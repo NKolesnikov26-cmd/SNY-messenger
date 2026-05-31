@@ -12,6 +12,8 @@
         .theme-red { background: linear-gradient(135deg, #8b5a5a, #c98a8a); }
         .theme-blue { background: linear-gradient(135deg, #4a6a8b, #8aadc9); }
         .theme-green { background: linear-gradient(135deg, #4a6b5a, #8aad9a); }
+        .theme-purple { background: linear-gradient(135deg, #6b4a8b, #a98ac9); }
+        .theme-orange { background: linear-gradient(135deg, #8b6a4a, #c9aa8a); }
         .screen { display: none; min-height: 100vh; padding: 20px; }
         .screen.active { display: flex; justify-content: center; align-items: center; }
         .welcome-card { background: rgba(255,255,255,0.95); padding: 40px; border-radius: 20px; width: 450px; text-align: center; }
@@ -29,6 +31,7 @@
         .user-profile { padding: 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #ddd; cursor: pointer; }
         .profile-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
         .profile-info { flex: 1; }
+        .profile-info small { font-size: 10px; color: #666; }
         .copy-id { background: none; border: none; font-size: 16px; cursor: pointer; width: auto; }
         .chats-list { flex: 1; overflow-y: auto; }
         .chat-item { padding: 15px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-bottom: 1px solid #eee; }
@@ -36,26 +39,32 @@
         .chat-avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
         .chat-info { flex: 1; }
         .chat-name { font-weight: 600; }
+        .chat-last-seen { font-size: 10px; color: #999; }
         .pinned-chat { background: #fef3c7; border-left: 3px solid #f59e0b; }
         .chat-area { flex: 1; display: flex; flex-direction: column; }
         .chat-header { padding: 20px; border-bottom: 1px solid #ddd; background: white; display: flex; justify-content: space-between; align-items: center; }
         .chat-header-info { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .chat-header-avatar { width: 40px; height: 40px; border-radius: 50%; }
+        .chat-header-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .chat-header-actions { display: flex; gap: 10px; }
         .icon-btn { background: none; border: none; font-size: 20px; cursor: pointer; padding: 8px; width: auto; }
-        .messages { flex: 1; padding: 20px; overflow-y: auto; background-size: cover; }
+        .messages { flex: 1; padding: 20px; overflow-y: auto; background-size: cover; background-position: center; }
         .message { margin-bottom: 15px; animation: fadeIn 0.3s; }
         .message-own { display: flex; justify-content: flex-end; }
         .message-other { display: flex; justify-content: flex-start; }
-        .message-bubble { max-width: 60%; padding: 10px 15px; border-radius: 18px; }
+        .message-bubble { max-width: 60%; padding: 10px 15px; border-radius: 18px; position: relative; }
         .message-own .message-bubble { background: #667eea; color: white; }
         .message-other .message-bubble { background: white; border: 1px solid #ddd; }
         .message-name { font-size: 11px; font-weight: bold; margin-bottom: 5px; opacity: 0.8; }
         .message-time { font-size: 9px; margin-top: 5px; opacity: 0.6; }
         .message-text { word-wrap: break-word; }
+        .message-text span.sticker-in-text { font-size: 20px; display: inline-block; vertical-align: middle; cursor: pointer; }
         .message-image { max-width: 200px; border-radius: 10px; cursor: pointer; }
-        .message-sticker { font-size: 48px; }
+        .message-sticker { font-size: 48px; cursor: pointer; display: inline-block; }
         .message-actions { display: flex; gap: 5px; margin-top: 5px; }
         .message-action-btn { background: none; border: none; font-size: 11px; cursor: pointer; color: #666; }
+        .reactions { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
+        .reaction { background: rgba(0,0,0,0.1); padding: 2px 6px; border-radius: 12px; font-size: 11px; cursor: pointer; }
+        .reaction:hover { background: rgba(0,0,0,0.2); }
         .input-area { padding: 20px; border-top: 1px solid #ddd; background: white; }
         .input-tools { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
         .tool-btn { width: auto; padding: 8px 12px; margin: 0; font-size: 13px; background: #f3f4f6; color: #333; }
@@ -64,14 +73,18 @@
         .input-row button { width: 50px; margin: 0; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
         .modal.active { display: flex; }
-        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 400px; max-width: 90%; }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 400px; max-width: 90%; max-height: 80vh; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .close-modal { font-size: 28px; cursor: pointer; }
         .profile-view { text-align: center; }
-        .profile-view-avatar { width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; }
+        .profile-view-avatar { width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; cursor: pointer; object-fit: cover; }
         .game-board { display: grid; grid-template-columns: repeat(3, 70px); gap: 5px; justify-content: center; margin: 20px 0; }
         .game-cell { width: 70px; height: 70px; background: #f0f0f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 40px; cursor: pointer; }
+        .game-cell.disabled { cursor: not-allowed; opacity: 0.6; }
+        .game-info { text-align: center; margin: 10px 0; font-weight: bold; }
         .notification { position: fixed; bottom: 20px; right: 20px; background: #333; color: white; padding: 12px 20px; border-radius: 10px; animation: slideIn 0.3s; z-index: 2000; }
+        .sticker-selector { display: inline-block; cursor: pointer; font-size: 20px; margin: 0 2px; }
+        .sticker-picker { position: absolute; background: white; border: 1px solid #ddd; border-radius: 10px; padding: 10px; display: none; z-index: 100; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -103,30 +116,45 @@
         <div class="messenger-container">
             <div class="sidebar">
                 <div class="user-profile" onclick="showProfile(currentUser.id)">
-                    <img id="profileAvatar" class="profile-avatar" src=""><div class="profile-info"><h3 id="profileName"></h3><small id="profileId"></small></div>
+                    <img id="profileAvatar" class="profile-avatar" src=""><div class="profile-info"><h3 id="profileName"></h3><small id="profileId"></small><div id="lastSeen" style="font-size:10px; color:#666;"></div></div>
                     <button class="copy-id" onclick="copyToClipboard(currentUser.id, event)">📋</button>
                 </div>
                 <div class="chats-list" id="chatsList"></div>
             </div>
             <div class="chat-area">
                 <div class="chat-header">
-                    <div class="chat-header-info"><img id="chatHeaderAvatar" class="chat-header-avatar" src=""><div><div class="chat-header-name" id="chatHeaderName"></div><small id="chatHeaderId"></small></div></div>
-                    <div><button class="icon-btn" onclick="showThemeModal()">🎨</button><button class="icon-btn" onclick="showWallpaperModal()">🖼️</button></div>
+                    <div class="chat-header-info" id="chatHeaderInfo">
+                        <img id="chatHeaderAvatar" class="chat-header-avatar" src=""><div><div class="chat-header-name" id="chatHeaderName"></div><small id="chatHeaderId"></small></div>
+                    </div>
+                    <div class="chat-header-actions">
+                        <button class="icon-btn" onclick="showThemeModal()">🎨</button>
+                        <button class="icon-btn" onclick="showWallpaperModal()">🖼️</button>
+                        <button class="icon-btn" onclick="showGroupSettings()" id="groupSettingsBtn" style="display:none">⚙️</button>
+                    </div>
                 </div>
                 <div class="messages" id="messagesList"></div>
                 <div class="input-area">
-                    <div class="input-tools"><button class="tool-btn" onclick="attachImage()">🖼️ Фото</button><button class="tool-btn" onclick="openStickerModal()">😊 Стикер</button><input type="file" id="imageInput" accept="image/*" style="display:none"><input type="file" id="stickerImageInput" accept="image/*" style="display:none"></div>
-                    <div class="input-row"><input type="text" id="messageInput" placeholder="Сообщение..." onkeypress="handleEnter(event)"><button onclick="sendMessage()">📤</button></div>
+                    <div class="input-tools">
+                        <button class="tool-btn" onclick="attachImage()">🖼️ Фото</button>
+                        <button class="tool-btn" onclick="openStickerModal()">😊 Стикер</button>
+                        <input type="file" id="imageInput" accept="image/*" style="display:none">
+                        <input type="file" id="stickerImageInput" accept="image/*" style="display:none">
+                    </div>
+                    <div class="input-row">
+                        <input type="text" id="messageInput" placeholder="Сообщение... (введи :стикер: для вставки)" onkeypress="handleEnter(event)">
+                        <button onclick="sendMessage()">📤</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <div id="profileModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>👤 Профиль</h3><span class="close-modal" onclick="closeModal('profileModal')">&times;</span></div><div id="profileContent"></div></div></div>
-    <div id="themeModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎨 Темы</h3><span class="close-modal" onclick="closeModal('themeModal')">&times;</span></div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px"><button onclick="changeTheme('default')">🌙 По умолчанию</button><button onclick="changeTheme('pink')">🌸 Розовая</button><button onclick="changeTheme('red')">❤️ Красная</button><button onclick="changeTheme('blue')">💙 Синяя</button><button onclick="changeTheme('green')">💚 Зеленая</button></div></div></div>
-    <div id="wallpaperModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🖼️ Обои</h3><span class="close-modal" onclick="closeModal('wallpaperModal')">&times;</span></div><button onclick="setWallpaper('default')">По умолчанию</button><button onclick="uploadWallpaper()">📤 Своё фото</button><input type="file" id="wallpaperFile" accept="image/*" style="display:none"></div></div>
+    <div id="themeModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎨 Темы</h3><span class="close-modal" onclick="closeModal('themeModal')">&times;</span></div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px"><button onclick="changeTheme('default')">🌙 По умолчанию</button><button onclick="changeTheme('pink')">🌸 Розовая</button><button onclick="changeTheme('red')">❤️ Красная</button><button onclick="changeTheme('blue')">💙 Синяя</button><button onclick="changeTheme('green')">💚 Зеленая</button><button onclick="changeTheme('purple')">🟣 Фиолетовая</button><button onclick="changeTheme('orange')">🟠 Оранжевая</button></div></div></div>
+    <div id="wallpaperModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🖼️ Обои чата</h3><span class="close-modal" onclick="closeModal('wallpaperModal')">&times;</span></div><button onclick="setWallpaper('default')">По умолчанию</button><button onclick="uploadWallpaper()">📤 Своё фото</button><input type="file" id="wallpaperFile" accept="image/*" style="display:none"></div></div>
     <div id="stickerModalWindow" class="modal"><div class="modal-content"><div class="modal-header"><h3>😊 Стикеры</h3><span class="close-modal" onclick="closeModal('stickerModalWindow')">&times;</span></div><button onclick="openStickerImageUpload()">📸 Стикер из фото</button><div id="stickersGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:15px;"></div></div></div>
     <div id="gameModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎮 Крестики-нолики</h3><span class="close-modal" onclick="closeModal('gameModal')">&times;</span></div><div id="gameContent"></div></div></div>
+    <div id="groupSettingsModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>⚙️ Настройки группы</h3><span class="close-modal" onclick="closeModal('groupSettingsModal')">&times;</span></div><div><label>Аватар группы</label><img id="groupAvatarPreview" style="width:100px;border-radius:50%;margin:10px auto;display:block"><button onclick="uploadGroupAvatar()">📸 Изменить аватар</button><input type="file" id="groupAvatarFile" accept="image/*" style="display:none"></div><div><label>Описание группы</label><textarea id="groupDescription" rows="3" placeholder="Описание группы"></textarea><button onclick="saveGroupSettings()">Сохранить</button></div></div></div>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -147,6 +175,8 @@
         let currentChat = { type: 'general' };
         let allMessages = [];
         let customStickers = [];
+        let gameUnsubscribe = null;
+        let onlineInterval = null;
 
         function showNotification(msg) {
             const notif = document.createElement('div');
@@ -161,6 +191,33 @@
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        // Вставка стикеров в текст
+        function insertStickerIntoInput(sticker, stickerUrl) {
+            const input = document.getElementById('messageInput');
+            const stickerCode = stickerUrl ? `[sticker:${stickerUrl}]` : `[sticker:${sticker}]`;
+            input.value += stickerCode;
+            closeModal('stickerModalWindow');
+            input.focus();
+        }
+
+        function parseStickersInText(text) {
+            const stickerRegex = /\[sticker:(.*?)\]/g;
+            let parts = [];
+            let lastIndex = 0;
+            let match;
+            while ((match = stickerRegex.exec(text)) !== null) {
+                if (match.index > lastIndex) {
+                    parts.push({ type: 'text', content: text.substring(lastIndex, match.index) });
+                }
+                parts.push({ type: 'sticker', content: match[1] });
+                lastIndex = match.index + match[0].length;
+            }
+            if (lastIndex < text.length) {
+                parts.push({ type: 'text', content: text.substring(lastIndex) });
+            }
+            return parts;
         }
 
         function switchTab(tab) {
@@ -197,7 +254,7 @@
             if (!password) { alert('Придумай пароль!'); return; }
             const snyId = 'SNY_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6).toUpperCase();
             const avatarUrl = document.getElementById('avatarImage').src;
-            currentUser = { id: snyId, name: username, password: password, bio: bio, avatar: avatarUrl, createdAt: new Date() };
+            currentUser = { id: snyId, name: username, password: password, bio: bio, avatar: avatarUrl, createdAt: new Date(), lastSeen: new Date() };
             await db.collection('users').doc(snyId).set(currentUser);
             localStorage.setItem('sny_user_id', snyId);
             localStorage.setItem('sny_password', password);
@@ -220,24 +277,82 @@
             } else { alert('Неверный ID или пароль!'); }
         }
 
+        async function updateLastSeen() {
+            if (currentUser) {
+                await db.collection('users').doc(currentUser.id).update({ lastSeen: new Date() });
+            }
+        }
+
         async function enterMessenger() {
             document.getElementById('welcomeScreen').classList.remove('active');
             document.getElementById('messengerScreen').style.display = 'block';
             document.getElementById('profileName').innerText = currentUser.name;
             document.getElementById('profileAvatar').src = currentUser.avatar;
             document.getElementById('profileId').innerText = currentUser.id;
+            
             await loadChats();
             await loadCustomStickers();
             await loadWallpaper();
+            await loadGroupSettings();
             await loadAllMessages();
             await openGeneralChat();
+            
+            // Обновление last seen
+            await updateLastSeen();
+            onlineInterval = setInterval(updateLastSeen, 30000);
+            
+            // Загрузка last seen других пользователей
+            setInterval(loadChats, 10000);
         }
+
+        async function loadGroupSettings() {
+            const groupDoc = await db.collection('groupSettings').doc('general').get();
+            if (groupDoc.exists) {
+                if (groupDoc.data().avatar) document.getElementById('chatHeaderAvatar').src = groupDoc.data().avatar;
+                if (groupDoc.data().description) document.getElementById('chatHeaderId').innerText = groupDoc.data().description;
+            }
+        }
+
+        function showGroupSettings() {
+            document.getElementById('groupSettingsModal').classList.add('active');
+            db.collection('groupSettings').doc('general').get().then(doc => {
+                if (doc.exists) {
+                    document.getElementById('groupDescription').value = doc.data().description || '';
+                    if (doc.data().avatar) document.getElementById('groupAvatarPreview').src = doc.data().avatar;
+                }
+            });
+        }
+
+        async function saveGroupSettings() {
+            const description = document.getElementById('groupDescription').value;
+            await db.collection('groupSettings').doc('general').set({ description, updatedAt: new Date() }, { merge: true });
+            document.getElementById('chatHeaderId').innerText = description;
+            showNotification('✅ Описание группы обновлено!');
+            closeModal('groupSettingsModal');
+        }
+
+        function uploadGroupAvatar() { document.getElementById('groupAvatarFile').click(); }
+        document.getElementById('groupAvatarFile').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = async (event) => {
+                    await db.collection('groupSettings').doc('general').set({ avatar: event.target.result, updatedAt: new Date() }, { merge: true });
+                    document.getElementById('chatHeaderAvatar').src = event.target.result;
+                    showNotification('✅ Аватар группы обновлен!');
+                    closeModal('groupSettingsModal');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
         async function loadWallpaper() {
             const groupDoc = await db.collection('groupSettings').doc('general').get();
             if (groupDoc.exists && groupDoc.data().wallpaper && groupDoc.data().wallpaper !== 'default') {
                 document.getElementById('messagesList').style.backgroundImage = `url(${groupDoc.data().wallpaper})`;
                 document.getElementById('messagesList').style.backgroundSize = 'cover';
+            } else {
+                document.getElementById('messagesList').style.backgroundImage = 'none';
             }
         }
 
@@ -245,7 +360,7 @@
             await db.collection('groupSettings').doc('general').set({ wallpaper: url === 'default' ? null : url }, { merge: true });
             await loadWallpaper();
             closeModal('wallpaperModal');
-            showNotification('🖼️ Обои обновлены!');
+            showNotification('🖼️ Обои обновлены для всех!');
         }
 
         function uploadWallpaper() { document.getElementById('wallpaperFile').click(); }
@@ -256,20 +371,21 @@
 
         async function loadChats() {
             const usersSnapshot = await db.collection('users').get();
+            const users = [];
+            usersSnapshot.forEach(doc => { if (doc.id !== currentUser.id) users.push({ id: doc.id, ...doc.data() }); });
+            
             const chatsList = document.getElementById('chatsList');
             chatsList.innerHTML = `<div class="chat-item" onclick="openGeneralChat()"><div class="chat-avatar" style="background:#667eea;display:flex;align-items:center;justify-content:center;font-size:24px;">💬</div><div class="chat-info"><div class="chat-name">Общий чат</div></div></div>
-            <div class="chat-item pinned-chat" onclick="openGameChat()"><div class="chat-avatar" style="background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:24px;">🎮</div><div class="chat-info"><div class="chat-name">Крестики-нолики</div></div></div>`;
-            usersSnapshot.forEach(doc => {
-                if (doc.id !== currentUser.id) {
-                    const user = doc.data();
-                    chatsList.innerHTML += `<div class="chat-item" onclick="openPrivateChat('${user.id}')"><img class="chat-avatar" src="${user.avatar}"><div class="chat-info"><div class="chat-name">${escapeHtml(user.name)}</div></div><button class="copy-id" onclick="copyToClipboard('${user.id}', event)">📋</button></div>`;
-                }
+            <div class="chat-item pinned-chat" onclick="openGameChat()"><div class="chat-avatar" style="background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:24px;">🎮</div><div class="chat-info"><div class="chat-name">🎮 Крестики-нолики</div></div></div>`;
+            
+            users.forEach(user => {
+                const lastSeen = user.lastSeen ? new Date(user.lastSeen.toDate()).toLocaleTimeString() : 'неизвестно';
+                chatsList.innerHTML += `<div class="chat-item" onclick="openPrivateChat('${user.id}')"><img class="chat-avatar" src="${user.avatar}"><div class="chat-info"><div class="chat-name">${escapeHtml(user.name)}</div><div class="chat-last-seen">Был(а): ${lastSeen}</div></div><button class="copy-id" onclick="copyToClipboard('${user.id}', event)">📋</button></div>`;
             });
         }
 
         function getPrivateChatId(user1, user2) { return [user1, user2].sort().join('_'); }
 
-        // ЗАГРУЗКА ВСЕХ СООБЩЕНИЙ БЕЗ ФИЛЬТРОВ (НЕ ТРЕБУЕТ ИНДЕКСОВ!)
         async function loadAllMessages() {
             db.collection('messages').onSnapshot((snapshot) => {
                 allMessages = [];
@@ -278,7 +394,6 @@
                     msg.id = doc.id;
                     allMessages.push(msg);
                 });
-                // Обновляем текущий чат
                 refreshCurrentChat();
             });
         }
@@ -312,7 +427,11 @@
             currentChat = { type: 'general' };
             document.getElementById('chatHeaderAvatar').src = 'https://via.placeholder.com/40?text=💬';
             document.getElementById('chatHeaderName').innerText = 'Общий чат';
-            document.getElementById('chatHeaderId').innerText = 'Все пользователи';
+            document.getElementById('groupSettingsBtn').style.display = 'inline-block';
+            const groupDoc = await db.collection('groupSettings').doc('general').get();
+            if (groupDoc.exists && groupDoc.data().avatar) document.getElementById('chatHeaderAvatar').src = groupDoc.data().avatar;
+            if (groupDoc.exists && groupDoc.data().description) document.getElementById('chatHeaderId').innerText = groupDoc.data().description;
+            else document.getElementById('chatHeaderId').innerText = 'Все пользователи';
             refreshCurrentChat();
         }
 
@@ -323,6 +442,7 @@
             document.getElementById('chatHeaderAvatar').src = user.avatar;
             document.getElementById('chatHeaderName').innerText = user.name;
             document.getElementById('chatHeaderId').innerText = user.bio || userId;
+            document.getElementById('groupSettingsBtn').style.display = 'none';
             refreshCurrentChat();
         }
 
@@ -331,6 +451,7 @@
             document.getElementById('chatHeaderAvatar').src = 'https://via.placeholder.com/40?text=🎮';
             document.getElementById('chatHeaderName').innerText = 'Крестики-нолики';
             document.getElementById('chatHeaderId').innerText = 'Играйте с друзьями!';
+            document.getElementById('groupSettingsBtn').style.display = 'none';
             showGameModal();
         }
 
@@ -341,24 +462,55 @@
             const isOwn = msg.userId === currentUser.id;
             div.className = 'message ' + (isOwn ? 'message-own' : 'message-other');
             const time = msg.timestamp?.toDate ? new Date(msg.timestamp.toDate()).toLocaleTimeString() : '';
+            
             let content = '';
-            if (msg.type === 'text') content = `<div class="message-text">${escapeHtml(msg.text)}</div>`;
-            else if (msg.type === 'image') content = `<img src="${msg.imageUrl}" class="message-image" onclick="window.open('${msg.imageUrl}','_blank')">`;
-            else if (msg.type === 'sticker') {
-                if (msg.stickerUrl) content = `<img src="${msg.stickerUrl}" style="max-width:80px;">`;
+            if (msg.type === 'text') {
+                const parts = parseStickersInText(msg.text);
+                let htmlContent = '';
+                for (const part of parts) {
+                    if (part.type === 'text') {
+                        htmlContent += escapeHtml(part.content);
+                    } else {
+                        if (part.content.startsWith('http')) {
+                            htmlContent += `<img src="${part.content}" class="message-sticker" style="width:40px; height:40px; vertical-align:middle;">`;
+                        } else {
+                            htmlContent += `<span class="message-sticker">${part.content}</span>`;
+                        }
+                    }
+                }
+                content = `<div class="message-text">${htmlContent}</div>`;
+            } else if (msg.type === 'image') {
+                content = `<img src="${msg.imageUrl}" class="message-image" onclick="window.open('${msg.imageUrl}','_blank')">`;
+            } else if (msg.type === 'sticker') {
+                if (msg.stickerUrl) content = `<img src="${msg.stickerUrl}" class="message-sticker" style="width:80px;">`;
                 else content = `<div class="message-sticker">${msg.sticker}</div>`;
             }
+            
+            // Реакции
+            let reactionsHtml = '';
+            if (msg.reactions && Object.keys(msg.reactions).length > 0) {
+                reactionsHtml = '<div class="reactions">';
+                for (const [emoji, users] of Object.entries(msg.reactions)) {
+                    reactionsHtml += `<span class="reaction" onclick="addReaction('${msg.id}', '${emoji}')">${emoji} ${users.length}</span>`;
+                }
+                reactionsHtml += '</div>';
+            }
+            
             let actionsHtml = '';
             if (isOwn && msg.type === 'text') {
-                actionsHtml = `<div class="message-actions"><button class="message-action-btn" onclick="editMessage('${msg.id}', '${escapeHtml(msg.text)}')">✏️</button><button class="message-action-btn" onclick="deleteMessage('${msg.id}')">🗑️</button></div>`;
+                actionsHtml = `<div class="message-actions">
+                    <button class="message-action-btn" onclick="editMessage('${msg.id}', '${escapeHtml(msg.text)}')">✏️</button>
+                    <button class="message-action-btn" onclick="deleteMessage('${msg.id}')">🗑️</button>
+                </div>`;
             }
-            div.innerHTML = `<div class="message-bubble"><div class="message-name">${escapeHtml(msg.userName)}</div>${content}${actionsHtml}<div class="message-time">${time}</div></div>`;
+            
+            div.innerHTML = `<div class="message-bubble"><div class="message-name">${escapeHtml(msg.userName)}</div>${content}${reactionsHtml}${actionsHtml}<div class="message-time">${time}</div></div>`;
             container.appendChild(div);
         }
 
         async function sendMessage() {
             const input = document.getElementById('messageInput');
-            const text = input.value.trim();
+            let text = input.value.trim();
             if (!text) { showNotification('📝 Введите сообщение'); return; }
             if (!currentChat || currentChat.type === 'game') { showNotification('❌ Нельзя отправить сообщение сюда'); return; }
             
@@ -369,6 +521,19 @@
             await db.collection('messages').add(messageData);
             input.value = '';
             showNotification('✅ Сообщение отправлено');
+        }
+
+        async function addReaction(messageId, emoji) {
+            const msgRef = db.collection('messages').doc(messageId);
+            const msgDoc = await msgRef.get();
+            const msg = msgDoc.data();
+            let reactions = msg.reactions || {};
+            if (!reactions[emoji]) reactions[emoji] = [];
+            if (!reactions[emoji].includes(currentUser.id)) {
+                reactions[emoji].push(currentUser.id);
+                await msgRef.update({ reactions });
+                showNotification(`👍 Реакция ${emoji} добавлена`);
+            }
         }
 
         async function editMessage(msgId, oldText) {
@@ -412,31 +577,26 @@
                 div.style.fontSize = '40px';
                 div.style.cursor = 'pointer';
                 div.style.textAlign = 'center';
-                div.onclick = () => sendSticker(sticker);
+                div.onclick = () => insertStickerIntoInput(sticker);
                 grid.appendChild(div);
             });
             customStickers.forEach(sticker => {
                 const div = document.createElement('div');
                 div.style.cursor = 'pointer';
                 div.style.textAlign = 'center';
-                if (sticker.stickerUrl) div.innerHTML = `<img src="${sticker.stickerUrl}" style="width:50px;">`;
-                else { div.textContent = sticker.sticker; div.style.fontSize = '40px'; }
-                div.onclick = () => sendSticker(sticker.sticker || sticker.stickerUrl, sticker.stickerUrl);
+                if (sticker.stickerUrl) {
+                    div.innerHTML = `<img src="${sticker.stickerUrl}" style="width:50px;">`;
+                    div.onclick = () => insertStickerIntoInput('', sticker.stickerUrl);
+                } else {
+                    div.textContent = sticker.sticker;
+                    div.style.fontSize = '40px';
+                    div.onclick = () => insertStickerIntoInput(sticker.sticker);
+                }
                 grid.appendChild(div);
             });
         }
 
-        async function sendSticker(sticker, stickerUrl = null) {
-            if (!currentChat || currentChat.type === 'game') { showNotification('❌ Нельзя отправить стикер сюда'); return; }
-            const messageData = { type: 'sticker', sticker: sticker, stickerUrl: stickerUrl, userId: currentUser.id, userName: currentUser.name, avatar: currentUser.avatar, timestamp: firebase.firestore.FieldValue.serverTimestamp(), reactions: {} };
-            if (currentChat.type === 'general') messageData.chatType = 'general';
-            else if (currentChat.type === 'private') { messageData.chatType = 'private'; messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId); }
-            await db.collection('messages').add(messageData);
-            closeModal('stickerModalWindow');
-            showNotification('😊 Стикер отправлен!');
-        }
-
-        function openStickerModal() { if (currentChat && currentChat.type !== 'game') { renderStickers(); document.getElementById('stickerModalWindow').classList.add('active'); } else { showNotification('❌ Нельзя отправить стикер в игру'); } }
+        function openStickerModal() { renderStickers(); document.getElementById('stickerModalWindow').classList.add('active'); }
         function openStickerImageUpload() { document.getElementById('stickerImageInput').click(); }
         document.getElementById('stickerImageInput').addEventListener('change', async (e) => {
             const file = e.target.files[0];
@@ -449,8 +609,9 @@
         async function showProfile(userId) {
             const userDoc = await db.collection('users').doc(userId).get();
             const user = userDoc.data();
+            const lastSeen = user.lastSeen ? new Date(user.lastSeen.toDate()).toLocaleString() : 'неизвестно';
             const content = document.getElementById('profileContent');
-            content.innerHTML = `<div class="profile-view"><img src="${user.avatar}" class="profile-view-avatar"><h3>${escapeHtml(user.name)}</h3><p>${user.bio || 'Нет описания'}</p><p>ID: ${user.id}</p><button onclick="copyToClipboard('${user.id}')">📋 Копировать ID</button>${userId !== currentUser.id ? `<button onclick="openPrivateChat('${userId}'); closeModal('profileModal');">💬 Написать</button>` : ''}</div>`;
+            content.innerHTML = `<div class="profile-view"><img src="${user.avatar}" class="profile-view-avatar"><h3>${escapeHtml(user.name)}</h3><p>${user.bio || 'Нет описания'}</p><p>ID: ${user.id}</p><p>Последний раз: ${lastSeen}</p><button onclick="copyToClipboard('${user.id}')">📋 Копировать ID</button>${userId !== currentUser.id ? `<button onclick="openPrivateChat('${userId}'); closeModal('profileModal');">💬 Написать</button>` : ''}</div>`;
             document.getElementById('profileModal').classList.add('active');
         }
 
@@ -459,33 +620,122 @@
         function changeTheme(theme) { document.body.className = `theme-${theme}`; }
         function showWallpaperModal() { document.getElementById('wallpaperModal').classList.add('active'); }
 
-        // Игра
-        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        // ========== СИНХРОНИЗИРОВАННАЯ ИГРА ==========
+        let gameBoardData = ['', '', '', '', '', '', '', '', ''];
         let gameCurrentPlayer = 'X';
         let gameActiveGame = true;
+        let gameWinner = null;
+
+        function startGameSync() {
+            if (gameUnsubscribe) gameUnsubscribe();
+            gameUnsubscribe = db.collection('game').doc('tic-tac-toe').onSnapshot((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    gameBoardData = data.board || ['', '', '', '', '', '', '', '', ''];
+                    gameCurrentPlayer = data.currentPlayer || 'X';
+                    gameActiveGame = data.active !== false;
+                    gameWinner = data.winner;
+                    renderGameBoardUI();
+                } else {
+                    resetGameInFirebase();
+                }
+            });
+        }
+
+        async function resetGameInFirebase() {
+            await db.collection('game').doc('tic-tac-toe').set({
+                board: ['', '', '', '', '', '', '', '', ''],
+                currentPlayer: 'X',
+                active: true,
+                winner: null,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        }
+
+        async function makeGameMove(index) {
+            if (!gameActiveGame || gameWinner || gameBoardData[index] !== '') {
+                showNotification('❌ Сейчас не твой ход или игра окончена!');
+                return;
+            }
+            if (gameCurrentPlayer !== 'X') {
+                showNotification('❌ Сейчас ход Крестиков (X)!');
+                return;
+            }
+            
+            const newBoard = [...gameBoardData];
+            newBoard[index] = 'X';
+            
+            const winner = checkWinnerOnBoard(newBoard);
+            if (winner) {
+                await db.collection('game').doc('tic-tac-toe').update({
+                    board: newBoard,
+                    active: false,
+                    winner: 'X'
+                });
+                showNotification('🏆 Победили Крестики (X)!');
+            } else if (newBoard.every(cell => cell !== '')) {
+                await db.collection('game').doc('tic-tac-toe').update({
+                    board: newBoard,
+                    active: false,
+                    winner: 'Ничья!'
+                });
+                showNotification('🤝 Ничья!');
+            } else {
+                await db.collection('game').doc('tic-tac-toe').update({
+                    board: newBoard,
+                    currentPlayer: 'O'
+                });
+                showNotification('⭕ Теперь ход Ноликов (O)!');
+            }
+        }
+
+        function checkWinnerOnBoard(board) {
+            const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            for (let w of wins) {
+                if (board[w[0]] && board[w[0]] === board[w[1]] && board[w[0]] === board[w[2]]) {
+                    return board[w[0]];
+                }
+            }
+            return null;
+        }
+
+        async function resetGame() {
+            await resetGameInFirebase();
+            showNotification('🔄 Новая игра! Теперь ход Крестиков (X)');
+        }
 
         function renderGameBoardUI() {
             const container = document.getElementById('gameContent');
             if (!container) return;
-            container.innerHTML = `<div style="text-align:center; margin-bottom:10px;">${gameActiveGame ? `Ход: ${gameCurrentPlayer === 'X' ? '❌' : '⭕'}` : 'Игра окончена'}</div><div class="game-board" id="gameBoard"></div><button onclick="resetGameBoard()">🔄 Новая игра</button>`;
+            
+            let statusText = '';
+            if (gameWinner === 'Ничья!') statusText = '🤝 Ничья!';
+            else if (gameWinner) statusText = `🏆 Победили ${gameWinner === 'X' ? 'Крестики (X)' : 'Нолики (O)'}!`;
+            else statusText = `Ход: ${gameCurrentPlayer === 'X' ? '❌ Крестики (X)' : '⭕ Нолики (O)'}`;
+            
+            const isPlayerTurn = gameCurrentPlayer === 'X' && gameActiveGame && !gameWinner;
+            
+            container.innerHTML = `
+                <div class="game-info">${statusText}</div>
+                <div class="game-board" id="gameBoard"></div>
+                <button onclick="resetGame()">🔄 Новая игра</button>
+            `;
+            
             const board = document.getElementById('gameBoard');
             for (let i = 0; i < 9; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'game-cell';
-                cell.textContent = gameBoard[i];
-                cell.onclick = () => { if (gameActiveGame && !gameBoard[i]) { gameBoard[i] = gameCurrentPlayer; const winner = checkGameWinner(); if (winner) { gameActiveGame = false; showNotification(`🏆 Победил ${winner === 'X' ? 'Крестик' : 'Нолик'}!`); } else if (gameBoard.every(c => c !== '')) { gameActiveGame = false; showNotification('🤝 Ничья!'); } else { gameCurrentPlayer = gameCurrentPlayer === 'X' ? 'O' : 'X'; } renderGameBoardUI(); } };
+                if (!isPlayerTurn || gameBoardData[i] !== '') cell.classList.add('disabled');
+                cell.textContent = gameBoardData[i];
+                cell.onclick = () => { if (isPlayerTurn && !gameBoardData[i]) makeGameMove(i); };
                 board.appendChild(cell);
             }
         }
 
-        function checkGameWinner() {
-            const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-            for (let w of wins) { if (gameBoard[w[0]] && gameBoard[w[0]] === gameBoard[w[1]] && gameBoard[w[0]] === gameBoard[w[2]]) return gameBoard[w[0]]; }
-            return null;
+        function showGameModal() {
+            startGameSync();
+            document.getElementById('gameModal').classList.add('active');
         }
-
-        function resetGameBoard() { gameBoard = ['', '', '', '', '', '', '', '', '']; gameCurrentPlayer = 'X'; gameActiveGame = true; renderGameBoardUI(); showNotification('🔄 Новая игра!'); }
-        function showGameModal() { resetGameBoard(); document.getElementById('gameModal').classList.add('active'); }
 
         function handleEnter(event) { if (event.key === 'Enter') sendMessage(); }
         function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
