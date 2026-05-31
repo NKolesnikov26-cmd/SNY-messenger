@@ -5,479 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SNY - Мессенджер</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            min-height: 100vh;
-            transition: background 0.3s;
-        }
-
-        /* Темы */
-        .theme-default { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); }
-        .theme-pink { background: linear-gradient(135deg, #7c5a6e 0%, #c9a3b8 100%); }
-        .theme-red { background: linear-gradient(135deg, #8b5a5a 0%, #c98a8a 100%); }
-        .theme-blue { background: linear-gradient(135deg, #4a6a8b 0%, #8aadc9 100%); }
-        .theme-green { background: linear-gradient(135deg, #4a6b5a 0%, #8aad9a 100%); }
-        .theme-purple { background: linear-gradient(135deg, #6b4a8b 0%, #a98ac9 100%); }
-        .theme-orange { background: linear-gradient(135deg, #8b6a4a 0%, #c9aa8a 100%); }
-
-        .screen {
-            display: none;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .screen.active {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .welcome-card {
-            background: rgba(255,255,255,0.95);
-            padding: 40px;
-            border-radius: 20px;
-            width: 450px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-
-        .welcome-card h1 {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-
-        .tab-buttons {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            background: #f0f0f0;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .tab-btn.active {
-            background: #667eea;
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        input, button, select, textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            font-size: 14px;
-        }
-
-        button {
-            background: #667eea;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        button:hover {
-            transform: scale(1.02);
-        }
-
-        .messenger-container {
-            display: flex;
-            width: 1400px;
-            max-width: 100%;
-            height: 90vh;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-
-        .sidebar {
-            width: 320px;
-            background: #f9fafb;
-            border-right: 1px solid #e5e7eb;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-
-        .user-profile {
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid #e5e7eb;
-            cursor: pointer;
-        }
-
-        .profile-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .profile-info {
-            flex: 1;
-        }
-
-        .profile-info h3 {
-            font-size: 16px;
-        }
-
-        .copy-id {
-            background: none;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            padding: 5px;
-            width: auto;
-        }
-
-        .chats-list {
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .chat-item {
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: background 0.2s;
-            border-bottom: 1px solid #eee;
-        }
-
-        .chat-item:hover {
-            background: #f0f0f0;
-        }
-
-        .chat-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .chat-info {
-            flex: 1;
-        }
-
-        .chat-name {
-            font-weight: 600;
-        }
-
-        .pinned-chat {
-            background: #fef3c7;
-            border-left: 3px solid #f59e0b;
-        }
-
-        .chat-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-header {
-            padding: 20px;
-            border-bottom: 1px solid #e5e7eb;
-            background: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .chat-header-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-        }
-
-        .chat-header-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .chat-header-name {
-            font-weight: 600;
-        }
-
-        .chat-header-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .icon-btn {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 8px;
-            width: auto;
-        }
-
-        .messages {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            background-size: cover;
-            background-position: center;
-        }
-
-        .message {
-            margin-bottom: 15px;
-            animation: fadeIn 0.3s;
-        }
-
-        .message-own {
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .message-other {
-            display: flex;
-            justify-content: flex-start;
-        }
-
-        .message-bubble {
-            max-width: 60%;
-            padding: 10px 15px;
-            border-radius: 18px;
-        }
-
-        .message-own .message-bubble {
-            background: #667eea;
-            color: white;
-        }
-
-        .message-other .message-bubble {
-            background: white;
-            border: 1px solid #ddd;
-        }
-
-        .message-name {
-            font-size: 11px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            opacity: 0.8;
-        }
-
-        .message-time {
-            font-size: 9px;
-            margin-top: 5px;
-            opacity: 0.6;
-        }
-
-        .message-text {
-            word-wrap: break-word;
-        }
-
-        .message-image {
-            max-width: 200px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        .message-sticker {
-            font-size: 48px;
-        }
-
-        .message-actions {
-            display: flex;
-            gap: 5px;
-            margin-top: 5px;
-        }
-
-        .message-action-btn {
-            background: none;
-            border: none;
-            font-size: 11px;
-            cursor: pointer;
-            color: #666;
-        }
-
-        .input-area {
-            padding: 20px;
-            border-top: 1px solid #e5e7eb;
-            background: white;
-        }
-
-        .input-tools {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-        }
-
-        .tool-btn {
-            width: auto;
-            padding: 8px 12px;
-            margin: 0;
-            font-size: 13px;
-            background: #f3f4f6;
-            color: #333;
-        }
-
-        .input-row {
-            display: flex;
-            gap: 10px;
-        }
-
-        .input-row input {
-            flex: 1;
-            margin: 0;
-        }
-
-        .input-row button {
-            width: 50px;
-            margin: 0;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            width: 400px;
-            max-width: 90%;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .close-modal {
-            font-size: 28px;
-            cursor: pointer;
-        }
-
-        .profile-view {
-            text-align: center;
-        }
-
-        .profile-view-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-bottom: 15px;
-        }
-
-        .game-board {
-            display: grid;
-            grid-template-columns: repeat(3, 70px);
-            grid-template-rows: repeat(3, 70px);
-            gap: 5px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .game-cell {
-            background: #f0f0f0;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .game-cell.disabled {
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #333;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 10px;
-            animation: slideIn 0.3s;
-            z-index: 2000;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #2c3e50, #3498db); min-height: 100vh; transition: background 0.3s; }
+        .theme-default { background: linear-gradient(135deg, #2c3e50, #3498db); }
+        .theme-pink { background: linear-gradient(135deg, #7c5a6e, #c9a3b8); }
+        .theme-red { background: linear-gradient(135deg, #8b5a5a, #c98a8a); }
+        .theme-blue { background: linear-gradient(135deg, #4a6a8b, #8aadc9); }
+        .theme-green { background: linear-gradient(135deg, #4a6b5a, #8aad9a); }
+        .screen { display: none; min-height: 100vh; padding: 20px; }
+        .screen.active { display: flex; justify-content: center; align-items: center; }
+        .welcome-card { background: rgba(255,255,255,0.95); padding: 40px; border-radius: 20px; width: 450px; text-align: center; }
+        .welcome-card h1 { font-size: 48px; margin-bottom: 10px; }
+        .tab-buttons { display: flex; gap: 10px; margin: 20px 0; }
+        .tab-btn { flex: 1; padding: 10px; border: none; background: #f0f0f0; border-radius: 10px; cursor: pointer; }
+        .tab-btn.active { background: #667eea; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        input, button, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; }
+        button { background: #667eea; color: white; border: none; cursor: pointer; transition: transform 0.2s; }
+        button:hover { transform: scale(1.02); }
+        .messenger-container { display: flex; width: 1400px; max-width: 100%; height: 90vh; background: white; border-radius: 20px; overflow: hidden; }
+        .sidebar { width: 320px; background: #f9fafb; border-right: 1px solid #ddd; display: flex; flex-direction: column; overflow-y: auto; }
+        .user-profile { padding: 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #ddd; cursor: pointer; }
+        .profile-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        .profile-info { flex: 1; }
+        .copy-id { background: none; border: none; font-size: 16px; cursor: pointer; width: auto; }
+        .chats-list { flex: 1; overflow-y: auto; }
+        .chat-item { padding: 15px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-bottom: 1px solid #eee; }
+        .chat-item:hover { background: #f0f0f0; }
+        .chat-avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
+        .chat-info { flex: 1; }
+        .chat-name { font-weight: 600; }
+        .pinned-chat { background: #fef3c7; border-left: 3px solid #f59e0b; }
+        .chat-area { flex: 1; display: flex; flex-direction: column; }
+        .chat-header { padding: 20px; border-bottom: 1px solid #ddd; background: white; display: flex; justify-content: space-between; align-items: center; }
+        .chat-header-info { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .chat-header-avatar { width: 40px; height: 40px; border-radius: 50%; }
+        .icon-btn { background: none; border: none; font-size: 20px; cursor: pointer; padding: 8px; width: auto; }
+        .messages { flex: 1; padding: 20px; overflow-y: auto; background-size: cover; }
+        .message { margin-bottom: 15px; animation: fadeIn 0.3s; }
+        .message-own { display: flex; justify-content: flex-end; }
+        .message-other { display: flex; justify-content: flex-start; }
+        .message-bubble { max-width: 60%; padding: 10px 15px; border-radius: 18px; }
+        .message-own .message-bubble { background: #667eea; color: white; }
+        .message-other .message-bubble { background: white; border: 1px solid #ddd; }
+        .message-name { font-size: 11px; font-weight: bold; margin-bottom: 5px; opacity: 0.8; }
+        .message-time { font-size: 9px; margin-top: 5px; opacity: 0.6; }
+        .message-text { word-wrap: break-word; }
+        .message-image { max-width: 200px; border-radius: 10px; cursor: pointer; }
+        .message-sticker { font-size: 48px; }
+        .message-actions { display: flex; gap: 5px; margin-top: 5px; }
+        .message-action-btn { background: none; border: none; font-size: 11px; cursor: pointer; color: #666; }
+        .input-area { padding: 20px; border-top: 1px solid #ddd; background: white; }
+        .input-tools { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+        .tool-btn { width: auto; padding: 8px 12px; margin: 0; font-size: 13px; background: #f3f4f6; color: #333; }
+        .input-row { display: flex; gap: 10px; }
+        .input-row input { flex: 1; margin: 0; }
+        .input-row button { width: 50px; margin: 0; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 400px; max-width: 90%; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .close-modal { font-size: 28px; cursor: pointer; }
+        .profile-view { text-align: center; }
+        .profile-view-avatar { width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; }
+        .game-board { display: grid; grid-template-columns: repeat(3, 70px); gap: 5px; justify-content: center; margin: 20px 0; }
+        .game-cell { width: 70px; height: 70px; background: #f0f0f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 40px; cursor: pointer; }
+        .notification { position: fixed; bottom: 20px; right: 20px; background: #333; color: white; padding: 12px 20px; border-radius: 10px; animation: slideIn 0.3s; z-index: 2000; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
     <div id="welcomeScreen" class="screen active">
         <div class="welcome-card">
             <h1>💬 SNY</h1>
-            <p>Твой мессенджер</p>
-            
             <div class="tab-buttons">
                 <button class="tab-btn active" onclick="switchTab('create')">✨ Создать</button>
                 <button class="tab-btn" onclick="switchTab('enter')">🔑 Войти</button>
             </div>
-
             <div id="createTab" class="tab-content active">
                 <input type="text" id="newUsername" placeholder="Никнейм">
                 <input type="password" id="newPassword" placeholder="Пароль">
-                <div>
-                    <img id="avatarImage" src="https://i.pravatar.cc/150?img=7" style="width:80px; border-radius:50%; margin:10px;">
-                    <button onclick="triggerAvatarUpload()">📸 Аватар</button>
-                    <input type="file" id="avatarFile" accept="image/*" style="display:none">
-                </div>
+                <div><img id="avatarImage" src="https://i.pravatar.cc/150?img=7" style="width:80px; border-radius:50%; margin:10px;"><button onclick="triggerAvatarUpload()">📸 Аватар</button><input type="file" id="avatarFile" accept="image/*" style="display:none"></div>
                 <textarea id="userBio" placeholder="О себе" rows="2"></textarea>
                 <button onclick="createAccount()">🚀 Создать SNY-ID</button>
             </div>
-
             <div id="enterTab" class="tab-content">
                 <input type="text" id="existingUserId" placeholder="SNY-ID">
                 <input type="password" id="existingPassword" placeholder="Пароль">
@@ -490,49 +103,27 @@
         <div class="messenger-container">
             <div class="sidebar">
                 <div class="user-profile" onclick="showProfile(currentUser.id)">
-                    <img id="profileAvatar" class="profile-avatar" src="">
-                    <div class="profile-info">
-                        <h3 id="profileName"></h3>
-                        <small id="profileId"></small>
-                    </div>
+                    <img id="profileAvatar" class="profile-avatar" src=""><div class="profile-info"><h3 id="profileName"></h3><small id="profileId"></small></div>
                     <button class="copy-id" onclick="copyToClipboard(currentUser.id, event)">📋</button>
                 </div>
                 <div class="chats-list" id="chatsList"></div>
             </div>
-            
             <div class="chat-area">
                 <div class="chat-header">
-                    <div class="chat-header-info" id="chatHeaderInfo">
-                        <img id="chatHeaderAvatar" class="chat-header-avatar" src="">
-                        <div>
-                            <div class="chat-header-name" id="chatHeaderName"></div>
-                            <small id="chatHeaderId"></small>
-                        </div>
-                    </div>
-                    <div class="chat-header-actions">
-                        <button class="icon-btn" onclick="showThemeModal()">🎨</button>
-                        <button class="icon-btn" onclick="showWallpaperModal()">🖼️</button>
-                    </div>
+                    <div class="chat-header-info"><img id="chatHeaderAvatar" class="chat-header-avatar" src=""><div><div class="chat-header-name" id="chatHeaderName"></div><small id="chatHeaderId"></small></div></div>
+                    <div><button class="icon-btn" onclick="showThemeModal()">🎨</button><button class="icon-btn" onclick="showWallpaperModal()">🖼️</button></div>
                 </div>
                 <div class="messages" id="messagesList"></div>
                 <div class="input-area">
-                    <div class="input-tools">
-                        <button class="tool-btn" onclick="attachImage()">🖼️ Фото</button>
-                        <button class="tool-btn" onclick="openStickerModal()">😊 Стикер</button>
-                        <input type="file" id="imageInput" accept="image/*" style="display:none">
-                        <input type="file" id="stickerImageInput" accept="image/*" style="display:none">
-                    </div>
-                    <div class="input-row">
-                        <input type="text" id="messageInput" placeholder="Напиши сообщение..." onkeypress="handleEnter(event)">
-                        <button onclick="sendMessage()">📤</button>
-                    </div>
+                    <div class="input-tools"><button class="tool-btn" onclick="attachImage()">🖼️ Фото</button><button class="tool-btn" onclick="openStickerModal()">😊 Стикер</button><input type="file" id="imageInput" accept="image/*" style="display:none"><input type="file" id="stickerImageInput" accept="image/*" style="display:none"></div>
+                    <div class="input-row"><input type="text" id="messageInput" placeholder="Сообщение..." onkeypress="handleEnter(event)"><button onclick="sendMessage()">📤</button></div>
                 </div>
             </div>
         </div>
     </div>
 
     <div id="profileModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>👤 Профиль</h3><span class="close-modal" onclick="closeModal('profileModal')">&times;</span></div><div id="profileContent"></div></div></div>
-    <div id="themeModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎨 Темы</h3><span class="close-modal" onclick="closeModal('themeModal')">&times;</span></div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px"><button onclick="changeTheme('default')">🌙 По умолчанию</button><button onclick="changeTheme('pink')">🌸 Розовая</button><button onclick="changeTheme('red')">❤️ Красная</button><button onclick="changeTheme('blue')">💙 Синяя</button><button onclick="changeTheme('green')">💚 Зеленая</button><button onclick="changeTheme('purple')">🟣 Фиолетовая</button><button onclick="changeTheme('orange')">🟠 Оранжевая</button></div></div></div>
+    <div id="themeModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎨 Темы</h3><span class="close-modal" onclick="closeModal('themeModal')">&times;</span></div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px"><button onclick="changeTheme('default')">🌙 По умолчанию</button><button onclick="changeTheme('pink')">🌸 Розовая</button><button onclick="changeTheme('red')">❤️ Красная</button><button onclick="changeTheme('blue')">💙 Синяя</button><button onclick="changeTheme('green')">💚 Зеленая</button></div></div></div>
     <div id="wallpaperModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🖼️ Обои</h3><span class="close-modal" onclick="closeModal('wallpaperModal')">&times;</span></div><button onclick="setWallpaper('default')">По умолчанию</button><button onclick="uploadWallpaper()">📤 Своё фото</button><input type="file" id="wallpaperFile" accept="image/*" style="display:none"></div></div>
     <div id="stickerModalWindow" class="modal"><div class="modal-content"><div class="modal-header"><h3>😊 Стикеры</h3><span class="close-modal" onclick="closeModal('stickerModalWindow')">&times;</span></div><button onclick="openStickerImageUpload()">📸 Стикер из фото</button><div id="stickersGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:15px;"></div></div></div>
     <div id="gameModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎮 Крестики-нолики</h3><span class="close-modal" onclick="closeModal('gameModal')">&times;</span></div><div id="gameContent"></div></div></div>
@@ -540,7 +131,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
     <script>
-        // ========== FIREBASE КОНФИГ ==========
         const firebaseConfig = {
             apiKey: "AIzaSyBfXUgZnRD013c1jPQ04X3ZRRCHJSwE6NQ",
             authDomain: "sny-messenger.firebaseapp.com",
@@ -553,13 +143,11 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // ========== ПЕРЕМЕННЫЕ ==========
         let currentUser = null;
         let currentChat = { type: 'general' };
-        let messagesUnsubscribe = null;
+        let allMessages = [];
         let customStickers = [];
 
-        // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
         function showNotification(msg) {
             const notif = document.createElement('div');
             notif.className = 'notification';
@@ -601,172 +189,141 @@
             }
         });
 
-        // ========== СОЗДАНИЕ АККАУНТА ==========
         async function createAccount() {
             const username = document.getElementById('newUsername').value.trim();
             const password = document.getElementById('newPassword').value;
             const bio = document.getElementById('userBio').value;
             if (!username) { alert('Введи никнейм!'); return; }
             if (!password) { alert('Придумай пароль!'); return; }
-            
             const snyId = 'SNY_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6).toUpperCase();
             const avatarUrl = document.getElementById('avatarImage').src;
-            
-            currentUser = {
-                id: snyId,
-                name: username,
-                password: password,
-                bio: bio,
-                avatar: avatarUrl,
-                createdAt: new Date()
-            };
-            
-            try {
-                await db.collection('users').doc(snyId).set(currentUser);
-                localStorage.setItem('sny_user_id', snyId);
-                localStorage.setItem('sny_password', password);
-                showNotification('✅ Аккаунт создан!');
-                enterMessenger();
-            } catch (error) {
-                console.error('Ошибка создания:', error);
-                showNotification('❌ Ошибка создания аккаунта');
-            }
+            currentUser = { id: snyId, name: username, password: password, bio: bio, avatar: avatarUrl, createdAt: new Date() };
+            await db.collection('users').doc(snyId).set(currentUser);
+            localStorage.setItem('sny_user_id', snyId);
+            localStorage.setItem('sny_password', password);
+            showNotification('✅ Аккаунт создан!');
+            enterMessenger();
         }
 
-        // ========== ВХОД ==========
         async function loginWithId() {
             const userId = document.getElementById('existingUserId').value.trim().toUpperCase();
             const password = document.getElementById('existingPassword').value;
             if (!userId) { alert('Введи ID!'); return; }
             if (!password) { alert('Введи пароль!'); return; }
-            
-            try {
-                const userDoc = await db.collection('users').doc(userId).get();
-                if (userDoc.exists && userDoc.data().password === password) {
-                    currentUser = userDoc.data();
-                    localStorage.setItem('sny_user_id', userId);
-                    localStorage.setItem('sny_password', password);
-                    showNotification(`👋 Добро пожаловать, ${currentUser.name}!`);
-                    enterMessenger();
-                } else {
-                    alert('Неверный ID или пароль!');
-                }
-            } catch (error) {
-                console.error('Ошибка входа:', error);
-                showNotification('❌ Ошибка входа');
-            }
+            const userDoc = await db.collection('users').doc(userId).get();
+            if (userDoc.exists && userDoc.data().password === password) {
+                currentUser = userDoc.data();
+                localStorage.setItem('sny_user_id', userId);
+                localStorage.setItem('sny_password', password);
+                showNotification(`👋 Добро пожаловать, ${currentUser.name}!`);
+                enterMessenger();
+            } else { alert('Неверный ID или пароль!'); }
         }
 
-        // ========== ВХОД В МЕССЕНДЖЕР ==========
         async function enterMessenger() {
             document.getElementById('welcomeScreen').classList.remove('active');
             document.getElementById('messengerScreen').style.display = 'block';
-            
             document.getElementById('profileName').innerText = currentUser.name;
             document.getElementById('profileAvatar').src = currentUser.avatar;
             document.getElementById('profileId').innerText = currentUser.id;
-            
             await loadChats();
             await loadCustomStickers();
             await loadWallpaper();
-            
+            await loadAllMessages();
             await openGeneralChat();
         }
 
-        // ========== ЗАГРУЗКА ОБОЕВ ==========
         async function loadWallpaper() {
-            try {
-                const groupDoc = await db.collection('groupSettings').doc('general').get();
-                if (groupDoc.exists && groupDoc.data().wallpaper && groupDoc.data().wallpaper !== 'default') {
-                    document.getElementById('messagesList').style.backgroundImage = `url(${groupDoc.data().wallpaper})`;
-                    document.getElementById('messagesList').style.backgroundSize = 'cover';
-                }
-            } catch (error) {
-                console.error('Ошибка загрузки обоев:', error);
+            const groupDoc = await db.collection('groupSettings').doc('general').get();
+            if (groupDoc.exists && groupDoc.data().wallpaper && groupDoc.data().wallpaper !== 'default') {
+                document.getElementById('messagesList').style.backgroundImage = `url(${groupDoc.data().wallpaper})`;
+                document.getElementById('messagesList').style.backgroundSize = 'cover';
             }
         }
 
         async function setWallpaper(url) {
-            try {
-                const wallpaperValue = url === 'default' ? null : url;
-                await db.collection('groupSettings').doc('general').set({ wallpaper: wallpaperValue }, { merge: true });
-                await loadWallpaper();
-                closeModal('wallpaperModal');
-                showNotification('🖼️ Обои обновлены!');
-            } catch (error) {
-                console.error('Ошибка установки обоев:', error);
-                showNotification('❌ Ошибка установки обоев');
-            }
+            await db.collection('groupSettings').doc('general').set({ wallpaper: url === 'default' ? null : url }, { merge: true });
+            await loadWallpaper();
+            closeModal('wallpaperModal');
+            showNotification('🖼️ Обои обновлены!');
         }
 
         function uploadWallpaper() { document.getElementById('wallpaperFile').click(); }
         document.getElementById('wallpaperFile').addEventListener('change', (e) => {
             const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => setWallpaper(event.target.result);
-                reader.readAsDataURL(file);
-            }
+            if (file) { const reader = new FileReader(); reader.onload = (event) => setWallpaper(event.target.result); reader.readAsDataURL(file); }
         });
 
-        // ========== ЗАГРУЗКА СПИСКА ЧАТОВ ==========
         async function loadChats() {
-            try {
-                const usersSnapshot = await db.collection('users').get();
-                const chatsList = document.getElementById('chatsList');
-                chatsList.innerHTML = `
-                    <div class="chat-item" onclick="openGeneralChat()">
-                        <div class="chat-avatar" style="background:#667eea;display:flex;align-items:center;justify-content:center;font-size:24px;">💬</div>
-                        <div class="chat-info"><div class="chat-name">Общий чат</div></div>
-                    </div>
-                    <div class="chat-item pinned-chat" onclick="openGameChat()">
-                        <div class="chat-avatar" style="background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:24px;">🎮</div>
-                        <div class="chat-info"><div class="chat-name">Крестики-нолики</div></div>
-                    </div>
-                `;
-                
-                usersSnapshot.forEach(doc => {
-                    if (doc.id !== currentUser.id) {
-                        const user = doc.data();
-                        chatsList.innerHTML += `
-                            <div class="chat-item" onclick="openPrivateChat('${user.id}')">
-                                <img class="chat-avatar" src="${user.avatar}">
-                                <div class="chat-info"><div class="chat-name">${escapeHtml(user.name)}</div></div>
-                                <button class="copy-id" onclick="copyToClipboard('${user.id}', event)">📋</button>
-                            </div>
-                        `;
-                    }
-                });
-            } catch (error) {
-                console.error('Ошибка загрузки чатов:', error);
-                showNotification('❌ Ошибка загрузки чатов');
-            }
+            const usersSnapshot = await db.collection('users').get();
+            const chatsList = document.getElementById('chatsList');
+            chatsList.innerHTML = `<div class="chat-item" onclick="openGeneralChat()"><div class="chat-avatar" style="background:#667eea;display:flex;align-items:center;justify-content:center;font-size:24px;">💬</div><div class="chat-info"><div class="chat-name">Общий чат</div></div></div>
+            <div class="chat-item pinned-chat" onclick="openGameChat()"><div class="chat-avatar" style="background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:24px;">🎮</div><div class="chat-info"><div class="chat-name">Крестики-нолики</div></div></div>`;
+            usersSnapshot.forEach(doc => {
+                if (doc.id !== currentUser.id) {
+                    const user = doc.data();
+                    chatsList.innerHTML += `<div class="chat-item" onclick="openPrivateChat('${user.id}')"><img class="chat-avatar" src="${user.avatar}"><div class="chat-info"><div class="chat-name">${escapeHtml(user.name)}</div></div><button class="copy-id" onclick="copyToClipboard('${user.id}', event)">📋</button></div>`;
+                }
+            });
         }
 
         function getPrivateChatId(user1, user2) { return [user1, user2].sort().join('_'); }
 
-        // ========== ОТКРЫТИЕ ЧАТОВ ==========
+        // ЗАГРУЗКА ВСЕХ СООБЩЕНИЙ БЕЗ ФИЛЬТРОВ (НЕ ТРЕБУЕТ ИНДЕКСОВ!)
+        async function loadAllMessages() {
+            db.collection('messages').onSnapshot((snapshot) => {
+                allMessages = [];
+                snapshot.forEach(doc => {
+                    const msg = doc.data();
+                    msg.id = doc.id;
+                    allMessages.push(msg);
+                });
+                // Обновляем текущий чат
+                refreshCurrentChat();
+            });
+        }
+
+        function refreshCurrentChat() {
+            const container = document.getElementById('messagesList');
+            if (!container) return;
+            
+            let filteredMessages = [];
+            if (currentChat.type === 'general') {
+                filteredMessages = allMessages.filter(m => m.chatType === 'general');
+            } else if (currentChat.type === 'private') {
+                const chatId = getPrivateChatId(currentUser.id, currentChat.userId);
+                filteredMessages = allMessages.filter(m => m.chatId === chatId);
+            } else {
+                return;
+            }
+            
+            filteredMessages.sort((a, b) => {
+                const timeA = a.timestamp?.toDate ? a.timestamp.toDate().getTime() : 0;
+                const timeB = b.timestamp?.toDate ? b.timestamp.toDate().getTime() : 0;
+                return timeA - timeB;
+            });
+            
+            container.innerHTML = '';
+            filteredMessages.forEach(msg => displayMessage(msg));
+            container.scrollTop = container.scrollHeight;
+        }
+
         async function openGeneralChat() {
             currentChat = { type: 'general' };
             document.getElementById('chatHeaderAvatar').src = 'https://via.placeholder.com/40?text=💬';
             document.getElementById('chatHeaderName').innerText = 'Общий чат';
             document.getElementById('chatHeaderId').innerText = 'Все пользователи';
-            await loadMessages('general');
+            refreshCurrentChat();
         }
 
         async function openPrivateChat(userId) {
-            try {
-                const userDoc = await db.collection('users').doc(userId).get();
-                const user = userDoc.data();
-                currentChat = { type: 'private', userId: userId };
-                document.getElementById('chatHeaderAvatar').src = user.avatar;
-                document.getElementById('chatHeaderName').innerText = user.name;
-                document.getElementById('chatHeaderId').innerText = user.bio || userId;
-                await loadMessages('private', userId);
-            } catch (error) {
-                console.error('Ошибка открытия чата:', error);
-                showNotification('❌ Ошибка открытия чата');
-            }
+            const userDoc = await db.collection('users').doc(userId).get();
+            const user = userDoc.data();
+            currentChat = { type: 'private', userId: userId };
+            document.getElementById('chatHeaderAvatar').src = user.avatar;
+            document.getElementById('chatHeaderName').innerText = user.name;
+            document.getElementById('chatHeaderId').innerText = user.bio || userId;
+            refreshCurrentChat();
         }
 
         function openGameChat() {
@@ -777,192 +334,72 @@
             showGameModal();
         }
 
-        // ========== ЗАГРУЗКА СООБЩЕНИЙ (ИСПРАВЛЕНО) ==========
-        async function loadMessages(chatType, otherUserId = null) {
-            if (messagesUnsubscribe) messagesUnsubscribe();
-            
-            try {
-                let query;
-                if (chatType === 'general') {
-                    query = db.collection('messages').where('chatType', '==', 'general').orderBy('timestamp', 'asc');
-                } else if (chatType === 'private') {
-                    const chatId = getPrivateChatId(currentUser.id, otherUserId);
-                    query = db.collection('messages').where('chatId', '==', chatId).orderBy('timestamp', 'asc');
-                } else {
-                    return;
-                }
-                
-                messagesUnsubscribe = query.onSnapshot((snapshot) => {
-                    const container = document.getElementById('messagesList');
-                    if (!container) return;
-                    container.innerHTML = '';
-                    
-                    snapshot.forEach(doc => {
-                        const msg = doc.data();
-                        msg.id = doc.id;
-                        displayMessage(msg);
-                    });
-                    
-                    container.scrollTop = container.scrollHeight;
-                }, (error) => {
-                    console.error('Ошибка загрузки сообщений:', error);
-                    showNotification('❌ Ошибка загрузки сообщений. Проверь интернет и правила Firebase!');
-                });
-            } catch (error) {
-                console.error('Ошибка в loadMessages:', error);
-                showNotification('❌ Ошибка загрузки сообщений');
-            }
-        }
-
-        // ========== ОТОБРАЖЕНИЕ СООБЩЕНИЯ ==========
         function displayMessage(msg) {
             const container = document.getElementById('messagesList');
             if (!container) return;
-            
             const div = document.createElement('div');
             const isOwn = msg.userId === currentUser.id;
             div.className = 'message ' + (isOwn ? 'message-own' : 'message-other');
-            
             const time = msg.timestamp?.toDate ? new Date(msg.timestamp.toDate()).toLocaleTimeString() : '';
-            
             let content = '';
-            if (msg.type === 'text') {
-                content = `<div class="message-text">${escapeHtml(msg.text)}</div>`;
-            } else if (msg.type === 'image') {
-                content = `<img src="${msg.imageUrl}" class="message-image" onclick="window.open('${msg.imageUrl}','_blank')">`;
-            } else if (msg.type === 'sticker') {
-                if (msg.stickerUrl) {
-                    content = `<img src="${msg.stickerUrl}" style="max-width:80px; max-height:80px;">`;
-                } else {
-                    content = `<div class="message-sticker">${msg.sticker}</div>`;
-                }
+            if (msg.type === 'text') content = `<div class="message-text">${escapeHtml(msg.text)}</div>`;
+            else if (msg.type === 'image') content = `<img src="${msg.imageUrl}" class="message-image" onclick="window.open('${msg.imageUrl}','_blank')">`;
+            else if (msg.type === 'sticker') {
+                if (msg.stickerUrl) content = `<img src="${msg.stickerUrl}" style="max-width:80px;">`;
+                else content = `<div class="message-sticker">${msg.sticker}</div>`;
             }
-            
             let actionsHtml = '';
             if (isOwn && msg.type === 'text') {
-                actionsHtml = `<div class="message-actions">
-                    <button class="message-action-btn" onclick="editMessage('${msg.id}', '${escapeHtml(msg.text)}')">✏️</button>
-                    <button class="message-action-btn" onclick="deleteMessage('${msg.id}')">🗑️</button>
-                </div>`;
+                actionsHtml = `<div class="message-actions"><button class="message-action-btn" onclick="editMessage('${msg.id}', '${escapeHtml(msg.text)}')">✏️</button><button class="message-action-btn" onclick="deleteMessage('${msg.id}')">🗑️</button></div>`;
             }
-            
-            div.innerHTML = `
-                <div class="message-bubble">
-                    <div class="message-name">${escapeHtml(msg.userName)}</div>
-                    ${content}
-                    ${actionsHtml}
-                    <div class="message-time">${time}</div>
-                </div>
-            `;
-            
+            div.innerHTML = `<div class="message-bubble"><div class="message-name">${escapeHtml(msg.userName)}</div>${content}${actionsHtml}<div class="message-time">${time}</div></div>`;
             container.appendChild(div);
         }
 
-        // ========== ОТПРАВКА СООБЩЕНИЯ (ИСПРАВЛЕНО) ==========
         async function sendMessage() {
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
+            if (!text) { showNotification('📝 Введите сообщение'); return; }
+            if (!currentChat || currentChat.type === 'game') { showNotification('❌ Нельзя отправить сообщение сюда'); return; }
             
-            if (!text) {
-                showNotification('📝 Введите сообщение');
-                return;
-            }
+            const messageData = { type: 'text', text: text, userId: currentUser.id, userName: currentUser.name, avatar: currentUser.avatar, timestamp: firebase.firestore.FieldValue.serverTimestamp(), reactions: {} };
+            if (currentChat.type === 'general') messageData.chatType = 'general';
+            else if (currentChat.type === 'private') { messageData.chatType = 'private'; messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId); }
             
-            if (!currentChat || currentChat.type === 'game') {
-                showNotification('❌ Нельзя отправить сообщение сюда');
-                return;
-            }
-            
-            const messageData = {
-                type: 'text',
-                text: text,
-                userId: currentUser.id,
-                userName: currentUser.name,
-                avatar: currentUser.avatar,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                reactions: {}
-            };
-            
-            if (currentChat.type === 'general') {
-                messageData.chatType = 'general';
-            } else if (currentChat.type === 'private') {
-                messageData.chatType = 'private';
-                messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId);
-                messageData.recipientId = currentChat.userId;
-            }
-            
-            try {
-                await db.collection('messages').add(messageData);
-                input.value = '';
-                showNotification('✅ Сообщение отправлено');
-            } catch (error) {
-                console.error('Ошибка отправки:', error);
-                showNotification('❌ Ошибка отправки! Проверь правила Firebase');
-            }
+            await db.collection('messages').add(messageData);
+            input.value = '';
+            showNotification('✅ Сообщение отправлено');
         }
 
         async function editMessage(msgId, oldText) {
-            const newText = prompt('Редактировать сообщение:', oldText);
-            if (newText && newText !== oldText) {
-                try {
-                    await db.collection('messages').doc(msgId).update({ text: newText, edited: true });
-                    showNotification('✏️ Сообщение изменено');
-                } catch (error) {
-                    showNotification('❌ Ошибка редактирования');
-                }
-            }
+            const newText = prompt('Редактировать:', oldText);
+            if (newText && newText !== oldText) { await db.collection('messages').doc(msgId).update({ text: newText, edited: true }); showNotification('✏️ Изменено'); }
         }
 
         async function deleteMessage(msgId) {
-            if (confirm('Удалить сообщение?')) {
-                try {
-                    await db.collection('messages').doc(msgId).delete();
-                    showNotification('🗑️ Сообщение удалено');
-                } catch (error) {
-                    showNotification('❌ Ошибка удаления');
-                }
-            }
+            if (confirm('Удалить?')) { await db.collection('messages').doc(msgId).delete(); showNotification('🗑️ Удалено'); }
         }
 
-        // ========== ФОТО ==========
         function attachImage() { document.getElementById('imageInput').click(); }
         document.getElementById('imageInput').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
             reader.onload = async (event) => {
-                const messageData = {
-                    type: 'image',
-                    imageUrl: event.target.result,
-                    userId: currentUser.id,
-                    userName: currentUser.name,
-                    avatar: currentUser.avatar,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    reactions: {}
-                };
-                if (currentChat.type === 'general') {
-                    messageData.chatType = 'general';
-                } else if (currentChat.type === 'private') {
-                    messageData.chatType = 'private';
-                    messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId);
-                }
+                const messageData = { type: 'image', imageUrl: event.target.result, userId: currentUser.id, userName: currentUser.name, avatar: currentUser.avatar, timestamp: firebase.firestore.FieldValue.serverTimestamp(), reactions: {} };
+                if (currentChat.type === 'general') messageData.chatType = 'general';
+                else if (currentChat.type === 'private') { messageData.chatType = 'private'; messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId); }
                 await db.collection('messages').add(messageData);
                 showNotification('🖼️ Фото отправлено');
             };
             reader.readAsDataURL(file);
-            document.getElementById('imageInput').value = '';
         });
 
-        // ========== СТИКЕРЫ ==========
         async function loadCustomStickers() {
-            try {
-                const stickersRef = await db.collection('stickers').where('userId', '==', currentUser.id).get();
-                customStickers = [];
-                stickersRef.forEach(doc => customStickers.push(doc.data()));
-                renderStickers();
-            } catch (error) {
-                console.error('Ошибка загрузки стикеров:', error);
-            }
+            const stickersRef = await db.collection('stickers').where('userId', '==', currentUser.id).get();
+            customStickers = [];
+            stickersRef.forEach(doc => customStickers.push(doc.data()));
+            renderStickers();
         }
 
         function renderStickers() {
@@ -982,107 +419,47 @@
                 const div = document.createElement('div');
                 div.style.cursor = 'pointer';
                 div.style.textAlign = 'center';
-                if (sticker.stickerUrl) {
-                    div.innerHTML = `<img src="${sticker.stickerUrl}" style="width:50px;height:50px;">`;
-                } else {
-                    div.textContent = sticker.sticker;
-                    div.style.fontSize = '40px';
-                }
+                if (sticker.stickerUrl) div.innerHTML = `<img src="${sticker.stickerUrl}" style="width:50px;">`;
+                else { div.textContent = sticker.sticker; div.style.fontSize = '40px'; }
                 div.onclick = () => sendSticker(sticker.sticker || sticker.stickerUrl, sticker.stickerUrl);
                 grid.appendChild(div);
             });
         }
 
         async function sendSticker(sticker, stickerUrl = null) {
-            if (!currentChat || currentChat.type === 'game') {
-                showNotification('❌ Нельзя отправить стикер сюда');
-                return;
-            }
-            
-            const messageData = {
-                type: 'sticker',
-                sticker: sticker,
-                stickerUrl: stickerUrl,
-                userId: currentUser.id,
-                userName: currentUser.name,
-                avatar: currentUser.avatar,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                reactions: {}
-            };
-            
-            if (currentChat.type === 'general') {
-                messageData.chatType = 'general';
-            } else if (currentChat.type === 'private') {
-                messageData.chatType = 'private';
-                messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId);
-            }
-            
-            try {
-                await db.collection('messages').add(messageData);
-                closeModal('stickerModalWindow');
-                showNotification('😊 Стикер отправлен!');
-            } catch (error) {
-                showNotification('❌ Ошибка отправки стикера');
-            }
+            if (!currentChat || currentChat.type === 'game') { showNotification('❌ Нельзя отправить стикер сюда'); return; }
+            const messageData = { type: 'sticker', sticker: sticker, stickerUrl: stickerUrl, userId: currentUser.id, userName: currentUser.name, avatar: currentUser.avatar, timestamp: firebase.firestore.FieldValue.serverTimestamp(), reactions: {} };
+            if (currentChat.type === 'general') messageData.chatType = 'general';
+            else if (currentChat.type === 'private') { messageData.chatType = 'private'; messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId); }
+            await db.collection('messages').add(messageData);
+            closeModal('stickerModalWindow');
+            showNotification('😊 Стикер отправлен!');
         }
 
-        function openStickerModal() {
-            if (currentChat && currentChat.type !== 'game') {
-                renderStickers();
-                document.getElementById('stickerModalWindow').classList.add('active');
-            } else {
-                showNotification('❌ Нельзя отправить стикер в игру');
-            }
-        }
-
+        function openStickerModal() { if (currentChat && currentChat.type !== 'game') { renderStickers(); document.getElementById('stickerModalWindow').classList.add('active'); } else { showNotification('❌ Нельзя отправить стикер в игру'); } }
         function openStickerImageUpload() { document.getElementById('stickerImageInput').click(); }
         document.getElementById('stickerImageInput').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = async (event) => {
-                await db.collection('stickers').add({ userId: currentUser.id, stickerUrl: event.target.result });
-                await loadCustomStickers();
-                showNotification('✅ Стикер создан!');
-            };
+            reader.onload = async (event) => { await db.collection('stickers').add({ userId: currentUser.id, stickerUrl: event.target.result }); await loadCustomStickers(); showNotification('✅ Стикер создан!'); };
             reader.readAsDataURL(file);
         });
 
-        // ========== ПРОФИЛЬ ==========
         async function showProfile(userId) {
-            try {
-                const userDoc = await db.collection('users').doc(userId).get();
-                const user = userDoc.data();
-                const content = document.getElementById('profileContent');
-                content.innerHTML = `
-                    <div class="profile-view">
-                        <img src="${user.avatar}" class="profile-view-avatar">
-                        <h3>${escapeHtml(user.name)}</h3>
-                        <p>${user.bio || 'Нет описания'}</p>
-                        <p style="color:#666;margin:10px 0;">ID: ${user.id}</p>
-                        <button onclick="copyToClipboard('${user.id}')">📋 Копировать ID</button>
-                        ${userId !== currentUser.id ? `<button onclick="openPrivateChat('${userId}'); closeModal('profileModal');">💬 Написать</button>` : ''}
-                    </div>
-                `;
-                document.getElementById('profileModal').classList.add('active');
-            } catch (error) {
-                showNotification('❌ Ошибка загрузки профиля');
-            }
+            const userDoc = await db.collection('users').doc(userId).get();
+            const user = userDoc.data();
+            const content = document.getElementById('profileContent');
+            content.innerHTML = `<div class="profile-view"><img src="${user.avatar}" class="profile-view-avatar"><h3>${escapeHtml(user.name)}</h3><p>${user.bio || 'Нет описания'}</p><p>ID: ${user.id}</p><button onclick="copyToClipboard('${user.id}')">📋 Копировать ID</button>${userId !== currentUser.id ? `<button onclick="openPrivateChat('${userId}'); closeModal('profileModal');">💬 Написать</button>` : ''}</div>`;
+            document.getElementById('profileModal').classList.add('active');
         }
 
-        function copyToClipboard(text, event) {
-            if (event) event.stopPropagation();
-            navigator.clipboard.writeText(text);
-            showNotification('✅ ID скопирован!');
-        }
-
-        // ========== ТЕМЫ ==========
+        function copyToClipboard(text, event) { if (event) event.stopPropagation(); navigator.clipboard.writeText(text); showNotification('✅ ID скопирован!'); }
         function showThemeModal() { document.getElementById('themeModal').classList.add('active'); }
         function changeTheme(theme) { document.body.className = `theme-${theme}`; }
-
         function showWallpaperModal() { document.getElementById('wallpaperModal').classList.add('active'); }
 
-        // ========== ИГРА (упрощенная) ==========
+        // Игра
         let gameBoard = ['', '', '', '', '', '', '', '', ''];
         let gameCurrentPlayer = 'X';
         let gameActiveGame = true;
@@ -1090,95 +467,38 @@
         function renderGameBoardUI() {
             const container = document.getElementById('gameContent');
             if (!container) return;
-            
-            let statusText = gameActiveGame ? `Ход: ${gameCurrentPlayer === 'X' ? '❌' : '⭕'}` : 'Игра окончена';
-            
-            container.innerHTML = `
-                <div style="text-align:center; margin-bottom:10px;">${statusText}</div>
-                <div class="game-board" id="gameBoard"></div>
-                <button onclick="resetGameBoard()">🔄 Новая игра</button>
-            `;
-            
+            container.innerHTML = `<div style="text-align:center; margin-bottom:10px;">${gameActiveGame ? `Ход: ${gameCurrentPlayer === 'X' ? '❌' : '⭕'}` : 'Игра окончена'}</div><div class="game-board" id="gameBoard"></div><button onclick="resetGameBoard()">🔄 Новая игра</button>`;
             const board = document.getElementById('gameBoard');
             for (let i = 0; i < 9; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'game-cell';
-                if (!gameActiveGame) cell.classList.add('disabled');
                 cell.textContent = gameBoard[i];
-                cell.onclick = () => makeGameMoveLocal(i);
+                cell.onclick = () => { if (gameActiveGame && !gameBoard[i]) { gameBoard[i] = gameCurrentPlayer; const winner = checkGameWinner(); if (winner) { gameActiveGame = false; showNotification(`🏆 Победил ${winner === 'X' ? 'Крестик' : 'Нолик'}!`); } else if (gameBoard.every(c => c !== '')) { gameActiveGame = false; showNotification('🤝 Ничья!'); } else { gameCurrentPlayer = gameCurrentPlayer === 'X' ? 'O' : 'X'; } renderGameBoardUI(); } };
                 board.appendChild(cell);
             }
         }
 
-        function makeGameMoveLocal(index) {
-            if (!gameActiveGame || gameBoard[index] !== '') return;
-            
-            gameBoard[index] = gameCurrentPlayer;
-            
-            const winner = checkGameWinner(gameBoard);
-            if (winner) {
-                gameActiveGame = false;
-                showNotification(`🏆 Победил ${winner === 'X' ? 'Крестик' : 'Нолик'}!`);
-            } else if (gameBoard.every(cell => cell !== '')) {
-                gameActiveGame = false;
-                showNotification('🤝 Ничья!');
-            } else {
-                gameCurrentPlayer = gameCurrentPlayer === 'X' ? 'O' : 'X';
-            }
-            
-            renderGameBoardUI();
-        }
-
-        function checkGameWinner(board) {
+        function checkGameWinner() {
             const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-            for (let w of wins) {
-                if (board[w[0]] && board[w[0]] === board[w[1]] && board[w[0]] === board[w[2]]) {
-                    return board[w[0]];
-                }
-            }
+            for (let w of wins) { if (gameBoard[w[0]] && gameBoard[w[0]] === gameBoard[w[1]] && gameBoard[w[0]] === gameBoard[w[2]]) return gameBoard[w[0]]; }
             return null;
         }
 
-        function resetGameBoard() {
-            gameBoard = ['', '', '', '', '', '', '', '', ''];
-            gameCurrentPlayer = 'X';
-            gameActiveGame = true;
-            renderGameBoardUI();
-            showNotification('🔄 Новая игра!');
-        }
+        function resetGameBoard() { gameBoard = ['', '', '', '', '', '', '', '', '']; gameCurrentPlayer = 'X'; gameActiveGame = true; renderGameBoardUI(); showNotification('🔄 Новая игра!'); }
+        function showGameModal() { resetGameBoard(); document.getElementById('gameModal').classList.add('active'); }
 
-        function showGameModal() {
-            resetGameBoard();
-            document.getElementById('gameModal').classList.add('active');
-        }
-
-        // ========== ОБЩИЕ ФУНКЦИИ ==========
         function handleEnter(event) { if (event.key === 'Enter') sendMessage(); }
         function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
+        window.onclick = function(event) { if (event.target.classList.contains('modal')) event.target.classList.remove('active'); }
 
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.classList.remove('active');
-            }
-        }
-
-        // ========== ПРОВЕРКА СОХРАНЕННОГО ПОЛЬЗОВАТЕЛЯ ==========
         async function checkSavedUser() {
             const saved = localStorage.getItem('sny_user_id');
             const savedPass = localStorage.getItem('sny_password');
             if (saved && savedPass) {
-                try {
-                    const userDoc = await db.collection('users').doc(saved).get();
-                    if (userDoc.exists && userDoc.data().password === savedPass) {
-                        currentUser = userDoc.data();
-                        enterMessenger();
-                    }
-                } catch (error) {
-                    console.log('Ожидание подключения к Firebase...');
-                }
+                const userDoc = await db.collection('users').doc(saved).get();
+                if (userDoc.exists && userDoc.data().password === savedPass) { currentUser = userDoc.data(); enterMessenger(); }
             }
         }
-
         checkSavedUser();
     </script>
 </body>
