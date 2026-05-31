@@ -22,7 +22,6 @@
             overflow: hidden;
         }
 
-        /* Темы */
         .theme-default { background: linear-gradient(135deg, #2c3e50, #3498db); }
         .theme-pink { background: linear-gradient(135deg, #7c5a6e, #c9a3b8); }
         .theme-red { background: linear-gradient(135deg, #8b5a5a, #c98a8a); }
@@ -31,7 +30,6 @@
         .theme-purple { background: linear-gradient(135deg, #6b4a8b, #a98ac9); }
         .theme-orange { background: linear-gradient(135deg, #8b6a4a, #c9aa8a); }
 
-        /* Экран входа */
         .screen {
             display: none;
             width: 100%;
@@ -66,15 +64,14 @@
         }
         button { background: #667eea; color: white; border: none; cursor: pointer; font-weight: 500; }
 
-        /* Основной контейнер */
         .app-container {
             width: 100%;
             height: 100%;
             position: relative;
             overflow: hidden;
+            display: none;
         }
 
-        /* Чат (основной экран) */
         .chat-screen {
             position: absolute;
             top: 0;
@@ -91,7 +88,6 @@
             transform: translateX(75%);
         }
 
-        /* Шапка чата */
         .chat-header {
             padding: 12px 16px;
             background: white;
@@ -130,7 +126,6 @@
             cursor: pointer; padding: 8px; width: auto; color: #555;
         }
 
-        /* Сообщения */
         .messages {
             flex: 1;
             padding: 12px;
@@ -158,7 +153,6 @@
         .message-big-sticker { font-size: 50px; }
         .message-big-sticker-img { width: 70px; height: 70px; object-fit: contain; }
 
-        /* Аудиоплеер */
         .audio-message { max-width: 240px; margin-top: 4px; }
         .audio-player {
             display: flex; align-items: center; gap: 8px;
@@ -173,27 +167,19 @@
             flex: 1; height: 30px; background: rgba(0,0,0,0.15);
             border-radius: 15px; overflow: hidden; position: relative; cursor: pointer;
         }
-        .message-own .waveform { background: rgba(255,255,255,0.3); }
         .waveform-progress {
             height: 100%; background: #667eea; width: 0%; transition: width 0.1s linear;
         }
         .duration { font-size: 11px; min-width: 40px; text-align: center; }
 
-        /* Подарки */
         .gift-badge {
-            display: inline-block;
-            font-size: 24px;
-            cursor: pointer;
-            margin-left: 5px;
-            transition: transform 0.2s;
+            display: inline-block; font-size: 24px; cursor: pointer; margin-left: 5px;
         }
-        .gift-badge:active { transform: scale(1.2); }
         .gift-message {
             background: linear-gradient(135deg, #ffd89b, #19547b);
             color: white !important;
         }
 
-        /* Кнопки действий */
         .message-actions {
             display: flex; gap: 8px; margin-top: 6px; justify-content: flex-end;
         }
@@ -209,7 +195,6 @@
             border-radius: 20px; font-size: 12px; cursor: pointer;
         }
 
-        /* Панель ввода */
         .input-area {
             padding: 10px 12px;
             background: white;
@@ -237,7 +222,6 @@
             display: inline-block; font-size: 12px; color: #ef4444; margin-left: 8px;
         }
 
-        /* Боковое меню */
         .side-menu {
             position: absolute;
             top: 0;
@@ -285,18 +269,6 @@
         .copy-id-btn {
             background: none; border: none; font-size: 18px; cursor: pointer; padding: 8px;
         }
-        .font-color-item {
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            border-bottom: 1px solid #eee;
-        }
-        .font-color-item:active { background: #f0f0f0; }
-        .color-dot {
-            width: 30px; height: 30px; border-radius: 50%;
-        }
         .menu-section {
             padding: 15px 20px;
             border-bottom: 1px solid #eee;
@@ -313,15 +285,18 @@
             align-items: center;
             gap: 12px;
             cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
         }
-        .menu-item:active { opacity: 0.7; }
+        .menu-item:active { background: #f0f0f0; }
+        .chats-list {
+            flex: 1;
+        }
         .clear-chat-btn {
             background: #dc3545;
             margin: 15px;
             width: calc(100% - 30px);
         }
 
-        /* Модалки */
         .modal {
             display: none;
             position: fixed;
@@ -474,7 +449,6 @@
     </style>
 </head>
 <body>
-    <!-- Экран входа -->
     <div id="welcomeScreen" class="screen active">
         <div class="welcome-card">
             <h1>💬 SNY</h1>
@@ -501,9 +475,7 @@
         </div>
     </div>
 
-    <!-- Основное приложение -->
-    <div id="appContainer" class="app-container" style="display:none">
-        <!-- Боковое меню (свайп сбоку) -->
+    <div id="appContainer" class="app-container">
         <div class="side-menu" id="sideMenu">
             <div class="menu-header">
                 <h3>SNY</h3>
@@ -520,15 +492,9 @@
             
             <div class="menu-section">
                 <div class="menu-section-title">Внешний вид</div>
-                <div class="menu-item" onclick="showThemeModal()">
-                    <span>🎨</span> <span>Темы оформления</span>
-                </div>
-                <div class="menu-item" onclick="showFontColorModal()">
-                    <span>🎨</span> <span>Цвет шрифта</span>
-                </div>
-                <div class="menu-item" onclick="showWallpaperModal()">
-                    <span>🖼️</span> <span>Обои чата</span>
-                </div>
+                <div class="menu-item" onclick="showThemeModal()"><span>🎨</span> <span>Темы оформления</span></div>
+                <div class="menu-item" onclick="showFontColorModal()"><span>🎨</span> <span>Цвет шрифта</span></div>
+                <div class="menu-item" onclick="showWallpaperModal()"><span>🖼️</span> <span>Обои чата</span></div>
             </div>
             
             <div class="menu-section">
@@ -539,7 +505,6 @@
             <button class="clear-chat-btn" onclick="clearChat()">🗑️ Очистить чат</button>
         </div>
 
-        <!-- Основной экран чата -->
         <div class="chat-screen" id="chatScreen">
             <div class="chat-header">
                 <button class="menu-toggle" onclick="toggleMenu()">☰</button>
@@ -574,7 +539,6 @@
         </div>
     </div>
 
-    <!-- Модалки -->
     <div id="profileModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>👤 Профиль</h3><span class="close-modal" onclick="closeModal('profileModal')">&times;</span></div><div id="profileContent"></div></div></div>
     <div id="themeModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎨 Темы</h3><span class="close-modal" onclick="closeModal('themeModal')">&times;</span></div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px"><button onclick="changeTheme('default')">🌙 По умолчанию</button><button onclick="changeTheme('pink')">🌸 Розовая</button><button onclick="changeTheme('red')">❤️ Красная</button><button onclick="changeTheme('blue')">💙 Синяя</button><button onclick="changeTheme('green')">💚 Зеленая</button><button onclick="changeTheme('purple')">🟣 Фиолетовая</button><button onclick="changeTheme('orange')">🟠 Оранжевая</button></div></div></div>
     <div id="wallpaperModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🖼️ Обои</h3><span class="close-modal" onclick="closeModal('wallpaperModal')">&times;</span></div><button onclick="setWallpaper('default')">По умолчанию</button><button onclick="uploadWallpaper()">📤 Своё фото</button><input type="file" id="wallpaperFile" accept="image/*" style="display:none"></div></div>
@@ -613,9 +577,7 @@
         let activeAudios = {};
 
         const availableReactions = ['👍', '❤️', '😂', '😮', '😢', '😡', '🎉', '🙏'];
-        const availableColors = [
-            '#000000', '#FF0000', '#00FF00', '#0000FF', '#FF69B4', '#FFA500', '#800080', '#008080', '#FFD700', '#9ACD32'
-        ];
+        const availableColors = ['#000000', '#FF0000', '#00FF00', '#0000FF', '#FF69B4', '#FFA500', '#800080', '#008080', '#FFD700', '#9ACD32'];
         const gifts = [
             { emoji: '🌹', name: 'Роза', value: '🌹' },
             { emoji: '💍', name: 'Кольцо', value: '💍' },
@@ -655,24 +617,16 @@
             return `${mins}:${secs.toString().padStart(2, '0')}`;
         }
 
-        // Свайп для открытия меню
         let touchStartX = 0;
-        let touchEndX = 0;
-        
         function initSwipe() {
             const chatScreen = document.getElementById('chatScreen');
             chatScreen.addEventListener('touchstart', (e) => {
                 touchStartX = e.changedTouches[0].screenX;
             });
             chatScreen.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                if (touchStartX - touchEndX > 80) {
-                    // свайп влево - закрыть меню
-                    closeMenu();
-                } else if (touchEndX - touchStartX > 80) {
-                    // свайп вправо - открыть меню
-                    openMenu();
-                }
+                const touchEndX = e.changedTouches[0].screenX;
+                if (touchStartX - touchEndX > 80) closeMenu();
+                else if (touchEndX - touchStartX > 80) openMenu();
             });
         }
 
@@ -697,7 +651,6 @@
             sideMenu.classList.remove('open');
         }
 
-        // Голосовые сообщения
         async function toggleVoiceRecord() {
             if (!isRecording) {
                 try {
@@ -814,7 +767,6 @@
             return container;
         }
 
-        // Подарки
         function sendGift() {
             const grid = document.getElementById('giftsGrid');
             grid.innerHTML = '';
@@ -852,7 +804,6 @@
             showNotification(`🎁 Подарок ${giftEmoji} отправлен!`);
         }
 
-        // Цвет шрифта
         function showFontColorModal() {
             const grid = document.getElementById('colorPickerGrid');
             grid.innerHTML = '';
@@ -879,7 +830,6 @@
             }
         }
 
-        // Остальные функции
         function insertStickerIntoInput(sticker, stickerUrl) {
             const input = document.getElementById('messageInput');
             if (stickerUrl) input.value += `[sticker-img:${stickerUrl}]`;
@@ -985,9 +935,6 @@
             document.getElementById('menuName').innerText = currentUser.name;
             document.getElementById('menuAvatar').src = currentUser.avatar;
             document.getElementById('menuId').innerText = currentUser.id;
-            document.getElementById('profileName').innerText = currentUser.name;
-            document.getElementById('profileAvatar').src = currentUser.avatar;
-            document.getElementById('profileId').innerText = currentUser.id;
             
             await loadChats();
             await loadCustomStickers();
@@ -997,7 +944,6 @@
             await openGeneralChat();
             await updateLastSeen();
             setInterval(updateLastSeen, 30000);
-            setInterval(loadChats, 10000);
             initSwipe();
         }
 
@@ -1058,18 +1004,23 @@
         });
 
         async function loadChats() {
-            const usersSnapshot = await db.collection('users').get();
-            const chatsList = document.getElementById('chatsList');
-            chatsList.innerHTML = `
-                <div class="menu-item" onclick="openGeneralChat(); closeMenu();">💬 Общий чат</div>
-                <div class="menu-item" onclick="openGameChat(); closeMenu();">🎮 Крестики-нолики</div>
-            `;
-            usersSnapshot.forEach(doc => {
-                if (doc.id !== currentUser.id) {
-                    const user = doc.data();
-                    chatsList.innerHTML += `<div class="menu-item" onclick="openPrivateChat('${user.id}'); closeMenu();">👤 ${escapeHtml(user.name)}</div>`;
-                }
-            });
+            try {
+                const usersSnapshot = await db.collection('users').get();
+                const chatsList = document.getElementById('chatsList');
+                chatsList.innerHTML = `
+                    <div class="menu-item" onclick="openGeneralChat(); closeMenu();">💬 Общий чат</div>
+                    <div class="menu-item" onclick="openGameChat(); closeMenu();">🎮 Крестики-нолики</div>
+                `;
+                usersSnapshot.forEach(doc => {
+                    if (doc.id !== currentUser.id) {
+                        const user = doc.data();
+                        chatsList.innerHTML += `<div class="menu-item" onclick="openPrivateChat('${user.id}'); closeMenu();">👤 ${escapeHtml(user.name)}</div>`;
+                    }
+                });
+            } catch (error) {
+                console.error('Ошибка загрузки чатов:', error);
+                showNotification('❌ Ошибка загрузки чатов');
+            }
         }
 
         function getPrivateChatId(u1, u2) { return [u1, u2].sort().join('_'); }
@@ -1174,17 +1125,17 @@
                     else if (p.type === 'sticker-img') html += `<img src="${p.content}" class="inline-sticker-img">`;
                 }
                 content = `<div class="message-text" style="color: ${fontColor}">${html}</div>`;
-                if (msg.isGift) {
-                    div.classList.add('gift-message');
-                }
+                if (msg.isGift) div.classList.add('gift-message');
             } else if (msg.type === 'image') {
                 content = `<img src="${msg.imageUrl}" class="message-image" onclick="window.open('${msg.imageUrl}','_blank')">`;
             } else if (msg.type === 'video') {
                 content = `<video src="${msg.videoUrl}" controls class="message-video"></video>`;
             } else if (msg.type === 'voice') {
-                const player = createAudioPlayer(msg.audioUrl, msg.duration || 1, msg.id);
                 content = `<div class="audio-message"></div>`;
-                setTimeout(() => { div.querySelector('.audio-message')?.appendChild(player); }, 0);
+                setTimeout(() => {
+                    const audioDiv = div.querySelector('.audio-message');
+                    if (audioDiv) audioDiv.appendChild(createAudioPlayer(msg.audioUrl, msg.duration || 1, msg.id));
+                }, 0);
             } else if (msg.type === 'sticker') {
                 if (msg.stickerUrl) content = `<img src="${msg.stickerUrl}" class="message-big-sticker-img">`;
                 else content = `<div class="message-big-sticker">${msg.sticker}</div>`;
@@ -1206,12 +1157,6 @@
             
             div.innerHTML = `<div class="message-bubble"><div class="message-name">${escapeHtml(msg.userName)}</div>${content}${reactionsHtml}${actionsHtml}<div class="message-time">${time}</div></div>`;
             container.appendChild(div);
-            if (msg.type === 'voice') {
-                const audioDiv = div.querySelector('.audio-message');
-                if (audioDiv && audioDiv.children.length === 0) {
-                    audioDiv.appendChild(createAudioPlayer(msg.audioUrl, msg.duration || 1, msg.id));
-                }
-            }
         }
 
         async function sendMessage() {
@@ -1347,7 +1292,6 @@
         function changeTheme(theme) { document.body.className = `theme-${theme}`; }
         function showWallpaperModal() { document.getElementById('wallpaperModal').classList.add('active'); }
 
-        // Игра
         let gameBoard = ['', '', '', '', '', '', '', '', ''];
         let gameCurrent = 'X';
         let gameActiveGame = true;
