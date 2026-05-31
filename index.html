@@ -18,7 +18,6 @@
             transition: background 0.3s;
         }
 
-        /* Приглушенные темы */
         .theme-default { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); }
         .theme-pink { background: linear-gradient(135deg, #7c5a6e 0%, #c9a3b8 100%); }
         .theme-red { background: linear-gradient(135deg, #8b5a5a 0%, #c98a8a 100%); }
@@ -111,7 +110,6 @@
             font-family: inherit;
         }
 
-        /* Мессенджер */
         .messenger-container {
             display: flex;
             width: 1400px;
@@ -284,6 +282,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            transition: background-image 0.3s;
         }
 
         .message {
@@ -491,7 +490,6 @@
             cursor: pointer;
         }
 
-        /* Игра крестики-нолики */
         .game-board {
             display: grid;
             grid-template-columns: repeat(3, 80px);
@@ -515,6 +513,11 @@
 
         .game-cell:hover {
             background: #e0e0e0;
+        }
+
+        .game-cell.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
         }
 
         .game-info {
@@ -561,6 +564,17 @@
             background: #fffacd;
             padding: 10px;
             border-radius: 10px;
+            margin-top: 10px;
+        }
+        
+        .game-status {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .game-reset-btn {
+            background: #f59e0b;
             margin-top: 10px;
         }
     </style>
@@ -661,7 +675,7 @@
     <div id="profileModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>👤 Профиль</h3><span class="close-modal" onclick="closeModal('profileModal')">&times;</span></div><div id="profileContent" class="profile-view"></div></div></div>
     <div id="themeModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎨 Темы</h3><span class="close-modal" onclick="closeModal('themeModal')">&times;</span></div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px"><button onclick="changeTheme('default')">🌙 По умолчанию</button><button onclick="changeTheme('pink')">🌸 Розовая</button><button onclick="changeTheme('red')">❤️ Красная</button><button onclick="changeTheme('blue')">💙 Синяя</button><button onclick="changeTheme('green')">💚 Зеленая</button><button onclick="changeTheme('purple')">🟣 Фиолетовая</button><button onclick="changeTheme('orange')">🟠 Оранжевая</button><button onclick="changeTheme('teal')">🩵 Бирюзовая</button><button onclick="changeTheme('indigo')">🔷 Индиго</button><button onclick="changeTheme('cyan')">💎 Циан</button></div></div></div>
     
-    <div id="wallpaperModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🖼️ Обои чата</h3><span class="close-modal" onclick="closeModal('wallpaperModal')">&times;</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px" id="wallpaperList"><button onclick="setWallpaper('default')">По умолчанию</button><button onclick="setWallpaper('https://www.transparenttextures.com/patterns/cubes.png')">Кубики</button><button onclick="setWallpaper('https://www.transparenttextures.com/patterns/diagmonds.png')">Ромбы</button><button onclick="setWallpaper('https://www.transparenttextures.com/patterns/flowers.png')">Цветы</button><button onclick="uploadWallpaper()">📤 Своё фото</button></div><input type="file" id="wallpaperFile" accept="image/*" style="display:none"></div></div>
+    <div id="wallpaperModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🖼️ Обои чата</h3><span class="close-modal" onclick="closeModal('wallpaperModal')">&times;</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"><button onclick="setWallpaper('default')">По умолчанию</button><button onclick="setWallpaper('https://www.transparenttextures.com/patterns/cubes.png')">Кубики</button><button onclick="setWallpaper('https://www.transparenttextures.com/patterns/diagmonds.png')">Ромбы</button><button onclick="setWallpaper('https://www.transparenttextures.com/patterns/flowers.png')">Цветы</button><button onclick="uploadWallpaper()">📤 Своё фото</button></div><input type="file" id="wallpaperFile" accept="image/*" style="display:none"></div></div>
     
     <div id="stickerModalWindow" class="modal"><div class="modal-content"><div class="modal-header"><h3>😊 Стикеры</h3><span class="close-modal" onclick="closeModal('stickerModalWindow')">&times;</span></div><button onclick="openStickerImageUpload()">📸 Стикер из фото</button><div id="stickersGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:15px;"></div></div></div>
     
@@ -691,11 +705,12 @@
         const db = firebase.firestore();
 
         let currentUser = null;
-        let currentChat = null;
+        let currentChat = { type: 'general' };
         let messagesUnsubscribe = null;
-        let chatsUnsubscribe = null;
         let customStickers = [];
         let editingMessageId = null;
+        let gameUnsubscribe = null;
+        let wallpaperUnsubscribe = null;
 
         function showNotification(msg) {
             const notif = document.createElement('div');
@@ -793,7 +808,9 @@
             loadCustomStickers();
             loadGroupSettings();
             loadPrivateNote();
-            openGeneralChat();
+            startWallpaperSync();
+            
+            await openGeneralChat();
         }
 
         async function loadGroupSettings() {
@@ -838,6 +855,39 @@
             });
         }
 
+        // Синхронизация обоев
+        function startWallpaperSync() {
+            if (wallpaperUnsubscribe) wallpaperUnsubscribe();
+            wallpaperUnsubscribe = db.collection('groupSettings').doc('general').onSnapshot((doc) => {
+                if (doc.exists && doc.data().wallpaper) {
+                    const wallpaper = doc.data().wallpaper;
+                    if (wallpaper && wallpaper !== 'default') {
+                        document.getElementById('messagesList').style.backgroundImage = `url(${wallpaper})`;
+                        document.getElementById('messagesList').style.backgroundSize = 'cover';
+                    } else {
+                        document.getElementById('messagesList').style.backgroundImage = 'none';
+                    }
+                }
+            });
+        }
+
+        async function setWallpaper(url) {
+            const wallpaperValue = url === 'default' ? null : url;
+            await db.collection('groupSettings').doc('general').set({ wallpaper: wallpaperValue, updatedAt: new Date() }, { merge: true });
+            closeModal('wallpaperModal');
+            showNotification('🖼️ Обои обновлены для всех!');
+        }
+        
+        function uploadWallpaper() { document.getElementById('wallpaperFile').click(); }
+        document.getElementById('wallpaperFile').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) { 
+                const reader = new FileReader(); 
+                reader.onload = (event) => setWallpaper(event.target.result); 
+                reader.readAsDataURL(file); 
+            }
+        });
+
         async function loadChats() {
             const usersSnapshot = await db.collection('users').get();
             const users = [];
@@ -864,6 +914,7 @@
             if (groupDoc.exists && groupDoc.data().description) document.getElementById('chatHeaderId').innerText = groupDoc.data().description;
             else document.getElementById('chatHeaderId').innerText = 'Все пользователи';
             loadMessages('general');
+            showNotification('💬 Вы в общем чате');
         }
 
         async function openPrivateChat(userId) {
@@ -875,13 +926,14 @@
             document.getElementById('chatHeaderId').innerText = user.bio || userId;
             document.getElementById('groupSettingsBtn').style.display = 'none';
             loadMessages('private', userId);
+            showNotification(`💬 Вы в чате с ${user.name}`);
         }
 
         function openGameChat() {
             currentChat = { type: 'game' };
             document.getElementById('chatHeaderAvatar').src = 'https://via.placeholder.com/40?text=🎮';
             document.getElementById('chatHeaderName').innerText = 'Крестики-нолики';
-            document.getElementById('chatHeaderId').innerText = 'Играй с друзьями!';
+            document.getElementById('chatHeaderId').innerText = 'Играйте с друзьями!';
             document.getElementById('groupSettingsBtn').style.display = 'none';
             showGameModal();
         }
@@ -971,12 +1023,16 @@
                 reactions: {}
             };
             
-            if (currentChat?.type === 'general') messageData.chatType = 'general';
-            else if (currentChat?.type === 'private') {
+            if (currentChat?.type === 'general') {
+                messageData.chatType = 'general';
+            } else if (currentChat?.type === 'private') {
                 messageData.chatType = 'private';
                 messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId);
                 messageData.recipientId = currentChat.userId;
-            } else return;
+            } else {
+                showNotification('❌ Не выбран чат');
+                return;
+            }
             
             await db.collection('messages').add(messageData);
             input.value = '';
@@ -1081,6 +1137,7 @@
 
         function renderStickers() {
             const grid = document.getElementById('stickersGrid');
+            if (!grid) return;
             grid.innerHTML = '';
             ['😊', '😂', '🥰', '😎', '🎉', '❤️', '🔥', '💯'].forEach(sticker => {
                 const div = document.createElement('div');
@@ -1088,6 +1145,7 @@
                 div.textContent = sticker;
                 div.style.fontSize = '40px';
                 div.style.cursor = 'pointer';
+                div.style.textAlign = 'center';
                 div.onclick = () => sendSticker(sticker);
                 grid.appendChild(div);
             });
@@ -1097,21 +1155,44 @@
                 if (sticker.stickerUrl) div.innerHTML = `<img src="${sticker.stickerUrl}" style="width:50px;height:50px;object-fit:contain;">`;
                 else div.textContent = sticker.sticker;
                 div.style.cursor = 'pointer';
+                div.style.textAlign = 'center';
                 div.onclick = () => sendSticker(sticker.sticker || sticker.stickerUrl, sticker.stickerUrl);
                 grid.appendChild(div);
             });
         }
 
         async function sendSticker(sticker, stickerUrl = null) {
+            if (!currentChat || currentChat.type === 'game') {
+                showNotification('❌ Нельзя отправить стикер сюда');
+                return;
+            }
+            
             const messageData = { type: 'sticker', sticker: sticker, stickerUrl: stickerUrl, userId: currentUser.id, userName: currentUser.name, avatar: currentUser.avatar, fontColor: currentUser.fontColor, timestamp: firebase.firestore.FieldValue.serverTimestamp(), views: [currentUser.id], reactions: {} };
-            if (currentChat?.type === 'general') messageData.chatType = 'general';
-            else if (currentChat?.type === 'private') { messageData.chatType = 'private'; messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId); messageData.recipientId = currentChat.userId; }
-            else return;
+            
+            if (currentChat.type === 'general') {
+                messageData.chatType = 'general';
+            } else if (currentChat.type === 'private') {
+                messageData.chatType = 'private';
+                messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId);
+                messageData.recipientId = currentChat.userId;
+            } else {
+                return;
+            }
+            
             await db.collection('messages').add(messageData);
             closeModal('stickerModalWindow');
+            showNotification('😊 Стикер отправлен!');
         }
 
-        function openStickerModal() { document.getElementById('stickerModalWindow').classList.add('active'); }
+        function openStickerModal() { 
+            if (currentChat && currentChat.type !== 'game') {
+                document.getElementById('stickerModalWindow').classList.add('active');
+                renderStickers();
+            } else {
+                showNotification('❌ Нельзя отправить стикер в игру');
+            }
+        }
+        
         function openStickerImageUpload() { document.getElementById('stickerImageInput').click(); }
         document.getElementById('stickerImageInput').addEventListener('change', async (e) => {
             const file = e.target.files[0];
@@ -1129,7 +1210,7 @@
             const userDoc = await db.collection('users').doc(userId).get();
             const user = userDoc.data();
             const content = document.getElementById('profileContent');
-            content.innerHTML = `<div class="profile-view"><img src="${user.avatar}" class="profile-view-avatar" onclick="triggerProfileAvatarUpload('${userId}')"><h3>${escapeHtml(user.name)}</h3><p>${user.bio || 'Нет описания'}</p><p style="color:#666;margin:10px 0;">ID: ${user.id}</p><button onclick="copyToClipboard('${user.id}')">📋 Копировать ID</button>${userId !== currentUser.id ? `<button onclick="openPrivateChat('${userId}'); closeModal('profileModal');">💬 Написать</button>` : ''}</div>`;
+            content.innerHTML = `<div class="profile-view"><img src="${user.avatar}" class="profile-view-avatar"><h3>${escapeHtml(user.name)}</h3><p>${user.bio || 'Нет описания'}</p><p style="color:#666;margin:10px 0;">ID: ${user.id}</p><button onclick="copyToClipboard('${user.id}')">📋 Копировать ID</button>${userId !== currentUser.id ? `<button onclick="openPrivateChat('${userId}'); closeModal('profileModal');">💬 Написать</button>` : ''}</div>`;
             document.getElementById('profileModal').classList.add('active');
         }
 
@@ -1139,23 +1220,6 @@
         function changeTheme(theme) { document.body.className = `theme-${theme}`; if (currentUser) db.collection('users').doc(currentUser.id).update({ theme }); }
 
         function showWallpaperModal() { document.getElementById('wallpaperModal').classList.add('active'); }
-        async function setWallpaper(url) {
-            const messagesDiv = document.getElementById('messagesList');
-            messagesDiv.style.backgroundImage = url === 'default' ? 'none' : `url(${url})`;
-            if (currentChat?.type === 'general') await db.collection('groupSettings').doc('general').set({ wallpaper: url }, { merge: true });
-            closeModal('wallpaperModal');
-            showNotification('🖼️ Обои обновлены!');
-        }
-        function uploadWallpaper() { document.getElementById('wallpaperFile').click(); }
-        document.getElementById('wallpaperFile').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) { const reader = new FileReader(); reader.onload = (event) => setWallpaper(event.target.result); reader.readAsDataURL(file); }
-        });
-
-        async function loadGroupWallpaper() {
-            const groupDoc = await db.collection('groupSettings').doc('general').get();
-            if (groupDoc.exists && groupDoc.data().wallpaper) document.getElementById('messagesList').style.backgroundImage = `url(${groupDoc.data().wallpaper})`;
-        }
 
         function showFontColorModal() { document.getElementById('fontColorModal').classList.add('active'); }
         async function saveFontColor() {
@@ -1166,51 +1230,126 @@
             showNotification('✅ Цвет шрифта сохранен!');
         }
 
-        // Игра крестики-нолики
-        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        // Синхронизированная игра Крестики-нолики
+        let gameBoardData = ['', '', '', '', '', '', '', '', ''];
         let gameCurrentPlayer = 'X';
         let gameActive = true;
+        let gameWinner = null;
         
-        function showGameModal() {
-            document.getElementById('gameModal').classList.add('active');
-            renderGame();
+        function startGameSync() {
+            if (gameUnsubscribe) gameUnsubscribe();
+            gameUnsubscribe = db.collection('game').doc('tic-tac-toe').onSnapshot((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    gameBoardData = data.board || ['', '', '', '', '', '', '', '', ''];
+                    gameCurrentPlayer = data.currentPlayer || 'X';
+                    gameActive = data.active !== false;
+                    gameWinner = data.winner;
+                    renderGameBoard();
+                } else {
+                    resetGameInFirebase();
+                }
+            });
         }
         
-        function renderGame() {
+        async function resetGameInFirebase() {
+            await db.collection('game').doc('tic-tac-toe').set({
+                board: ['', '', '', '', '', '', '', '', ''],
+                currentPlayer: 'X',
+                active: true,
+                winner: null,
+                lastMove: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        }
+        
+        async function makeGameMove(index) {
+            if (!gameActive || gameWinner || gameBoardData[index] !== '') {
+                showNotification('❌ Невозможный ход!');
+                return;
+            }
+            
+            // Обновляем в Firebase
+            const newBoard = [...gameBoardData];
+            newBoard[index] = gameCurrentPlayer;
+            
+            // Проверка победителя
+            const winner = checkWinnerOnBoard(newBoard);
+            let active = true;
+            let winnerSymbol = null;
+            
+            if (winner) {
+                active = false;
+                winnerSymbol = winner;
+                showNotification(`🏆 Победил ${winner === 'X' ? 'Крестик' : 'Нолик'}!`);
+            } else if (newBoard.every(cell => cell !== '')) {
+                active = false;
+                winnerSymbol = 'Ничья!';
+                showNotification(`🤝 Ничья!`);
+            } else {
+                // Меняем игрока
+                const nextPlayer = gameCurrentPlayer === 'X' ? 'O' : 'X';
+                await db.collection('game').doc('tic-tac-toe').update({
+                    board: newBoard,
+                    currentPlayer: nextPlayer,
+                    lastMove: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                return;
+            }
+            
+            await db.collection('game').doc('tic-tac-toe').update({
+                board: newBoard,
+                active: active,
+                winner: winnerSymbol,
+                lastMove: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        }
+        
+        function checkWinnerOnBoard(board) {
+            const winPatterns = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            for (let pattern of winPatterns) {
+                const [a,b,c] = pattern;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    return board[a];
+                }
+            }
+            return null;
+        }
+        
+        async function resetGame() {
+            await resetGameInFirebase();
+            showNotification('🔄 Игра перезапущена!');
+        }
+        
+        function renderGameBoard() {
             const container = document.getElementById('gameContent');
-            container.innerHTML = `<div class="game-board" id="gameBoard"></div><div class="game-info" id="gameInfo"></div><button onclick="resetGame()">🔄 Новая игра</button>`;
+            if (!container) return;
+            
+            let statusText = '';
+            if (gameWinner === 'Ничья!') statusText = '🤝 Ничья!';
+            else if (gameWinner) statusText = `🏆 Победил ${gameWinner === 'X' ? 'Крестик' : 'Нолик'}!`;
+            else statusText = `Ход: ${gameCurrentPlayer === 'X' ? '❌ Крестики' : '⭕ Нолики'}`;
+            
+            container.innerHTML = `
+                <div class="game-status">${statusText}</div>
+                <div class="game-board" id="gameBoard"></div>
+                <button class="game-reset-btn" onclick="resetGame()">🔄 Новая игра</button>
+            `;
+            
             const board = document.getElementById('gameBoard');
             for (let i = 0; i < 9; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'game-cell';
-                cell.textContent = gameBoard[i];
-                cell.onclick = () => makeMove(i);
+                if (!gameActive || gameWinner) cell.classList.add('disabled');
+                cell.textContent = gameBoardData[i];
+                cell.onclick = () => makeGameMove(i);
                 board.appendChild(cell);
             }
-            document.getElementById('gameInfo').innerText = gameActive ? `Ход: ${gameCurrentPlayer}` : (gameCurrentPlayer === 'Ничья!' ? 'Ничья!' : `Победил: ${gameCurrentPlayer === 'X' ? 'O' : 'X'}`);
         }
         
-        function makeMove(index) {
-            if (!gameActive || gameBoard[index] !== '') return;
-            gameBoard[index] = gameCurrentPlayer;
-            checkWinner();
-            if (gameActive) gameCurrentPlayer = gameCurrentPlayer === 'X' ? 'O' : 'X';
-            renderGame();
+        function showGameModal() {
+            startGameSync();
+            document.getElementById('gameModal').classList.add('active');
         }
-        
-        function checkWinner() {
-            const winPatterns = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-            for (let pattern of winPatterns) {
-                const [a,b,c] = pattern;
-                if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
-                    gameActive = false;
-                    return;
-                }
-            }
-            if (gameBoard.every(cell => cell !== '')) { gameActive = false; gameCurrentPlayer = 'Ничья!'; }
-        }
-        
-        function resetGame() { gameBoard = ['', '', '', '', '', '', '', '', '']; gameCurrentPlayer = 'X'; gameActive = true; renderGame(); }
 
         // Личные заметки
         async function openPrivateNote() {
@@ -1250,7 +1389,6 @@
         }
 
         checkSavedUser();
-        loadGroupWallpaper();
     </script>
 </body>
 </html>
