@@ -56,10 +56,11 @@
         .message-other .message-bubble { background: white; border: 1px solid #ddd; }
         .message-name { font-size: 11px; font-weight: bold; margin-bottom: 5px; opacity: 0.8; display: flex; justify-content: space-between; align-items: center; }
         .message-time { font-size: 9px; margin-top: 5px; opacity: 0.6; display: inline-block; }
-        .message-text { word-wrap: break-word; line-height: 1.4; }
-        .message-text .inline-sticker { font-size: 1.1em; display: inline-block; vertical-align: middle; }
-        .message-text .inline-sticker-img { width: 1.2em; height: 1.2em; vertical-align: middle; object-fit: contain; display: inline-block; }
+        .message-text { word-wrap: break-word; line-height: 1.4; font-size: 14px; }
+        .message-text .inline-sticker { font-size: 1.3em; display: inline-block; vertical-align: middle; }
+        .message-text .inline-sticker-img { width: 1.3em; height: 1.3em; vertical-align: middle; object-fit: contain; display: inline-block; }
         .message-image { max-width: 200px; border-radius: 10px; cursor: pointer; }
+        .message-video { max-width: 250px; border-radius: 10px; margin-top: 5px; }
         .message-big-sticker { font-size: 48px; cursor: pointer; display: inline-block; }
         .message-big-sticker-img { width: 80px; height: 80px; object-fit: contain; cursor: pointer; }
         .message-actions { display: flex; gap: 5px; margin-top: 5px; justify-content: flex-end; }
@@ -72,11 +73,10 @@
         .reaction { background: rgba(0,0,0,0.1); padding: 2px 8px; border-radius: 12px; font-size: 11px; cursor: pointer; transition: all 0.2s; }
         .reaction:hover { background: rgba(0,0,0,0.2); transform: scale(1.05); }
         .reaction-emoji { margin-right: 3px; }
-        .add-reaction-btn { background: none; border: none; font-size: 11px; cursor: pointer; padding: 2px 6px; border-radius: 12px; color: #666; }
-        .add-reaction-btn:hover { background: #f0f0f0; }
         .input-area { padding: 20px; border-top: 1px solid #ddd; background: white; }
         .input-tools { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
-        .tool-btn { width: auto; padding: 8px 12px; margin: 0; font-size: 13px; background: #f3f4f6; color: #333; }
+        .tool-btn { width: auto; padding: 8px 12px; margin: 0; font-size: 13px; background: #f3f4f6; color: #333; cursor: pointer; border: none; border-radius: 10px; }
+        .tool-btn:hover { background: #e0e0e0; transform: scale(1.02); }
         .input-row { display: flex; gap: 10px; }
         .input-row input { flex: 1; margin: 0; }
         .input-row button { width: 50px; margin: 0; }
@@ -90,7 +90,8 @@
         .game-board { display: grid; grid-template-columns: repeat(3, 80px); gap: 8px; justify-content: center; margin: 20px 0; }
         .game-cell { width: 80px; height: 80px; background: #f0f0f0; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 50px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
         .game-cell:hover { background: #e0e0e0; transform: scale(1.02); }
-        .game-cell.disabled { cursor: not-allowed; opacity: 0.6; }
+        .game-cell.disabled { cursor: not-allowed; opacity: 0.6; pointer-events: none; }
+        .game-cell.disabled:hover { transform: none; }
         .game-info { text-align: center; margin: 15px 0; font-weight: bold; font-size: 18px; padding: 10px; background: #f0f0f0; border-radius: 10px; }
         .notification { position: fixed; bottom: 20px; right: 20px; background: #333; color: white; padding: 12px 20px; border-radius: 10px; animation: slideIn 0.3s; z-index: 2000; }
         .clear-chat-btn { background: #dc3545; margin-top: 10px; }
@@ -100,9 +101,6 @@
         .sticker-grid-item { font-size: 40px; cursor: pointer; text-align: center; padding: 10px; border-radius: 10px; transition: transform 0.2s; }
         .sticker-grid-item:hover { transform: scale(1.1); background: #f0f0f0; }
         .sticker-grid-img { width: 50px; height: 50px; object-fit: contain; }
-        .reaction-picker { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
-        .reaction-option { background: #f0f0f0; padding: 4px 8px; border-radius: 15px; cursor: pointer; font-size: 14px; }
-        .reaction-option:hover { background: #e0e0e0; }
     </style>
 </head>
 <body>
@@ -153,8 +151,10 @@
                 <div class="input-area">
                     <div class="input-tools">
                         <button class="tool-btn" onclick="attachImage()">🖼️ Фото</button>
+                        <button class="tool-btn" onclick="attachVideo()">🎥 Видео</button>
                         <button class="tool-btn" onclick="openStickerModal()">😊 Стикер</button>
                         <input type="file" id="imageInput" accept="image/*" style="display:none">
+                        <input type="file" id="videoFile" accept="video/*" style="display:none">
                         <input type="file" id="stickerImageInput" accept="image/*" style="display:none">
                     </div>
                     <div class="input-row">
@@ -585,6 +585,8 @@
                 content = `<div class="message-text">${htmlContent}</div>`;
             } else if (msg.type === 'image') {
                 content = `<img src="${msg.imageUrl}" class="message-image" onclick="window.open('${msg.imageUrl}','_blank')">`;
+            } else if (msg.type === 'video') {
+                content = `<video src="${msg.videoUrl}" controls class="message-video"></video>`;
             } else if (msg.type === 'sticker') {
                 if (msg.stickerUrl) content = `<img src="${msg.stickerUrl}" class="message-big-sticker-img">`;
                 else content = `<div class="message-big-sticker">${msg.sticker}</div>`;
@@ -655,10 +657,30 @@
             reader.readAsDataURL(file);
         });
 
+        function attachVideo() { document.getElementById('videoFile').click(); }
+        document.getElementById('videoFile').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                const messageData = { type: 'video', videoUrl: event.target.result, userId: currentUser.id, userName: currentUser.name, avatar: currentUser.avatar, timestamp: firebase.firestore.FieldValue.serverTimestamp(), reactions: {} };
+                if (currentChat.type === 'general') messageData.chatType = 'general';
+                else if (currentChat.type === 'private') { messageData.chatType = 'private'; messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId); }
+                await db.collection('messages').add(messageData);
+                showNotification('🎥 Видео отправлено');
+            };
+            reader.readAsDataURL(file);
+        });
+
         async function loadCustomStickers() {
-            const stickersRef = await db.collection('stickers').where('userId', '==', currentUser.id).get();
+            const stickersRef = await db.collection('stickers').get();
             customStickers = [];
-            stickersRef.forEach(doc => customStickers.push(doc.data()));
+            stickersRef.forEach(doc => {
+                const sticker = doc.data();
+                if (sticker.userId === currentUser.id || true) { // Все видят все стикеры
+                    customStickers.push(sticker);
+                }
+            });
             renderStickers();
         }
 
@@ -697,7 +719,11 @@
             const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = async (event) => { await db.collection('stickers').add({ userId: currentUser.id, stickerUrl: event.target.result }); await loadCustomStickers(); showNotification('✅ Стикер создан!'); };
+            reader.onload = async (event) => { 
+                await db.collection('stickers').add({ userId: currentUser.id, stickerUrl: event.target.result, createdAt: new Date() }); 
+                await loadCustomStickers(); 
+                showNotification('✅ Стикер создан!'); 
+            };
             reader.readAsDataURL(file);
         });
 
@@ -806,6 +832,7 @@
             else statusText = `🎮 Ход: ${gameCurrentPlayer === 'X' ? '❌ Крестики (X)' : '⭕ Нолики (O)'}`;
             
             const isPlayerTurn = gameActiveGame && !gameWinner;
+            const isXTurn = gameCurrentPlayer === 'X';
             
             container.innerHTML = `
                 <div class="game-info">${statusText}</div>
@@ -817,9 +844,9 @@
             for (let i = 0; i < 9; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'game-cell';
-                if (!isPlayerTurn || gameBoardData[i] !== '') cell.classList.add('disabled');
+                if (!isPlayerTurn || !isXTurn || gameBoardData[i] !== '') cell.classList.add('disabled');
                 cell.textContent = gameBoardData[i];
-                cell.onclick = () => { if (isPlayerTurn && !gameBoardData[i]) makeGameMove(i); };
+                cell.onclick = () => { if (isPlayerTurn && isXTurn && !gameBoardData[i]) makeGameMove(i); };
                 board.appendChild(cell);
             }
         }
