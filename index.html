@@ -105,11 +105,6 @@
             transform: scale(1.02);
         }
 
-        textarea {
-            resize: vertical;
-            font-family: inherit;
-        }
-
         .messenger-container {
             display: flex;
             width: 1400px;
@@ -137,11 +132,6 @@
             gap: 12px;
             border-bottom: 1px solid #e5e7eb;
             cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .user-profile:hover {
-            background: #f3f4f6;
         }
 
         .profile-avatar {
@@ -157,12 +147,6 @@
 
         .profile-info h3 {
             font-size: 16px;
-            margin-bottom: 4px;
-        }
-
-        .profile-info small {
-            font-size: 11px;
-            color: #6b7280;
         }
 
         .copy-id {
@@ -186,15 +170,11 @@
             gap: 12px;
             cursor: pointer;
             transition: background 0.2s;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid #eee;
         }
 
         .chat-item:hover {
-            background: #f3f4f6;
-        }
-
-        .chat-item.active {
-            background: #e0e7ff;
+            background: #f0f0f0;
         }
 
         .chat-avatar {
@@ -210,16 +190,6 @@
 
         .chat-name {
             font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .chat-last-msg {
-            font-size: 12px;
-            color: #6b7280;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 180px;
         }
 
         .pinned-chat {
@@ -272,7 +242,6 @@
             cursor: pointer;
             padding: 8px;
             width: auto;
-            color: #6b7280;
         }
 
         .messages {
@@ -281,14 +250,11 @@
             overflow-y: auto;
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
-            transition: background-image 0.3s;
         }
 
         .message {
             margin-bottom: 15px;
             animation: fadeIn 0.3s;
-            position: relative;
         }
 
         .message-own {
@@ -305,7 +271,6 @@
             max-width: 60%;
             padding: 10px 15px;
             border-radius: 18px;
-            position: relative;
         }
 
         .message-own .message-bubble {
@@ -315,7 +280,7 @@
 
         .message-other .message-bubble {
             background: white;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #ddd;
         }
 
         .message-name {
@@ -329,8 +294,6 @@
             font-size: 9px;
             margin-top: 5px;
             opacity: 0.6;
-            display: inline-block;
-            margin-right: 10px;
         }
 
         .message-text {
@@ -338,21 +301,13 @@
         }
 
         .message-image {
-            max-width: 250px;
+            max-width: 200px;
             border-radius: 10px;
-            margin-top: 5px;
             cursor: pointer;
-        }
-
-        .message-video {
-            max-width: 250px;
-            border-radius: 10px;
-            margin-top: 5px;
         }
 
         .message-sticker {
             font-size: 48px;
-            cursor: pointer;
         }
 
         .message-actions {
@@ -364,11 +319,9 @@
         .message-action-btn {
             background: none;
             border: none;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
-            padding: 2px 5px;
-            width: auto;
-            color: #6b7280;
+            color: #666;
         }
 
         .reactions {
@@ -382,15 +335,7 @@
             background: rgba(0,0,0,0.1);
             padding: 2px 6px;
             border-radius: 12px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .views-info {
-            font-size: 10px;
-            opacity: 0.6;
-            margin-top: 5px;
+            font-size: 11px;
             cursor: pointer;
         }
 
@@ -411,9 +356,9 @@
             width: auto;
             padding: 8px 12px;
             margin: 0;
-            font-size: 14px;
+            font-size: 13px;
             background: #f3f4f6;
-            color: #374151;
+            color: #333;
         }
 
         .input-row {
@@ -452,10 +397,8 @@
             background: white;
             padding: 30px;
             border-radius: 20px;
-            width: 450px;
+            width: 400px;
             max-width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
         }
 
         .modal-header {
@@ -475,25 +418,16 @@
         }
 
         .profile-view-avatar {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            object-fit: cover;
             margin-bottom: 15px;
-            cursor: pointer;
-        }
-
-        .custom-sticker {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-            cursor: pointer;
         }
 
         .game-board {
             display: grid;
-            grid-template-columns: repeat(3, 80px);
-            grid-template-rows: repeat(3, 80px);
+            grid-template-columns: repeat(3, 70px);
+            grid-template-rows: repeat(3, 70px);
             gap: 5px;
             justify-content: center;
             margin: 20px 0;
@@ -508,16 +442,11 @@
             font-size: 40px;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .game-cell:hover {
-            background: #e0e0e0;
         }
 
         .game-cell.disabled {
             cursor: not-allowed;
-            opacity: 0.7;
+            opacity: 0.6;
         }
 
         .game-info {
@@ -550,40 +479,14 @@
         ::-webkit-scrollbar {
             width: 6px;
         }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 3px;
-        }
-
-        .private-note {
-            background: #fffacd;
-            padding: 10px;
-            border-radius: 10px;
-            margin-top: 10px;
-        }
-        
-        .game-status {
-            font-size: 18px;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-        
-        .game-reset-btn {
-            background: #f59e0b;
-            margin-top: 10px;
-        }
     </style>
 </head>
-<body class="theme-default">
+<body>
+    <!-- ЭКРАН ВХОДА -->
     <div id="welcomeScreen" class="screen active">
         <div class="welcome-card">
             <h1>💬 SNY</h1>
-            <p>Твой личный мессенджер</p>
+            <p>Твой мессенджер</p>
             
             <div class="tab-buttons">
                 <button class="tab-btn active" onclick="switchTab('create')">✨ Создать</button>
@@ -591,34 +494,26 @@
             </div>
 
             <div id="createTab" class="tab-content active">
-                <input type="text" id="newUsername" placeholder="Твой никнейм" maxlength="20">
-                <input type="password" id="newPassword" placeholder="Придумай пароль">
-                <div class="avatar-section">
-                    <img id="avatarImage" src="https://i.pravatar.cc/150?img=7" alt="avatar" style="width:100px; border-radius:50%; margin-bottom:10px;">
-                    <button onclick="triggerAvatarUpload()">📸 Загрузить аватар</button>
+                <input type="text" id="newUsername" placeholder="Никнейм">
+                <input type="password" id="newPassword" placeholder="Пароль">
+                <div>
+                    <img id="avatarImage" src="https://i.pravatar.cc/150?img=7" style="width:80px; border-radius:50%; margin:10px;">
+                    <button onclick="triggerAvatarUpload()">📸 Аватар</button>
                     <input type="file" id="avatarFile" accept="image/*" style="display:none">
                 </div>
-                <textarea id="userBio" placeholder="О себе (необязательно)" rows="3"></textarea>
-                <select id="fontColorSelect">
-                    <option value="#000000">Черный</option>
-                    <option value="#e74c3c">Красный</option>
-                    <option value="#27ae60">Зеленый</option>
-                    <option value="#2980b9">Синий</option>
-                    <option value="#e84393">Розовый</option>
-                    <option value="#f39c12">Оранжевый</option>
-                    <option value="#8e44ad">Фиолетовый</option>
-                </select>
+                <textarea id="userBio" placeholder="О себе" rows="2"></textarea>
                 <button onclick="createAccount()">🚀 Создать SNY-ID</button>
             </div>
 
             <div id="enterTab" class="tab-content">
-                <input type="text" id="existingUserId" placeholder="Введи свой SNY-ID">
+                <input type="text" id="existingUserId" placeholder="SNY-ID">
                 <input type="password" id="existingPassword" placeholder="Пароль">
                 <button onclick="loginWithId()">🔓 Войти</button>
             </div>
         </div>
     </div>
 
+    <!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
     <div id="messengerScreen" class="screen" style="display:none">
         <div class="messenger-container">
             <div class="sidebar">
@@ -630,7 +525,6 @@
                     </div>
                     <button class="copy-id" onclick="copyToClipboard(currentUser.id, event)">📋</button>
                 </div>
-                
                 <div class="chats-list" id="chatsList"></div>
             </div>
             
@@ -645,25 +539,19 @@
                     </div>
                     <div class="chat-header-actions">
                         <button class="icon-btn" onclick="showThemeModal()">🎨</button>
-                        <button class="icon-btn" onclick="showWallpaperModal()">🖼️ Обои</button>
-                        <button class="icon-btn" onclick="showGroupSettings()" id="groupSettingsBtn" style="display:none">⚙️</button>
+                        <button class="icon-btn" onclick="showWallpaperModal()">🖼️</button>
                     </div>
                 </div>
-                
                 <div class="messages" id="messagesList"></div>
-                
                 <div class="input-area">
                     <div class="input-tools">
                         <button class="tool-btn" onclick="attachImage()">🖼️ Фото</button>
-                        <button class="tool-btn" onclick="attachVideo()">🎥 Видео</button>
                         <button class="tool-btn" onclick="openStickerModal()">😊 Стикер</button>
-                        <button class="tool-btn" onclick="openPrivateNote()">📝 Личное</button>
                         <input type="file" id="imageInput" accept="image/*" style="display:none">
-                        <input type="file" id="videoFile" accept="video/*" style="display:none">
                         <input type="file" id="stickerImageInput" accept="image/*" style="display:none">
                     </div>
                     <div class="input-row">
-                        <input type="text" id="messageInput" placeholder="Напиши сообщение..." onkeypress="handleEnter(event)">
+                        <input type="text" id="messageInput" placeholder="Сообщение..." onkeypress="handleEnter(event)">
                         <button onclick="sendMessage()">📤</button>
                     </div>
                 </div>
@@ -671,27 +559,17 @@
         </div>
     </div>
 
-    <div id="viewsModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>👁️ Просмотры</h3><span class="close-modal" onclick="closeModal('viewsModal')">&times;</span></div><div id="viewsList"></div></div></div>
-    <div id="profileModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>👤 Профиль</h3><span class="close-modal" onclick="closeModal('profileModal')">&times;</span></div><div id="profileContent" class="profile-view"></div></div></div>
-    <div id="themeModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎨 Темы</h3><span class="close-modal" onclick="closeModal('themeModal')">&times;</span></div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px"><button onclick="changeTheme('default')">🌙 По умолчанию</button><button onclick="changeTheme('pink')">🌸 Розовая</button><button onclick="changeTheme('red')">❤️ Красная</button><button onclick="changeTheme('blue')">💙 Синяя</button><button onclick="changeTheme('green')">💚 Зеленая</button><button onclick="changeTheme('purple')">🟣 Фиолетовая</button><button onclick="changeTheme('orange')">🟠 Оранжевая</button><button onclick="changeTheme('teal')">🩵 Бирюзовая</button><button onclick="changeTheme('indigo')">🔷 Индиго</button><button onclick="changeTheme('cyan')">💎 Циан</button></div></div></div>
-    
-    <div id="wallpaperModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🖼️ Обои чата</h3><span class="close-modal" onclick="closeModal('wallpaperModal')">&times;</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"><button onclick="setWallpaper('default')">По умолчанию</button><button onclick="setWallpaper('https://www.transparenttextures.com/patterns/cubes.png')">Кубики</button><button onclick="setWallpaper('https://www.transparenttextures.com/patterns/diagmonds.png')">Ромбы</button><button onclick="setWallpaper('https://www.transparenttextures.com/patterns/flowers.png')">Цветы</button><button onclick="uploadWallpaper()">📤 Своё фото</button></div><input type="file" id="wallpaperFile" accept="image/*" style="display:none"></div></div>
-    
+    <!-- МОДАЛЬНЫЕ ОКНА -->
+    <div id="profileModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>👤 Профиль</h3><span class="close-modal" onclick="closeModal('profileModal')">&times;</span></div><div id="profileContent"></div></div></div>
+    <div id="themeModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎨 Темы</h3><span class="close-modal" onclick="closeModal('themeModal')">&times;</span></div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px"><button onclick="changeTheme('default')">🌙 По умолчанию</button><button onclick="changeTheme('pink')">🌸 Розовая</button><button onclick="changeTheme('red')">❤️ Красная</button><button onclick="changeTheme('blue')">💙 Синяя</button><button onclick="changeTheme('green')">💚 Зеленая</button><button onclick="changeTheme('purple')">🟣 Фиолетовая</button><button onclick="changeTheme('orange')">🟠 Оранжевая</button></div></div></div>
+    <div id="wallpaperModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🖼️ Обои</h3><span class="close-modal" onclick="closeModal('wallpaperModal')">&times;</span></div><button onclick="setWallpaper('default')">По умолчанию</button><button onclick="uploadWallpaper()">📤 Своё фото</button><input type="file" id="wallpaperFile" accept="image/*" style="display:none"></div></div>
     <div id="stickerModalWindow" class="modal"><div class="modal-content"><div class="modal-header"><h3>😊 Стикеры</h3><span class="close-modal" onclick="closeModal('stickerModalWindow')">&times;</span></div><button onclick="openStickerImageUpload()">📸 Стикер из фото</button><div id="stickersGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:15px;"></div></div></div>
-    
-    <div id="fontColorModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎨 Цвет шрифта</h3><span class="close-modal" onclick="closeModal('fontColorModal')">&times;</span></div><input type="color" id="fontColorPicker" value="#000000"><button onclick="saveFontColor()">Сохранить</button></div></div>
-    
-    <div id="editMessageModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>✏️ Редактировать</h3><span class="close-modal" onclick="closeModal('editMessageModal')">&times;</span></div><input type="text" id="editMessageInput" placeholder="Новый текст"><button onclick="saveEditedMessage()">Сохранить</button></div></div>
-    
-    <div id="groupSettingsModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>⚙️ Настройки группы</h3><span class="close-modal" onclick="closeModal('groupSettingsModal')">&times;</span></div><div><label>Аватар группы</label><img id="groupAvatarPreview" style="width:100px;border-radius:50%;margin:10px auto;display:block"><button onclick="uploadGroupAvatar()">📸 Изменить аватар</button><input type="file" id="groupAvatarFile" accept="image/*" style="display:none"></div><div><label>Описание группы</label><textarea id="groupDescription" rows="3" placeholder="Описание группы"></textarea><button onclick="saveGroupSettings()">Сохранить</button></div></div></div>
-    
     <div id="gameModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎮 Крестики-нолики</h3><span class="close-modal" onclick="closeModal('gameModal')">&times;</span></div><div id="gameContent"></div></div></div>
-    
-    <div id="privateNoteModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>📝 Личная заметка</h3><span class="close-modal" onclick="closeModal('privateNoteModal')">&times;</span></div><textarea id="privateNoteText" rows="5" placeholder="Твои личные заметки... (видно только тебе)"></textarea><button onclick="savePrivateNote()">Сохранить</button><div id="privateNoteDisplay" class="private-note" style="margin-top:15px;"></div></div></div>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
     <script>
+        // ========== FIREBASE КОНФИГ ==========
         const firebaseConfig = {
             apiKey: "AIzaSyBfXUgZnRD013c1jPQ04X3ZRRCHJSwE6NQ",
             authDomain: "sny-messenger.firebaseapp.com",
@@ -704,20 +582,26 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        // ========== ПЕРЕМЕННЫЕ ==========
         let currentUser = null;
         let currentChat = { type: 'general' };
         let messagesUnsubscribe = null;
         let customStickers = [];
-        let editingMessageId = null;
-        let gameUnsubscribe = null;
-        let wallpaperUnsubscribe = null;
 
+        // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
         function showNotification(msg) {
             const notif = document.createElement('div');
             notif.className = 'notification';
             notif.innerText = msg;
             document.body.appendChild(notif);
             setTimeout(() => notif.remove(), 3000);
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         function switchTab(tab) {
@@ -746,11 +630,11 @@
             }
         });
 
+        // ========== СОЗДАНИЕ АККАУНТА ==========
         async function createAccount() {
             const username = document.getElementById('newUsername').value.trim();
             const password = document.getElementById('newPassword').value;
             const bio = document.getElementById('userBio').value;
-            const fontColor = document.getElementById('fontColorSelect').value;
             if (!username) { alert('Введи никнейм!'); return; }
             if (!password) { alert('Придумай пароль!'); return; }
             
@@ -763,22 +647,21 @@
                 password: password,
                 bio: bio,
                 avatar: avatarUrl,
-                fontColor: fontColor,
-                theme: 'default',
                 createdAt: new Date()
             };
             
             await db.collection('users').doc(snyId).set(currentUser);
             localStorage.setItem('sny_user_id', snyId);
             localStorage.setItem('sny_password', password);
-            showNotification('✅ Аккаунт создан! Добро пожаловать в SNY!');
+            showNotification('✅ Аккаунт создан!');
             enterMessenger();
         }
 
+        // ========== ВХОД ==========
         async function loginWithId() {
             const userId = document.getElementById('existingUserId').value.trim().toUpperCase();
             const password = document.getElementById('existingPassword').value;
-            if (!userId) { alert('Введи SNY-ID!'); return; }
+            if (!userId) { alert('Введи ID!'); return; }
             if (!password) { alert('Введи пароль!'); return; }
             
             const userDoc = await db.collection('users').doc(userId).get();
@@ -786,13 +669,14 @@
                 currentUser = userDoc.data();
                 localStorage.setItem('sny_user_id', userId);
                 localStorage.setItem('sny_password', password);
-                showNotification(`👋 С возвращением, ${currentUser.name}!`);
+                showNotification(`👋 Добро пожаловать, ${currentUser.name}!`);
                 enterMessenger();
             } else {
                 alert('Неверный ID или пароль!');
             }
         }
 
+        // ========== ВХОД В МЕССЕНДЖЕР ==========
         async function enterMessenger() {
             document.getElementById('welcomeScreen').classList.remove('active');
             document.getElementById('messengerScreen').style.display = 'block';
@@ -801,132 +685,93 @@
             document.getElementById('profileAvatar').src = currentUser.avatar;
             document.getElementById('profileId').innerText = currentUser.id;
             
-            if (currentUser.theme) changeTheme(currentUser.theme);
-            if (currentUser.fontColor) document.documentElement.style.setProperty('--font-color', currentUser.fontColor);
-            
             await loadChats();
-            loadCustomStickers();
-            loadGroupSettings();
-            loadPrivateNote();
-            startWallpaperSync();
+            await loadCustomStickers();
+            await loadWallpaper();
             
+            // Открываем общий чат
             await openGeneralChat();
         }
 
-        async function loadGroupSettings() {
+        // ========== ЗАГРУЗКА ОБОЕВ ==========
+        async function loadWallpaper() {
             const groupDoc = await db.collection('groupSettings').doc('general').get();
-            if (groupDoc.exists) {
-                const settings = groupDoc.data();
-                if (settings.avatar) document.getElementById('chatHeaderAvatar').src = settings.avatar;
-                if (settings.description) document.getElementById('chatHeaderId').innerText = settings.description;
+            if (groupDoc.exists && groupDoc.data().wallpaper && groupDoc.data().wallpaper !== 'default') {
+                document.getElementById('messagesList').style.backgroundImage = `url(${groupDoc.data().wallpaper})`;
+                document.getElementById('messagesList').style.backgroundSize = 'cover';
+            } else {
+                document.getElementById('messagesList').style.backgroundImage = 'none';
             }
-        }
-
-        async function saveGroupSettings() {
-            const description = document.getElementById('groupDescription').value;
-            await db.collection('groupSettings').doc('general').set({ description, updatedAt: new Date() }, { merge: true });
-            document.getElementById('chatHeaderId').innerText = description;
-            showNotification('✅ Описание группы обновлено!');
-            closeModal('groupSettingsModal');
-        }
-
-        function uploadGroupAvatar() { document.getElementById('groupAvatarFile').click(); }
-        document.getElementById('groupAvatarFile').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = async (event) => {
-                    await db.collection('groupSettings').doc('general').set({ avatar: event.target.result, updatedAt: new Date() }, { merge: true });
-                    document.getElementById('chatHeaderAvatar').src = event.target.result;
-                    showNotification('✅ Аватар группы обновлен!');
-                    closeModal('groupSettingsModal');
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        function showGroupSettings() {
-            document.getElementById('groupSettingsModal').classList.add('active');
-            db.collection('groupSettings').doc('general').get().then(doc => {
-                if (doc.exists) {
-                    document.getElementById('groupDescription').value = doc.data().description || '';
-                    if (doc.data().avatar) document.getElementById('groupAvatarPreview').src = doc.data().avatar;
-                }
-            });
-        }
-
-        // Синхронизация обоев
-        function startWallpaperSync() {
-            if (wallpaperUnsubscribe) wallpaperUnsubscribe();
-            wallpaperUnsubscribe = db.collection('groupSettings').doc('general').onSnapshot((doc) => {
-                if (doc.exists && doc.data().wallpaper) {
-                    const wallpaper = doc.data().wallpaper;
-                    if (wallpaper && wallpaper !== 'default') {
-                        document.getElementById('messagesList').style.backgroundImage = `url(${wallpaper})`;
-                        document.getElementById('messagesList').style.backgroundSize = 'cover';
-                    } else {
-                        document.getElementById('messagesList').style.backgroundImage = 'none';
-                    }
-                }
-            });
         }
 
         async function setWallpaper(url) {
             const wallpaperValue = url === 'default' ? null : url;
-            await db.collection('groupSettings').doc('general').set({ wallpaper: wallpaperValue, updatedAt: new Date() }, { merge: true });
+            await db.collection('groupSettings').doc('general').set({ wallpaper: wallpaperValue }, { merge: true });
+            await loadWallpaper();
             closeModal('wallpaperModal');
             showNotification('🖼️ Обои обновлены для всех!');
         }
-        
+
         function uploadWallpaper() { document.getElementById('wallpaperFile').click(); }
         document.getElementById('wallpaperFile').addEventListener('change', (e) => {
             const file = e.target.files[0];
-            if (file) { 
-                const reader = new FileReader(); 
-                reader.onload = (event) => setWallpaper(event.target.result); 
-                reader.readAsDataURL(file); 
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => setWallpaper(event.target.result);
+                reader.readAsDataURL(file);
             }
         });
 
+        // ========== ЗАГРУЗКА СПИСКА ЧАТОВ ==========
         async function loadChats() {
             const usersSnapshot = await db.collection('users').get();
-            const users = [];
-            usersSnapshot.forEach(doc => { if (doc.id !== currentUser.id) users.push(doc.data()); });
-            
             const chatsList = document.getElementById('chatsList');
-            chatsList.innerHTML = `<div class="chat-item" onclick="openGeneralChat()"><div class="chat-avatar" style="background:#667eea;display:flex;align-items:center;justify-content:center;font-size:24px;">💬</div><div class="chat-info"><div class="chat-name">Общий чат</div><div class="chat-last-msg">Все пользователи</div></div></div>
-            <div class="chat-item pinned-chat" onclick="openGameChat()"><div class="chat-avatar" style="background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:24px;">🎮</div><div class="chat-info"><div class="chat-name">🎮 Крестики-нолики</div><div class="chat-last-msg">Игра с друзьями</div></div></div>`;
+            chatsList.innerHTML = `
+                <div class="chat-item" onclick="openGeneralChat()">
+                    <div class="chat-avatar" style="background:#667eea;display:flex;align-items:center;justify-content:center;font-size:24px;">💬</div>
+                    <div class="chat-info"><div class="chat-name">Общий чат</div></div>
+                </div>
+                <div class="chat-item pinned-chat" onclick="openGameChat()">
+                    <div class="chat-avatar" style="background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:24px;">🎮</div>
+                    <div class="chat-info"><div class="chat-name">Крестики-нолики</div></div>
+                </div>
+            `;
             
-            users.forEach(user => {
-                chatsList.innerHTML += `<div class="chat-item" onclick="openPrivateChat('${user.id}')"><img class="chat-avatar" src="${user.avatar}"><div class="chat-info"><div class="chat-name">${escapeHtml(user.name)}</div><div class="chat-last-msg">${user.bio || 'Нет описания'}</div></div><button class="copy-id" onclick="copyToClipboard('${user.id}', event)">📋</button></div>`;
+            usersSnapshot.forEach(doc => {
+                if (doc.id !== currentUser.id) {
+                    const user = doc.data();
+                    chatsList.innerHTML += `
+                        <div class="chat-item" onclick="openPrivateChat('${user.id}')">
+                            <img class="chat-avatar" src="${user.avatar}">
+                            <div class="chat-info"><div class="chat-name">${escapeHtml(user.name)}</div></div>
+                            <button class="copy-id" onclick="copyToClipboard('${user.id}', event)">📋</button>
+                        </div>
+                    `;
+                }
             });
         }
 
         function getPrivateChatId(user1, user2) { return [user1, user2].sort().join('_'); }
 
+        // ========== ОТКРЫТИЕ ЧАТОВ ==========
         async function openGeneralChat() {
             currentChat = { type: 'general' };
             document.getElementById('chatHeaderAvatar').src = 'https://via.placeholder.com/40?text=💬';
             document.getElementById('chatHeaderName').innerText = 'Общий чат';
-            document.getElementById('groupSettingsBtn').style.display = 'inline-block';
-            const groupDoc = await db.collection('groupSettings').doc('general').get();
-            if (groupDoc.exists && groupDoc.data().avatar) document.getElementById('chatHeaderAvatar').src = groupDoc.data().avatar;
-            if (groupDoc.exists && groupDoc.data().description) document.getElementById('chatHeaderId').innerText = groupDoc.data().description;
-            else document.getElementById('chatHeaderId').innerText = 'Все пользователи';
-            loadMessages('general');
-            showNotification('💬 Вы в общем чате');
+            document.getElementById('chatHeaderId').innerText = 'Все пользователи';
+            await loadMessages('general');
+            showNotification('💬 Общий чат');
         }
 
         async function openPrivateChat(userId) {
             const userDoc = await db.collection('users').doc(userId).get();
             const user = userDoc.data();
-            currentChat = { type: 'private', userId: userId, userName: user.name, userAvatar: user.avatar };
+            currentChat = { type: 'private', userId: userId };
             document.getElementById('chatHeaderAvatar').src = user.avatar;
             document.getElementById('chatHeaderName').innerText = user.name;
             document.getElementById('chatHeaderId').innerText = user.bio || userId;
-            document.getElementById('groupSettingsBtn').style.display = 'none';
-            loadMessages('private', userId);
-            showNotification(`💬 Вы в чате с ${user.name}`);
+            await loadMessages('private', userId);
+            showNotification(`💬 Чат с ${user.name}`);
         }
 
         function openGameChat() {
@@ -934,11 +779,11 @@
             document.getElementById('chatHeaderAvatar').src = 'https://via.placeholder.com/40?text=🎮';
             document.getElementById('chatHeaderName').innerText = 'Крестики-нолики';
             document.getElementById('chatHeaderId').innerText = 'Играйте с друзьями!';
-            document.getElementById('groupSettingsBtn').style.display = 'none';
             showGameModal();
         }
 
-        function loadMessages(chatType, otherUserId = null) {
+        // ========== ЗАГРУЗКА СООБЩЕНИЙ (ГЛАВНОЕ ИСПРАВЛЕНИЕ!) ==========
+        async function loadMessages(chatType, otherUserId = null) {
             if (messagesUnsubscribe) messagesUnsubscribe();
             
             let query;
@@ -953,63 +798,78 @@
             
             messagesUnsubscribe = query.onSnapshot((snapshot) => {
                 const container = document.getElementById('messagesList');
+                if (!container) return;
                 container.innerHTML = '';
+                
                 snapshot.forEach(doc => {
                     const msg = doc.data();
                     msg.id = doc.id;
                     displayMessage(msg);
                 });
+                
                 container.scrollTop = container.scrollHeight;
+            }, (error) => {
+                console.error('Ошибка загрузки сообщений:', error);
+                showNotification('❌ Ошибка загрузки сообщений. Проверь правила Firebase!');
             });
         }
 
+        // ========== ОТОБРАЖЕНИЕ СООБЩЕНИЯ ==========
         function displayMessage(msg) {
             const container = document.getElementById('messagesList');
+            if (!container) return;
+            
             const div = document.createElement('div');
             const isOwn = msg.userId === currentUser.id;
             div.className = 'message ' + (isOwn ? 'message-own' : 'message-other');
             
             const time = msg.timestamp?.toDate ? new Date(msg.timestamp.toDate()).toLocaleTimeString() : '';
-            const senderColor = msg.fontColor || '#000000';
             
             let content = '';
-            if (msg.type === 'text') content = `<div class="message-text" style="color: ${senderColor}">${escapeHtml(msg.text)}</div>`;
-            else if (msg.type === 'image') content = `<img src="${msg.imageUrl}" class="message-image" onclick="viewImage('${msg.imageUrl}')">`;
-            else if (msg.type === 'video') content = `<video src="${msg.videoUrl}" controls class="message-video"></video>`;
-            else if (msg.type === 'sticker') {
-                if (msg.stickerUrl) content = `<img src="${msg.stickerUrl}" class="custom-sticker" style="width:80px">`;
-                else content = `<div class="message-sticker">${msg.sticker}</div>`;
-            }
-            
-            let reactionsHtml = '';
-            if (msg.reactions) {
-                const reactionList = Object.entries(msg.reactions);
-                if (reactionList.length > 0) {
-                    reactionsHtml = '<div class="reactions">';
-                    reactionList.forEach(([emoji, users]) => {
-                        reactionsHtml += `<span class="reaction" onclick="addReaction('${msg.id}', '${emoji}')"><span class="reaction-emoji">${emoji}</span> ${users.length}</span>`;
-                    });
-                    reactionsHtml += '</div>';
+            if (msg.type === 'text') {
+                content = `<div class="message-text">${escapeHtml(msg.text)}</div>`;
+            } else if (msg.type === 'image') {
+                content = `<img src="${msg.imageUrl}" class="message-image" onclick="window.open('${msg.imageUrl}','_blank')">`;
+            } else if (msg.type === 'sticker') {
+                if (msg.stickerUrl) {
+                    content = `<img src="${msg.stickerUrl}" style="max-width:80px; max-height:80px;">`;
+                } else {
+                    content = `<div class="message-sticker">${msg.sticker}</div>`;
                 }
             }
             
-            let viewsHtml = '';
-            if (!isOwn && msg.views && !msg.views.includes(currentUser.id)) setTimeout(() => markAsViewed(msg.id), 1000);
-            if (msg.views && msg.views.length > 0) viewsHtml = `<div class="views-info" onclick="showViews('${msg.id}')">👁️ ${msg.views.length} просмотров</div>`;
-            
             let actionsHtml = '';
-            if (isOwn) {
-                actionsHtml = `<div class="message-actions"><button class="message-action-btn" onclick="editMessage('${msg.id}', '${escapeHtml(msg.text)}')">✏️</button><button class="message-action-btn" onclick="deleteMessage('${msg.id}')">🗑️</button></div>`;
+            if (isOwn && msg.type === 'text') {
+                actionsHtml = `<div class="message-actions">
+                    <button class="message-action-btn" onclick="editMessage('${msg.id}', '${escapeHtml(msg.text)}')">✏️</button>
+                    <button class="message-action-btn" onclick="deleteMessage('${msg.id}')">🗑️</button>
+                </div>`;
             }
             
-            div.innerHTML = `<div class="message-bubble"><div class="message-name">${escapeHtml(msg.userName)}</div>${content}${reactionsHtml}${viewsHtml}${actionsHtml}<div class="message-time">${time}</div></div>`;
+            div.innerHTML = `
+                <div class="message-bubble">
+                    <div class="message-name">${escapeHtml(msg.userName)}</div>
+                    ${content}
+                    ${actionsHtml}
+                    <div class="message-time">${time}</div>
+                </div>
+            `;
+            
             container.appendChild(div);
         }
 
+        // ========== ОТПРАВКА СООБЩЕНИЯ ==========
         async function sendMessage() {
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
-            if (!text) return;
+            if (!text) {
+                showNotification('📝 Введите сообщение');
+                return;
+            }
+            if (!currentChat || currentChat.type === 'game') {
+                showNotification('❌ Нельзя отправить сообщение сюда');
+                return;
+            }
             
             const messageData = {
                 type: 'text',
@@ -1017,39 +877,34 @@
                 userId: currentUser.id,
                 userName: currentUser.name,
                 avatar: currentUser.avatar,
-                fontColor: currentUser.fontColor,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                views: [currentUser.id],
                 reactions: {}
             };
             
-            if (currentChat?.type === 'general') {
+            if (currentChat.type === 'general') {
                 messageData.chatType = 'general';
-            } else if (currentChat?.type === 'private') {
+            } else if (currentChat.type === 'private') {
                 messageData.chatType = 'private';
                 messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId);
                 messageData.recipientId = currentChat.userId;
-            } else {
-                showNotification('❌ Не выбран чат');
-                return;
             }
             
-            await db.collection('messages').add(messageData);
-            input.value = '';
+            try {
+                await db.collection('messages').add(messageData);
+                input.value = '';
+                showNotification('✅ Сообщение отправлено');
+            } catch (error) {
+                console.error('Ошибка отправки:', error);
+                showNotification('❌ Ошибка отправки! Проверь правила Firebase');
+            }
         }
 
         async function editMessage(msgId, oldText) {
-            editingMessageId = msgId;
-            document.getElementById('editMessageInput').value = oldText;
-            document.getElementById('editMessageModal').classList.add('active');
-        }
-
-        async function saveEditedMessage() {
-            const newText = document.getElementById('editMessageInput').value;
-            if (!newText) return;
-            await db.collection('messages').doc(editingMessageId).update({ text: newText, edited: true });
-            showNotification('✏️ Сообщение изменено');
-            closeModal('editMessageModal');
+            const newText = prompt('Редактировать сообщение:', oldText);
+            if (newText && newText !== oldText) {
+                await db.collection('messages').doc(msgId).update({ text: newText, edited: true });
+                showNotification('✏️ Сообщение изменено');
+            }
         }
 
         async function deleteMessage(msgId) {
@@ -1059,75 +914,35 @@
             }
         }
 
-        async function markAsViewed(messageId) {
-            const msgRef = db.collection('messages').doc(messageId);
-            const msgDoc = await msgRef.get();
-            const msg = msgDoc.data();
-            if (msg && msg.views) { if (!msg.views.includes(currentUser.id)) await msgRef.update({ views: [...msg.views, currentUser.id] }); }
-            else if (msg) await msgRef.update({ views: [currentUser.id] });
-        }
-
-        async function showViews(messageId) {
-            const msgDoc = await db.collection('messages').doc(messageId).get();
-            const msg = msgDoc.data();
-            if (msg && msg.views) {
-                const viewsList = document.getElementById('viewsList');
-                viewsList.innerHTML = '';
-                for (const userId of msg.views) {
-                    const userDoc = await db.collection('users').doc(userId).get();
-                    if (userDoc.exists) {
-                        const user = userDoc.data();
-                        viewsList.innerHTML += `<div style="display:flex;align-items:center;gap:10px;padding:10px;border-bottom:1px solid #eee;"><img src="${user.avatar}" style="width:40px;height:40px;border-radius:50%;"><div><div><strong>${escapeHtml(user.name)}</strong></div><small>${user.id}</small></div></div>`;
-                    }
-                }
-                document.getElementById('viewsModal').classList.add('active');
-            }
-        }
-
-        async function addReaction(messageId, emoji) {
-            const msgRef = db.collection('messages').doc(messageId);
-            const msgDoc = await msgRef.get();
-            const msg = msgDoc.data();
-            let reactions = msg.reactions || {};
-            if (!reactions[emoji]) reactions[emoji] = [];
-            if (!reactions[emoji].includes(currentUser.id)) {
-                reactions[emoji].push(currentUser.id);
-                await msgRef.update({ reactions });
-            }
-        }
-
+        // ========== ФОТО ==========
         function attachImage() { document.getElementById('imageInput').click(); }
         document.getElementById('imageInput').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
             reader.onload = async (event) => {
-                const messageData = { type: 'image', imageUrl: event.target.result, userId: currentUser.id, userName: currentUser.name, avatar: currentUser.avatar, fontColor: currentUser.fontColor, timestamp: firebase.firestore.FieldValue.serverTimestamp(), views: [currentUser.id], reactions: {} };
-                if (currentChat?.type === 'general') messageData.chatType = 'general';
-                else if (currentChat?.type === 'private') { messageData.chatType = 'private'; messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId); messageData.recipientId = currentChat.userId; }
-                else return;
+                const messageData = {
+                    type: 'image',
+                    imageUrl: event.target.result,
+                    userId: currentUser.id,
+                    userName: currentUser.name,
+                    avatar: currentUser.avatar,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    reactions: {}
+                };
+                if (currentChat.type === 'general') messageData.chatType = 'general';
+                else if (currentChat.type === 'private') {
+                    messageData.chatType = 'private';
+                    messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId);
+                }
                 await db.collection('messages').add(messageData);
+                showNotification('🖼️ Фото отправлено');
             };
             reader.readAsDataURL(file);
             document.getElementById('imageInput').value = '';
         });
 
-        function attachVideo() { document.getElementById('videoFile').click(); }
-        document.getElementById('videoFile').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = async (event) => {
-                const messageData = { type: 'video', videoUrl: event.target.result, userId: currentUser.id, userName: currentUser.name, avatar: currentUser.avatar, fontColor: currentUser.fontColor, timestamp: firebase.firestore.FieldValue.serverTimestamp(), views: [currentUser.id], reactions: {} };
-                if (currentChat?.type === 'general') messageData.chatType = 'general';
-                else if (currentChat?.type === 'private') { messageData.chatType = 'private'; messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId); messageData.recipientId = currentChat.userId; }
-                else return;
-                await db.collection('messages').add(messageData);
-            };
-            reader.readAsDataURL(file);
-            document.getElementById('videoFile').value = '';
-        });
-
+        // ========== СТИКЕРЫ ==========
         async function loadCustomStickers() {
             const stickersRef = await db.collection('stickers').where('userId', '==', currentUser.id).get();
             customStickers = [];
@@ -1141,7 +956,6 @@
             grid.innerHTML = '';
             ['😊', '😂', '🥰', '😎', '🎉', '❤️', '🔥', '💯'].forEach(sticker => {
                 const div = document.createElement('div');
-                div.className = 'sticker-item';
                 div.textContent = sticker;
                 div.style.fontSize = '40px';
                 div.style.cursor = 'pointer';
@@ -1151,11 +965,14 @@
             });
             customStickers.forEach(sticker => {
                 const div = document.createElement('div');
-                div.className = 'sticker-item';
-                if (sticker.stickerUrl) div.innerHTML = `<img src="${sticker.stickerUrl}" style="width:50px;height:50px;object-fit:contain;">`;
-                else div.textContent = sticker.sticker;
                 div.style.cursor = 'pointer';
                 div.style.textAlign = 'center';
+                if (sticker.stickerUrl) {
+                    div.innerHTML = `<img src="${sticker.stickerUrl}" style="width:50px;height:50px;">`;
+                } else {
+                    div.textContent = sticker.sticker;
+                    div.style.fontSize = '40px';
+                }
                 div.onclick = () => sendSticker(sticker.sticker || sticker.stickerUrl, sticker.stickerUrl);
                 grid.appendChild(div);
             });
@@ -1167,16 +984,21 @@
                 return;
             }
             
-            const messageData = { type: 'sticker', sticker: sticker, stickerUrl: stickerUrl, userId: currentUser.id, userName: currentUser.name, avatar: currentUser.avatar, fontColor: currentUser.fontColor, timestamp: firebase.firestore.FieldValue.serverTimestamp(), views: [currentUser.id], reactions: {} };
+            const messageData = {
+                type: 'sticker',
+                sticker: sticker,
+                stickerUrl: stickerUrl,
+                userId: currentUser.id,
+                userName: currentUser.name,
+                avatar: currentUser.avatar,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                reactions: {}
+            };
             
-            if (currentChat.type === 'general') {
-                messageData.chatType = 'general';
-            } else if (currentChat.type === 'private') {
+            if (currentChat.type === 'general') messageData.chatType = 'general';
+            else if (currentChat.type === 'private') {
                 messageData.chatType = 'private';
                 messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId);
-                messageData.recipientId = currentChat.userId;
-            } else {
-                return;
             }
             
             await db.collection('messages').add(messageData);
@@ -1184,58 +1006,64 @@
             showNotification('😊 Стикер отправлен!');
         }
 
-        function openStickerModal() { 
+        function openStickerModal() {
             if (currentChat && currentChat.type !== 'game') {
-                document.getElementById('stickerModalWindow').classList.add('active');
                 renderStickers();
+                document.getElementById('stickerModalWindow').classList.add('active');
             } else {
                 showNotification('❌ Нельзя отправить стикер в игру');
             }
         }
-        
+
         function openStickerImageUpload() { document.getElementById('stickerImageInput').click(); }
         document.getElementById('stickerImageInput').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
             reader.onload = async (event) => {
-                await db.collection('stickers').add({ userId: currentUser.id, stickerUrl: event.target.result, createdAt: new Date() });
+                await db.collection('stickers').add({ userId: currentUser.id, stickerUrl: event.target.result });
                 await loadCustomStickers();
                 showNotification('✅ Стикер создан!');
             };
             reader.readAsDataURL(file);
         });
 
+        // ========== ПРОФИЛЬ ==========
         async function showProfile(userId) {
             const userDoc = await db.collection('users').doc(userId).get();
             const user = userDoc.data();
             const content = document.getElementById('profileContent');
-            content.innerHTML = `<div class="profile-view"><img src="${user.avatar}" class="profile-view-avatar"><h3>${escapeHtml(user.name)}</h3><p>${user.bio || 'Нет описания'}</p><p style="color:#666;margin:10px 0;">ID: ${user.id}</p><button onclick="copyToClipboard('${user.id}')">📋 Копировать ID</button>${userId !== currentUser.id ? `<button onclick="openPrivateChat('${userId}'); closeModal('profileModal');">💬 Написать</button>` : ''}</div>`;
+            content.innerHTML = `
+                <div class="profile-view">
+                    <img src="${user.avatar}" class="profile-view-avatar">
+                    <h3>${escapeHtml(user.name)}</h3>
+                    <p>${user.bio || 'Нет описания'}</p>
+                    <p style="color:#666;margin:10px 0;">ID: ${user.id}</p>
+                    <button onclick="copyToClipboard('${user.id}')">📋 Копировать ID</button>
+                    ${userId !== currentUser.id ? `<button onclick="openPrivateChat('${userId}'); closeModal('profileModal');">💬 Написать</button>` : ''}
+                </div>
+            `;
             document.getElementById('profileModal').classList.add('active');
         }
 
-        function copyToClipboard(text, event) { if (event) event.stopPropagation(); navigator.clipboard.writeText(text); showNotification('✅ ID скопирован!'); }
+        function copyToClipboard(text, event) {
+            if (event) event.stopPropagation();
+            navigator.clipboard.writeText(text);
+            showNotification('✅ ID скопирован!');
+        }
 
+        // ========== ТЕМЫ ==========
         function showThemeModal() { document.getElementById('themeModal').classList.add('active'); }
-        function changeTheme(theme) { document.body.className = `theme-${theme}`; if (currentUser) db.collection('users').doc(currentUser.id).update({ theme }); }
+        function changeTheme(theme) { document.body.className = `theme-${theme}`; }
 
         function showWallpaperModal() { document.getElementById('wallpaperModal').classList.add('active'); }
 
-        function showFontColorModal() { document.getElementById('fontColorModal').classList.add('active'); }
-        async function saveFontColor() {
-            const color = document.getElementById('fontColorPicker').value;
-            await db.collection('users').doc(currentUser.id).update({ fontColor: color });
-            currentUser.fontColor = color;
-            closeModal('fontColorModal');
-            showNotification('✅ Цвет шрифта сохранен!');
-        }
-
-        // Синхронизированная игра Крестики-нолики
+        // ========== ИГРА (синхронизированная) ==========
+        let gameUnsubscribe = null;
         let gameBoardData = ['', '', '', '', '', '', '', '', ''];
         let gameCurrentPlayer = 'X';
         let gameActive = true;
-        let gameWinner = null;
-        
+
         function startGameSync() {
             if (gameUnsubscribe) gameUnsubscribe();
             gameUnsubscribe = db.collection('game').doc('tic-tac-toe').onSnapshot((doc) => {
@@ -1244,137 +1072,102 @@
                     gameBoardData = data.board || ['', '', '', '', '', '', '', '', ''];
                     gameCurrentPlayer = data.currentPlayer || 'X';
                     gameActive = data.active !== false;
-                    gameWinner = data.winner;
-                    renderGameBoard();
+                    renderGameBoardUI();
                 } else {
                     resetGameInFirebase();
                 }
             });
         }
-        
+
         async function resetGameInFirebase() {
             await db.collection('game').doc('tic-tac-toe').set({
                 board: ['', '', '', '', '', '', '', '', ''],
                 currentPlayer: 'X',
                 active: true,
-                winner: null,
-                lastMove: firebase.firestore.FieldValue.serverTimestamp()
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
         }
-        
+
         async function makeGameMove(index) {
-            if (!gameActive || gameWinner || gameBoardData[index] !== '') {
-                showNotification('❌ Невозможный ход!');
-                return;
-            }
+            if (!gameActive || gameBoardData[index] !== '') return;
             
-            // Обновляем в Firebase
             const newBoard = [...gameBoardData];
             newBoard[index] = gameCurrentPlayer;
             
-            // Проверка победителя
-            const winner = checkWinnerOnBoard(newBoard);
-            let active = true;
-            let winnerSymbol = null;
-            
+            const winner = checkWinner(newBoard);
             if (winner) {
-                active = false;
-                winnerSymbol = winner;
+                await db.collection('game').doc('tic-tac-toe').update({
+                    board: newBoard,
+                    active: false
+                });
                 showNotification(`🏆 Победил ${winner === 'X' ? 'Крестик' : 'Нолик'}!`);
             } else if (newBoard.every(cell => cell !== '')) {
-                active = false;
-                winnerSymbol = 'Ничья!';
-                showNotification(`🤝 Ничья!`);
+                await db.collection('game').doc('tic-tac-toe').update({
+                    board: newBoard,
+                    active: false
+                });
+                showNotification('🤝 Ничья!');
             } else {
-                // Меняем игрока
                 const nextPlayer = gameCurrentPlayer === 'X' ? 'O' : 'X';
                 await db.collection('game').doc('tic-tac-toe').update({
                     board: newBoard,
-                    currentPlayer: nextPlayer,
-                    lastMove: firebase.firestore.FieldValue.serverTimestamp()
+                    currentPlayer: nextPlayer
                 });
-                return;
             }
-            
-            await db.collection('game').doc('tic-tac-toe').update({
-                board: newBoard,
-                active: active,
-                winner: winnerSymbol,
-                lastMove: firebase.firestore.FieldValue.serverTimestamp()
-            });
         }
-        
-        function checkWinnerOnBoard(board) {
-            const winPatterns = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-            for (let pattern of winPatterns) {
-                const [a,b,c] = pattern;
-                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-                    return board[a];
+
+        function checkWinner(board) {
+            const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            for (let w of wins) {
+                if (board[w[0]] && board[w[0]] === board[w[1]] && board[w[0]] === board[w[2]]) {
+                    return board[w[0]];
                 }
             }
             return null;
         }
-        
+
         async function resetGame() {
             await resetGameInFirebase();
-            showNotification('🔄 Игра перезапущена!');
+            showNotification('🔄 Новая игра!');
         }
-        
-        function renderGameBoard() {
+
+        function renderGameBoardUI() {
             const container = document.getElementById('gameContent');
             if (!container) return;
             
-            let statusText = '';
-            if (gameWinner === 'Ничья!') statusText = '🤝 Ничья!';
-            else if (gameWinner) statusText = `🏆 Победил ${gameWinner === 'X' ? 'Крестик' : 'Нолик'}!`;
-            else statusText = `Ход: ${gameCurrentPlayer === 'X' ? '❌ Крестики' : '⭕ Нолики'}`;
+            let statusText = gameActive ? `Ход: ${gameCurrentPlayer === 'X' ? '❌' : '⭕'}` : 'Игра окончена';
             
             container.innerHTML = `
-                <div class="game-status">${statusText}</div>
+                <div class="game-info">${statusText}</div>
                 <div class="game-board" id="gameBoard"></div>
-                <button class="game-reset-btn" onclick="resetGame()">🔄 Новая игра</button>
+                <button onclick="resetGame()">🔄 Новая игра</button>
             `;
             
             const board = document.getElementById('gameBoard');
             for (let i = 0; i < 9; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'game-cell';
-                if (!gameActive || gameWinner) cell.classList.add('disabled');
+                if (!gameActive) cell.classList.add('disabled');
                 cell.textContent = gameBoardData[i];
                 cell.onclick = () => makeGameMove(i);
                 board.appendChild(cell);
             }
         }
-        
+
         function showGameModal() {
             startGameSync();
             document.getElementById('gameModal').classList.add('active');
         }
 
-        // Личные заметки
-        async function openPrivateNote() {
-            document.getElementById('privateNoteModal').classList.add('active');
-            const noteDoc = await db.collection('privateNotes').doc(currentUser.id).get();
-            if (noteDoc.exists) document.getElementById('privateNoteDisplay').innerHTML = `<strong>📝 Ваши заметки:</strong><br>${escapeHtml(noteDoc.data().note)}`;
-        }
-        async function savePrivateNote() {
-            const note = document.getElementById('privateNoteText').value;
-            await db.collection('privateNotes').doc(currentUser.id).set({ note, updatedAt: new Date() });
-            document.getElementById('privateNoteDisplay').innerHTML = `<strong>📝 Ваши заметки:</strong><br>${escapeHtml(note)}`;
-            document.getElementById('privateNoteText').value = '';
-            showNotification('📝 Заметка сохранена!');
-        }
-        async function loadPrivateNote() {
-            const noteDoc = await db.collection('privateNotes').doc(currentUser.id).get();
-            if (noteDoc.exists) document.getElementById('privateNoteDisplay').innerHTML = `<strong>📝 Ваши заметки:</strong><br>${escapeHtml(noteDoc.data().note)}`;
-        }
-
-        function viewImage(imageUrl) { window.open(imageUrl, '_blank'); }
+        // ========== ОБЩИЕ ФУНКЦИИ ==========
         function handleEnter(event) { if (event.key === 'Enter') sendMessage(); }
         function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
-        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
-        window.onclick = function(event) { if (event.target.classList.contains('modal')) event.target.classList.remove('active'); }
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
 
         async function checkSavedUser() {
             const saved = localStorage.getItem('sny_user_id');
