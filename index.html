@@ -54,17 +54,26 @@
         .message-bubble { max-width: 60%; padding: 10px 15px; border-radius: 18px; position: relative; }
         .message-own .message-bubble { background: #667eea; color: white; }
         .message-other .message-bubble { background: white; border: 1px solid #ddd; }
-        .message-name { font-size: 11px; font-weight: bold; margin-bottom: 5px; opacity: 0.8; }
-        .message-time { font-size: 9px; margin-top: 5px; opacity: 0.6; }
-        .message-text { word-wrap: break-word; }
-        .message-text span.sticker-in-text { font-size: 20px; display: inline-block; vertical-align: middle; cursor: pointer; }
+        .message-name { font-size: 11px; font-weight: bold; margin-bottom: 5px; opacity: 0.8; display: flex; justify-content: space-between; align-items: center; }
+        .message-time { font-size: 9px; margin-top: 5px; opacity: 0.6; display: inline-block; }
+        .message-text { word-wrap: break-word; line-height: 1.4; }
+        .message-text .inline-sticker { font-size: 1.1em; display: inline-block; vertical-align: middle; }
+        .message-text .inline-sticker-img { width: 1.2em; height: 1.2em; vertical-align: middle; object-fit: contain; display: inline-block; }
         .message-image { max-width: 200px; border-radius: 10px; cursor: pointer; }
-        .message-sticker { font-size: 48px; cursor: pointer; display: inline-block; }
-        .message-actions { display: flex; gap: 5px; margin-top: 5px; }
-        .message-action-btn { background: none; border: none; font-size: 11px; cursor: pointer; color: #666; }
+        .message-big-sticker { font-size: 48px; cursor: pointer; display: inline-block; }
+        .message-big-sticker-img { width: 80px; height: 80px; object-fit: contain; cursor: pointer; }
+        .message-actions { display: flex; gap: 5px; margin-top: 5px; justify-content: flex-end; }
+        .message-action-btn { background: none; border: none; font-size: 11px; cursor: pointer; padding: 2px 6px; border-radius: 8px; }
+        .message-own .message-action-btn { color: #ddd; }
+        .message-own .message-action-btn:hover { background: rgba(255,255,255,0.2); color: white; }
+        .message-other .message-action-btn { color: #666; }
+        .message-other .message-action-btn:hover { background: #f0f0f0; }
         .reactions { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
-        .reaction { background: rgba(0,0,0,0.1); padding: 2px 6px; border-radius: 12px; font-size: 11px; cursor: pointer; }
-        .reaction:hover { background: rgba(0,0,0,0.2); }
+        .reaction { background: rgba(0,0,0,0.1); padding: 2px 8px; border-radius: 12px; font-size: 11px; cursor: pointer; transition: all 0.2s; }
+        .reaction:hover { background: rgba(0,0,0,0.2); transform: scale(1.05); }
+        .reaction-emoji { margin-right: 3px; }
+        .add-reaction-btn { background: none; border: none; font-size: 11px; cursor: pointer; padding: 2px 6px; border-radius: 12px; color: #666; }
+        .add-reaction-btn:hover { background: #f0f0f0; }
         .input-area { padding: 20px; border-top: 1px solid #ddd; background: white; }
         .input-tools { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
         .tool-btn { width: auto; padding: 8px 12px; margin: 0; font-size: 13px; background: #f3f4f6; color: #333; }
@@ -78,15 +87,22 @@
         .close-modal { font-size: 28px; cursor: pointer; }
         .profile-view { text-align: center; }
         .profile-view-avatar { width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; cursor: pointer; object-fit: cover; }
-        .game-board { display: grid; grid-template-columns: repeat(3, 70px); gap: 5px; justify-content: center; margin: 20px 0; }
-        .game-cell { width: 70px; height: 70px; background: #f0f0f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 40px; cursor: pointer; }
+        .game-board { display: grid; grid-template-columns: repeat(3, 80px); gap: 8px; justify-content: center; margin: 20px 0; }
+        .game-cell { width: 80px; height: 80px; background: #f0f0f0; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 50px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+        .game-cell:hover { background: #e0e0e0; transform: scale(1.02); }
         .game-cell.disabled { cursor: not-allowed; opacity: 0.6; }
-        .game-info { text-align: center; margin: 10px 0; font-weight: bold; }
+        .game-info { text-align: center; margin: 15px 0; font-weight: bold; font-size: 18px; padding: 10px; background: #f0f0f0; border-radius: 10px; }
         .notification { position: fixed; bottom: 20px; right: 20px; background: #333; color: white; padding: 12px 20px; border-radius: 10px; animation: slideIn 0.3s; z-index: 2000; }
-        .sticker-selector { display: inline-block; cursor: pointer; font-size: 20px; margin: 0 2px; }
-        .sticker-picker { position: absolute; background: white; border: 1px solid #ddd; border-radius: 10px; padding: 10px; display: none; z-index: 100; }
+        .clear-chat-btn { background: #dc3545; margin-top: 10px; }
+        .clear-chat-btn:hover { background: #c82333; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .sticker-grid-item { font-size: 40px; cursor: pointer; text-align: center; padding: 10px; border-radius: 10px; transition: transform 0.2s; }
+        .sticker-grid-item:hover { transform: scale(1.1); background: #f0f0f0; }
+        .sticker-grid-img { width: 50px; height: 50px; object-fit: contain; }
+        .reaction-picker { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
+        .reaction-option { background: #f0f0f0; padding: 4px 8px; border-radius: 15px; cursor: pointer; font-size: 14px; }
+        .reaction-option:hover { background: #e0e0e0; }
     </style>
 </head>
 <body>
@@ -119,6 +135,7 @@
                     <img id="profileAvatar" class="profile-avatar" src=""><div class="profile-info"><h3 id="profileName"></h3><small id="profileId"></small><div id="lastSeen" style="font-size:10px; color:#666;"></div></div>
                     <button class="copy-id" onclick="copyToClipboard(currentUser.id, event)">📋</button>
                 </div>
+                <button class="clear-chat-btn" onclick="clearChat()" style="margin:10px; width:calc(100% - 20px);">🗑️ Очистить чат</button>
                 <div class="chats-list" id="chatsList"></div>
             </div>
             <div class="chat-area">
@@ -141,7 +158,7 @@
                         <input type="file" id="stickerImageInput" accept="image/*" style="display:none">
                     </div>
                     <div class="input-row">
-                        <input type="text" id="messageInput" placeholder="Сообщение... (введи :стикер: для вставки)" onkeypress="handleEnter(event)">
+                        <input type="text" id="messageInput" placeholder="Сообщение..." onkeypress="handleEnter(event)">
                         <button onclick="sendMessage()">📤</button>
                     </div>
                 </div>
@@ -155,6 +172,7 @@
     <div id="stickerModalWindow" class="modal"><div class="modal-content"><div class="modal-header"><h3>😊 Стикеры</h3><span class="close-modal" onclick="closeModal('stickerModalWindow')">&times;</span></div><button onclick="openStickerImageUpload()">📸 Стикер из фото</button><div id="stickersGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:15px;"></div></div></div>
     <div id="gameModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎮 Крестики-нолики</h3><span class="close-modal" onclick="closeModal('gameModal')">&times;</span></div><div id="gameContent"></div></div></div>
     <div id="groupSettingsModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>⚙️ Настройки группы</h3><span class="close-modal" onclick="closeModal('groupSettingsModal')">&times;</span></div><div><label>Аватар группы</label><img id="groupAvatarPreview" style="width:100px;border-radius:50%;margin:10px auto;display:block"><button onclick="uploadGroupAvatar()">📸 Изменить аватар</button><input type="file" id="groupAvatarFile" accept="image/*" style="display:none"></div><div><label>Описание группы</label><textarea id="groupDescription" rows="3" placeholder="Описание группы"></textarea><button onclick="saveGroupSettings()">Сохранить</button></div></div></div>
+    <div id="reactionModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>😊 Добавить реакцию</h3><span class="close-modal" onclick="closeModal('reactionModal')">&times;</span></div><div id="reactionPicker" style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;"></div></div></div>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -176,7 +194,9 @@
         let allMessages = [];
         let customStickers = [];
         let gameUnsubscribe = null;
-        let onlineInterval = null;
+        let currentMessageForReaction = null;
+
+        const availableReactions = ['👍', '❤️', '😂', '😮', '😢', '😡', '🎉', '🙏'];
 
         function showNotification(msg) {
             const notif = document.createElement('div');
@@ -193,31 +213,79 @@
             return div.innerHTML;
         }
 
-        // Вставка стикеров в текст
+        function formatTime(date) {
+            if (!date) return 'неизвестно';
+            const d = date.toDate ? date.toDate() : new Date(date);
+            return d.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+        }
+
         function insertStickerIntoInput(sticker, stickerUrl) {
             const input = document.getElementById('messageInput');
-            const stickerCode = stickerUrl ? `[sticker:${stickerUrl}]` : `[sticker:${sticker}]`;
-            input.value += stickerCode;
+            if (stickerUrl) {
+                input.value += `[sticker-img:${stickerUrl}]`;
+            } else {
+                input.value += `[sticker:${sticker}]`;
+            }
             closeModal('stickerModalWindow');
             input.focus();
         }
 
         function parseStickersInText(text) {
             const stickerRegex = /\[sticker:(.*?)\]/g;
+            const stickerImgRegex = /\[sticker-img:(.*?)\]/g;
             let parts = [];
             let lastIndex = 0;
             let match;
-            while ((match = stickerRegex.exec(text)) !== null) {
+            
+            while ((match = stickerImgRegex.exec(text)) !== null) {
                 if (match.index > lastIndex) {
                     parts.push({ type: 'text', content: text.substring(lastIndex, match.index) });
+                }
+                parts.push({ type: 'sticker-img', content: match[1] });
+                lastIndex = match.index + match[0].length;
+            }
+            
+            let remainingText = text.substring(lastIndex);
+            lastIndex = 0;
+            while ((match = stickerRegex.exec(remainingText)) !== null) {
+                if (match.index > lastIndex) {
+                    parts.push({ type: 'text', content: remainingText.substring(lastIndex, match.index) });
                 }
                 parts.push({ type: 'sticker', content: match[1] });
                 lastIndex = match.index + match[0].length;
             }
-            if (lastIndex < text.length) {
-                parts.push({ type: 'text', content: text.substring(lastIndex) });
+            if (lastIndex < remainingText.length) {
+                parts.push({ type: 'text', content: remainingText.substring(lastIndex) });
             }
+            
             return parts;
+        }
+
+        async function clearChat() {
+            if (!confirm('⚠️ Вы уверены, что хотите очистить ВЕСЬ чат? Это действие необратимо!')) return;
+            
+            try {
+                let query;
+                if (currentChat.type === 'general') {
+                    query = db.collection('messages').where('chatType', '==', 'general');
+                } else if (currentChat.type === 'private') {
+                    const chatId = getPrivateChatId(currentUser.id, currentChat.userId);
+                    query = db.collection('messages').where('chatId', '==', chatId);
+                } else {
+                    return;
+                }
+                
+                const snapshot = await query.get();
+                const batch = db.batch();
+                snapshot.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
+                await batch.commit();
+                showNotification('✅ Чат очищен!');
+            } catch (error) {
+                console.error('Ошибка очистки:', error);
+                showNotification('❌ Ошибка очистки чата');
+            }
         }
 
         function switchTab(tab) {
@@ -297,11 +365,8 @@
             await loadAllMessages();
             await openGeneralChat();
             
-            // Обновление last seen
             await updateLastSeen();
-            onlineInterval = setInterval(updateLastSeen, 30000);
-            
-            // Загрузка last seen других пользователей
+            setInterval(updateLastSeen, 30000);
             setInterval(loadChats, 10000);
         }
 
@@ -379,7 +444,7 @@
             <div class="chat-item pinned-chat" onclick="openGameChat()"><div class="chat-avatar" style="background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:24px;">🎮</div><div class="chat-info"><div class="chat-name">🎮 Крестики-нолики</div></div></div>`;
             
             users.forEach(user => {
-                const lastSeen = user.lastSeen ? new Date(user.lastSeen.toDate()).toLocaleTimeString() : 'неизвестно';
+                const lastSeen = formatTime(user.lastSeen);
                 chatsList.innerHTML += `<div class="chat-item" onclick="openPrivateChat('${user.id}')"><img class="chat-avatar" src="${user.avatar}"><div class="chat-info"><div class="chat-name">${escapeHtml(user.name)}</div><div class="chat-last-seen">Был(а): ${lastSeen}</div></div><button class="copy-id" onclick="copyToClipboard('${user.id}', event)">📋</button></div>`;
             });
         }
@@ -455,6 +520,47 @@
             showGameModal();
         }
 
+        async function addReaction(messageId, emoji) {
+            const msgRef = db.collection('messages').doc(messageId);
+            const msgDoc = await msgRef.get();
+            const msg = msgDoc.data();
+            let reactions = msg.reactions || {};
+            if (!reactions[emoji]) reactions[emoji] = [];
+            if (!reactions[emoji].includes(currentUser.id)) {
+                reactions[emoji].push(currentUser.id);
+                await msgRef.update({ reactions });
+                showNotification(`👍 Реакция ${emoji} добавлена`);
+            }
+        }
+
+        function showReactionPicker(messageId) {
+            currentMessageForReaction = messageId;
+            const picker = document.getElementById('reactionPicker');
+            picker.innerHTML = '';
+            availableReactions.forEach(emoji => {
+                const btn = document.createElement('button');
+                btn.textContent = emoji;
+                btn.style.fontSize = '24px';
+                btn.style.padding = '10px';
+                btn.style.margin = '5px';
+                btn.style.width = 'auto';
+                btn.style.display = 'inline-block';
+                btn.onclick = () => {
+                    addReaction(messageId, emoji);
+                    closeModal('reactionModal');
+                };
+                picker.appendChild(btn);
+            });
+            document.getElementById('reactionModal').classList.add('active');
+        }
+
+        async function deleteMessage(messageId, isOwn) {
+            if (isOwn || confirm('Удалить чужое сообщение?')) {
+                await db.collection('messages').doc(messageId).delete();
+                showNotification('🗑️ Сообщение удалено');
+            }
+        }
+
         function displayMessage(msg) {
             const container = document.getElementById('messagesList');
             if (!container) return;
@@ -470,38 +576,44 @@
                 for (const part of parts) {
                     if (part.type === 'text') {
                         htmlContent += escapeHtml(part.content);
-                    } else {
-                        if (part.content.startsWith('http')) {
-                            htmlContent += `<img src="${part.content}" class="message-sticker" style="width:40px; height:40px; vertical-align:middle;">`;
-                        } else {
-                            htmlContent += `<span class="message-sticker">${part.content}</span>`;
-                        }
+                    } else if (part.type === 'sticker') {
+                        htmlContent += `<span class="inline-sticker">${part.content}</span>`;
+                    } else if (part.type === 'sticker-img') {
+                        htmlContent += `<img src="${part.content}" class="inline-sticker-img" alt="sticker">`;
                     }
                 }
                 content = `<div class="message-text">${htmlContent}</div>`;
             } else if (msg.type === 'image') {
                 content = `<img src="${msg.imageUrl}" class="message-image" onclick="window.open('${msg.imageUrl}','_blank')">`;
             } else if (msg.type === 'sticker') {
-                if (msg.stickerUrl) content = `<img src="${msg.stickerUrl}" class="message-sticker" style="width:80px;">`;
-                else content = `<div class="message-sticker">${msg.sticker}</div>`;
+                if (msg.stickerUrl) content = `<img src="${msg.stickerUrl}" class="message-big-sticker-img">`;
+                else content = `<div class="message-big-sticker">${msg.sticker}</div>`;
             }
             
-            // Реакции
             let reactionsHtml = '';
             if (msg.reactions && Object.keys(msg.reactions).length > 0) {
                 reactionsHtml = '<div class="reactions">';
                 for (const [emoji, users] of Object.entries(msg.reactions)) {
-                    reactionsHtml += `<span class="reaction" onclick="addReaction('${msg.id}', '${emoji}')">${emoji} ${users.length}</span>`;
+                    reactionsHtml += `<span class="reaction" onclick="addReaction('${msg.id}', '${emoji}')"><span class="reaction-emoji">${emoji}</span> ${users.length}</span>`;
                 }
                 reactionsHtml += '</div>';
             }
             
-            let actionsHtml = '';
+            let actionsHtml = `
+                <div class="message-actions">
+                    <button class="message-action-btn" onclick="showReactionPicker('${msg.id}')">😊</button>
+                    <button class="message-action-btn" onclick="deleteMessage('${msg.id}', ${isOwn})">🗑️</button>
+                </div>
+            `;
+            
             if (isOwn && msg.type === 'text') {
-                actionsHtml = `<div class="message-actions">
-                    <button class="message-action-btn" onclick="editMessage('${msg.id}', '${escapeHtml(msg.text)}')">✏️</button>
-                    <button class="message-action-btn" onclick="deleteMessage('${msg.id}')">🗑️</button>
-                </div>`;
+                actionsHtml = `
+                    <div class="message-actions">
+                        <button class="message-action-btn" onclick="editMessage('${msg.id}', '${escapeHtml(msg.text)}')">✏️</button>
+                        <button class="message-action-btn" onclick="showReactionPicker('${msg.id}')">😊</button>
+                        <button class="message-action-btn" onclick="deleteMessage('${msg.id}', true)">🗑️</button>
+                    </div>
+                `;
             }
             
             div.innerHTML = `<div class="message-bubble"><div class="message-name">${escapeHtml(msg.userName)}</div>${content}${reactionsHtml}${actionsHtml}<div class="message-time">${time}</div></div>`;
@@ -523,26 +635,9 @@
             showNotification('✅ Сообщение отправлено');
         }
 
-        async function addReaction(messageId, emoji) {
-            const msgRef = db.collection('messages').doc(messageId);
-            const msgDoc = await msgRef.get();
-            const msg = msgDoc.data();
-            let reactions = msg.reactions || {};
-            if (!reactions[emoji]) reactions[emoji] = [];
-            if (!reactions[emoji].includes(currentUser.id)) {
-                reactions[emoji].push(currentUser.id);
-                await msgRef.update({ reactions });
-                showNotification(`👍 Реакция ${emoji} добавлена`);
-            }
-        }
-
         async function editMessage(msgId, oldText) {
             const newText = prompt('Редактировать:', oldText);
             if (newText && newText !== oldText) { await db.collection('messages').doc(msgId).update({ text: newText, edited: true }); showNotification('✏️ Изменено'); }
-        }
-
-        async function deleteMessage(msgId) {
-            if (confirm('Удалить?')) { await db.collection('messages').doc(msgId).delete(); showNotification('🗑️ Удалено'); }
         }
 
         function attachImage() { document.getElementById('imageInput').click(); }
@@ -609,7 +704,7 @@
         async function showProfile(userId) {
             const userDoc = await db.collection('users').doc(userId).get();
             const user = userDoc.data();
-            const lastSeen = user.lastSeen ? new Date(user.lastSeen.toDate()).toLocaleString() : 'неизвестно';
+            const lastSeen = formatTime(user.lastSeen);
             const content = document.getElementById('profileContent');
             content.innerHTML = `<div class="profile-view"><img src="${user.avatar}" class="profile-view-avatar"><h3>${escapeHtml(user.name)}</h3><p>${user.bio || 'Нет описания'}</p><p>ID: ${user.id}</p><p>Последний раз: ${lastSeen}</p><button onclick="copyToClipboard('${user.id}')">📋 Копировать ID</button>${userId !== currentUser.id ? `<button onclick="openPrivateChat('${userId}'); closeModal('profileModal');">💬 Написать</button>` : ''}</div>`;
             document.getElementById('profileModal').classList.add('active');
@@ -620,7 +715,7 @@
         function changeTheme(theme) { document.body.className = `theme-${theme}`; }
         function showWallpaperModal() { document.getElementById('wallpaperModal').classList.add('active'); }
 
-        // ========== СИНХРОНИЗИРОВАННАЯ ИГРА ==========
+        // Игра Крестики-нолики
         let gameBoardData = ['', '', '', '', '', '', '', '', ''];
         let gameCurrentPlayer = 'X';
         let gameActiveGame = true;
@@ -650,6 +745,7 @@
                 winner: null,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
+            showNotification('🔄 Игра перезапущена! Ход Крестиков (X)');
         }
 
         async function makeGameMove(index) {
@@ -657,22 +753,18 @@
                 showNotification('❌ Сейчас не твой ход или игра окончена!');
                 return;
             }
-            if (gameCurrentPlayer !== 'X') {
-                showNotification('❌ Сейчас ход Крестиков (X)!');
-                return;
-            }
             
             const newBoard = [...gameBoardData];
-            newBoard[index] = 'X';
+            newBoard[index] = gameCurrentPlayer;
             
             const winner = checkWinnerOnBoard(newBoard);
             if (winner) {
                 await db.collection('game').doc('tic-tac-toe').update({
                     board: newBoard,
                     active: false,
-                    winner: 'X'
+                    winner: winner
                 });
-                showNotification('🏆 Победили Крестики (X)!');
+                showNotification(`🏆 Победил ${winner === 'X' ? 'Крестик (X)' : 'Нолик (O)'}!`);
             } else if (newBoard.every(cell => cell !== '')) {
                 await db.collection('game').doc('tic-tac-toe').update({
                     board: newBoard,
@@ -681,11 +773,12 @@
                 });
                 showNotification('🤝 Ничья!');
             } else {
+                const nextPlayer = gameCurrentPlayer === 'X' ? 'O' : 'X';
                 await db.collection('game').doc('tic-tac-toe').update({
                     board: newBoard,
-                    currentPlayer: 'O'
+                    currentPlayer: nextPlayer
                 });
-                showNotification('⭕ Теперь ход Ноликов (O)!');
+                showNotification(`${nextPlayer === 'X' ? '❌' : '⭕'} Теперь ход ${nextPlayer === 'X' ? 'Крестиков (X)' : 'Ноликов (O)'}`);
             }
         }
 
@@ -701,7 +794,6 @@
 
         async function resetGame() {
             await resetGameInFirebase();
-            showNotification('🔄 Новая игра! Теперь ход Крестиков (X)');
         }
 
         function renderGameBoardUI() {
@@ -711,14 +803,14 @@
             let statusText = '';
             if (gameWinner === 'Ничья!') statusText = '🤝 Ничья!';
             else if (gameWinner) statusText = `🏆 Победили ${gameWinner === 'X' ? 'Крестики (X)' : 'Нолики (O)'}!`;
-            else statusText = `Ход: ${gameCurrentPlayer === 'X' ? '❌ Крестики (X)' : '⭕ Нолики (O)'}`;
+            else statusText = `🎮 Ход: ${gameCurrentPlayer === 'X' ? '❌ Крестики (X)' : '⭕ Нолики (O)'}`;
             
-            const isPlayerTurn = gameCurrentPlayer === 'X' && gameActiveGame && !gameWinner;
+            const isPlayerTurn = gameActiveGame && !gameWinner;
             
             container.innerHTML = `
                 <div class="game-info">${statusText}</div>
                 <div class="game-board" id="gameBoard"></div>
-                <button onclick="resetGame()">🔄 Новая игра</button>
+                <button class="game-reset-btn" onclick="resetGame()">🔄 Новая игра</button>
             `;
             
             const board = document.getElementById('gameBoard');
