@@ -12,10 +12,23 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            transition: background 0.3s;
         }
+
+        /* Темы */
+        .theme-default { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .theme-pink { background: linear-gradient(135deg, #ff69b4, #ff1493); }
+        .theme-red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .theme-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .theme-green { background: linear-gradient(135deg, #10b981, #059669); }
+        .theme-purple { background: linear-gradient(135deg, #a855f7, #7c3aed); }
+        .theme-orange { background: linear-gradient(135deg, #f97316, #ea580c); }
+        .theme-teal { background: linear-gradient(135deg, #14b8a6, #0d9488); }
+        .theme-indigo { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+        .theme-cyan { background: linear-gradient(135deg, #06b6d4, #0891b2); }
 
         .screen {
             display: none;
@@ -35,6 +48,7 @@
             border-radius: 20px;
             width: 400px;
             text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
 
         .welcome-card h1 {
@@ -71,7 +85,7 @@
             display: block;
         }
 
-        input, button {
+        input, button, select {
             width: 100%;
             padding: 12px;
             margin: 10px 0;
@@ -92,125 +106,127 @@
             transform: scale(1.02);
         }
 
-        .avatar-section {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .avatar-section img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #667eea;
-            margin-bottom: 10px;
-        }
-
         /* Мессенджер */
         .messenger-container {
             display: flex;
-            width: 1200px;
+            width: 1400px;
             max-width: 100%;
             height: 90vh;
             background: white;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
 
+        /* Боковая панель */
         .sidebar {
-            width: 280px;
-            background: #f7f7f7;
-            padding: 20px;
-            border-right: 1px solid #ddd;
+            width: 320px;
+            background: #f9fafb;
+            border-right: 1px solid #e5e7eb;
             display: flex;
             flex-direction: column;
-            gap: 20px;
             overflow-y: auto;
         }
 
-        .user-info {
+        .user-profile {
+            padding: 20px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #ddd;
+            gap: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            cursor: pointer;
+            transition: background 0.2s;
         }
 
-        .user-info img {
+        .user-profile:hover {
+            background: #f3f4f6;
+        }
+
+        .profile-avatar {
             width: 50px;
             height: 50px;
             border-radius: 50%;
             object-fit: cover;
         }
 
-        .user-info h3 {
-            font-size: 16px;
-        }
-
-        .user-info small {
-            font-size: 10px;
-            color: #666;
-        }
-
-        .logout-btn {
-            background: #ff4444;
-            margin-top: 10px;
-        }
-
-        .themes {
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 15px;
-        }
-
-        .themes h4, .stickers h4 {
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .theme-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .theme-btn {
-            width: auto;
-            padding: 8px 12px;
-            margin: 0;
-            font-size: 12px;
-        }
-
-        .theme-pink { background: #ff69b4; }
-        .theme-red { background: #ef4444; }
-        .theme-blue { background: #3b82f6; }
-        .theme-green { background: #10b981; }
-
-        .stickers {
+        .profile-info {
             flex: 1;
         }
 
-        .stickers-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin: 10px 0;
+        .profile-info h3 {
+            font-size: 16px;
+            margin-bottom: 4px;
         }
 
-        .sticker-item {
-            font-size: 32px;
-            text-align: center;
+        .profile-info small {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .copy-id {
+            background: none;
+            border: none;
+            font-size: 16px;
             cursor: pointer;
-            padding: 8px;
-            background: white;
-            border-radius: 10px;
-            transition: transform 0.2s;
+            padding: 5px;
+            width: auto;
         }
 
-        .sticker-item:hover {
-            transform: scale(1.1);
+        /* Чаты */
+        .chats-list {
+            flex: 1;
+            overflow-y: auto;
         }
 
+        .chat-item {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .chat-item:hover {
+            background: #f3f4f6;
+        }
+
+        .chat-item.active {
+            background: #e0e7ff;
+        }
+
+        .chat-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .chat-info {
+            flex: 1;
+        }
+
+        .chat-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .chat-last-msg {
+            font-size: 12px;
+            color: #6b7280;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
+        }
+
+        .chat-time {
+            font-size: 10px;
+            color: #9ca3af;
+        }
+
+        /* Область чата */
         .chat-area {
             flex: 1;
             display: flex;
@@ -219,10 +235,46 @@
 
         .chat-header {
             padding: 20px;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #e5e7eb;
             background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
+        .chat-header-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-header-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .chat-header-name {
+            font-weight: 600;
+        }
+
+        .chat-header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            width: auto;
+            color: #6b7280;
+        }
+
+        /* Сообщения */
         .messages {
             flex: 1;
             padding: 20px;
@@ -233,27 +285,34 @@
         .message {
             margin-bottom: 15px;
             animation: fadeIn 0.3s;
+            position: relative;
         }
 
         .message-own {
-            text-align: right;
+            display: flex;
+            justify-content: flex-end;
         }
 
         .message-other {
-            text-align: left;
+            display: flex;
+            justify-content: flex-start;
         }
 
         .message-bubble {
-            display: inline-block;
             max-width: 60%;
             padding: 10px 15px;
             border-radius: 18px;
-            background: #f0f0f0;
+            position: relative;
         }
 
         .message-own .message-bubble {
             background: #667eea;
             color: white;
+        }
+
+        .message-other .message-bubble {
+            background: white;
+            border: 1px solid #e5e7eb;
         }
 
         .message-name {
@@ -267,41 +326,104 @@
             font-size: 9px;
             margin-top: 5px;
             opacity: 0.6;
+            display: inline-block;
+            margin-right: 10px;
         }
 
         .message-text {
             word-wrap: break-word;
         }
 
+        .message-image {
+            max-width: 250px;
+            border-radius: 10px;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+
         .message-video {
-            max-width: 200px;
+            max-width: 250px;
             border-radius: 10px;
             margin-top: 5px;
         }
 
         .message-sticker {
             font-size: 48px;
+            cursor: pointer;
         }
 
-        .input-area {
+        /* Реакции */
+        .reactions {
             display: flex;
-            gap: 10px;
+            gap: 5px;
+            margin-top: 5px;
+            flex-wrap: wrap;
+        }
+
+        .reaction {
+            background: rgba(0,0,0,0.1);
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .reaction:hover {
+            background: rgba(0,0,0,0.2);
+        }
+
+        .reaction-emoji {
+            margin-right: 3px;
+        }
+
+        /* Просмотры */
+        .views-info {
+            font-size: 10px;
+            opacity: 0.6;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+
+        /* Поле ввода */
+        .input-area {
             padding: 20px;
-            border-top: 1px solid #ddd;
+            border-top: 1px solid #e5e7eb;
             background: white;
         }
 
-        .input-area input {
+        .input-tools {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tool-btn {
+            width: auto;
+            padding: 8px 12px;
+            margin: 0;
+            font-size: 14px;
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-row input {
             flex: 1;
             margin: 0;
         }
 
-        .input-area button {
+        .input-row button {
             width: 50px;
             margin: 0;
         }
 
-        /* Модальное окно */
+        /* Модальные окна */
         .modal {
             display: none;
             position: fixed;
@@ -315,20 +437,54 @@
             align-items: center;
         }
 
+        .modal.active {
+            display: flex;
+        }
+
         .modal-content {
             background: white;
             padding: 30px;
             border-radius: 20px;
-            width: 350px;
+            width: 450px;
+            max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-modal {
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        /* Профиль */
+        .profile-view {
             text-align: center;
         }
 
-        .modal-content button {
-            width: auto;
-            margin: 5px;
-            padding: 10px 20px;
+        .profile-view-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
         }
 
+        /* Стикеры из картинок */
+        .custom-sticker {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            cursor: pointer;
+        }
+
+        /* Адаптивность */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -343,13 +499,13 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #888;
+            background: #cbd5e1;
             border-radius: 3px;
         }
     </style>
 </head>
-<body>
-    <!-- ЭКРАН ВХОДА -->
+<body class="theme-default">
+    <!-- Экран входа -->
     <div id="welcomeScreen" class="screen active">
         <div class="welcome-card">
             <h1>💬 SNY</h1>
@@ -360,18 +516,25 @@
                 <button class="tab-btn" onclick="switchTab('enter')">🔑 Войти</button>
             </div>
 
-            <!-- Вкладка создания -->
             <div id="createTab" class="tab-content active">
                 <input type="text" id="newUsername" placeholder="Твой никнейм" maxlength="20">
                 <div class="avatar-section">
-                    <img id="avatarImage" src="https://i.pravatar.cc/150?img=7" alt="avatar">
+                    <img id="avatarImage" src="https://i.pravatar.cc/150?img=7" alt="avatar" style="width:100px; border-radius:50%; margin-bottom:10px;">
                     <button onclick="triggerAvatarUpload()">📸 Загрузить аватар</button>
                     <input type="file" id="avatarFile" accept="image/*" style="display:none">
                 </div>
+                <select id="fontColorSelect">
+                    <option value="#000000">Черный</option>
+                    <option value="#ff0000">Красный</option>
+                    <option value="#00ff00">Зеленый</option>
+                    <option value="#0000ff">Синий</option>
+                    <option value="#ff69b4">Розовый</option>
+                    <option value="#ffa500">Оранжевый</option>
+                    <option value="#800080">Фиолетовый</option>
+                </select>
                 <button onclick="createAccount()">🚀 Создать SNY-ID</button>
             </div>
 
-            <!-- Вкладка входа -->
             <div id="enterTab" class="tab-content">
                 <input type="text" id="existingUserId" placeholder="Введи свой SNY-ID">
                 <button onclick="loginWithId()">🔓 Войти</button>
@@ -379,70 +542,135 @@
         </div>
     </div>
 
-    <!-- ОСНОВНОЙ ЧАТ -->
+    <!-- Основной интерфейс -->
     <div id="messengerScreen" class="screen" style="display:none">
         <div class="messenger-container">
-            <!-- Боковая панель -->
+            <!-- Левая панель - чаты -->
             <div class="sidebar">
-                <div class="user-info">
-                    <img id="profileAvatar" src="" alt="avatar">
-                    <div>
+                <div class="user-profile" onclick="showProfile(currentUser.id)">
+                    <img id="profileAvatar" class="profile-avatar" src="">
+                    <div class="profile-info">
                         <h3 id="profileName"></h3>
                         <small id="profileId"></small>
                     </div>
-                    <button onclick="logout()" class="logout-btn" style="width:auto; padding:8px 12px;">🚪</button>
+                    <button class="copy-id" onclick="copyToClipboard(currentUser.id, event)">📋</button>
                 </div>
                 
-                <div class="themes">
-                    <h4>🎨 Темы:</h4>
-                    <div class="theme-buttons">
-                        <button onclick="setTheme('pink')" class="theme-btn theme-pink">🌸 Розовая</button>
-                        <button onclick="setTheme('red')" class="theme-btn theme-red">❤️ Красная</button>
-                        <button onclick="setTheme('blue')" class="theme-btn theme-blue">💙 Синяя</button>
-                        <button onclick="setTheme('green')" class="theme-btn theme-green">💚 Зеленая</button>
-                    </div>
-                </div>
-                
-                <div class="stickers">
-                    <h4>😊 Стикеры:</h4>
-                    <div class="stickers-grid" id="stickersGrid"></div>
-                    <button onclick="openStickerCreator()" style="width:100%">➕ Создать стикер</button>
+                <div class="chats-list" id="chatsList">
+                    <!-- Список чатов -->
                 </div>
             </div>
             
-            <!-- Область чата -->
+            <!-- Правая область - чат -->
             <div class="chat-area">
                 <div class="chat-header">
-                    <h3>💬 Общий чат</h3>
+                    <div class="chat-header-info" id="chatHeaderInfo">
+                        <img id="chatHeaderAvatar" class="chat-header-avatar" src="">
+                        <div>
+                            <div class="chat-header-name" id="chatHeaderName"></div>
+                            <small id="chatHeaderId"></small>
+                        </div>
+                    </div>
+                    <div class="chat-header-actions">
+                        <button class="icon-btn" onclick="showThemeModal()">🎨</button>
+                        <button class="icon-btn" onclick="showFontColorModal()">🎨 Цвет шрифта</button>
+                    </div>
                 </div>
+                
                 <div class="messages" id="messagesList"></div>
+                
                 <div class="input-area">
-                    <input type="text" id="messageInput" placeholder="Напиши сообщение..." onkeypress="handleEnter(event)">
-                    <button onclick="sendVideo()">🎥</button>
-                    <button onclick="sendMessage()">📤</button>
-                    <input type="file" id="videoFile" accept="video/*" style="display:none">
+                    <div class="input-tools">
+                        <button class="tool-btn" onclick="attachImage()">🖼️ Фото</button>
+                        <button class="tool-btn" onclick="attachVideo()">🎥 Видео</button>
+                        <button class="tool-btn" onclick="openStickerModal()">😊 Стикер</button>
+                        <input type="file" id="imageInput" accept="image/*" style="display:none">
+                        <input type="file" id="videoFile" accept="video/*" style="display:none">
+                        <input type="file" id="stickerImageInput" accept="image/*" style="display:none">
+                    </div>
+                    <div class="input-row">
+                        <input type="text" id="messageInput" placeholder="Напиши сообщение..." onkeypress="handleEnter(event)">
+                        <button onclick="sendMessage()">📤</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Модальное окно создания стикера -->
-    <div id="stickerModal" class="modal">
+    <!-- Модалка просмотра просмотров -->
+    <div id="viewsModal" class="modal">
         <div class="modal-content">
-            <h3>✨ Новый стикер</h3>
-            <input type="text" id="stickerEmoji" placeholder="Введи смайлик или текст" maxlength="4">
-            <button onclick="createSticker()">Создать</button>
-            <button onclick="closeStickerModal()">Отмена</button>
+            <div class="modal-header">
+                <h3>👁️ Просмотры</h3>
+                <span class="close-modal" onclick="closeModal('viewsModal')">&times;</span>
+            </div>
+            <div id="viewsList"></div>
         </div>
     </div>
 
-    <!-- Подключаем Firebase -->
+    <!-- Модалка профиля -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>👤 Профиль</h3>
+                <span class="close-modal" onclick="closeModal('profileModal')">&times;</span>
+            </div>
+            <div id="profileContent" class="profile-view"></div>
+        </div>
+    </div>
+
+    <!-- Модалка тем -->
+    <div id="themeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🎨 Темы оформления</h3>
+                <span class="close-modal" onclick="closeModal('themeModal')">&times;</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2,1fr); gap:10px">
+                <button onclick="changeTheme('default')">🌙 По умолчанию</button>
+                <button onclick="changeTheme('pink')">🌸 Розовая</button>
+                <button onclick="changeTheme('red')">❤️ Красная</button>
+                <button onclick="changeTheme('blue')">💙 Синяя</button>
+                <button onclick="changeTheme('green')">💚 Зеленая</button>
+                <button onclick="changeTheme('purple')">🟣 Фиолетовая</button>
+                <button onclick="changeTheme('orange')">🟠 Оранжевая</button>
+                <button onclick="changeTheme('teal')">🩵 Бирюзовая</button>
+                <button onclick="changeTheme('indigo')">🔷 Индиго</button>
+                <button onclick="changeTheme('cyan')">💎 Циан</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модалка стикеров -->
+    <div id="stickerModalWindow" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>😊 Стикеры</h3>
+                <span class="close-modal" onclick="closeModal('stickerModalWindow')">&times;</span>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <button onclick="openStickerImageUpload()">📸 Стикер из фото</button>
+            </div>
+            <div id="stickersGrid" style="display: grid; grid-template-columns: repeat(4,1fr); gap:10px;"></div>
+        </div>
+    </div>
+
+    <!-- Модалка цвета шрифта -->
+    <div id="fontColorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🎨 Цвет шрифта</h3>
+                <span class="close-modal" onclick="closeModal('fontColorModal')">&times;</span>
+            </div>
+            <input type="color" id="fontColorPicker" value="#000000">
+            <button onclick="saveFontColor()">Сохранить</button>
+        </div>
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
-
     <script>
-        // ========== ТВОИ КЛЮЧИ FIREBASE ==========
+        // Firebase конфиг
         const firebaseConfig = {
             apiKey: "AIzaSyBfXUgZnRD013c1jPQ04X3ZRRCHJSwE6NQ",
             authDomain: "sny-messenger.firebaseapp.com",
@@ -452,23 +680,22 @@
             appId: "1:495989032426:web:21094d0b3fb3f544579e93"
         };
 
-        // Инициализация Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        const storage = firebase.storage();
 
-        // ========== ПЕРЕМЕННЫЕ ==========
+        // Переменные
         let currentUser = null;
+        let currentChat = null; // { type: 'general' or 'private', userId: id }
         let messagesUnsubscribe = null;
+        let chatsUnsubscribe = null;
+        let customStickers = [];
 
-        // ========== ПЕРЕКЛЮЧЕНИЕ ТАБОВ ==========
+        // Переключение табов
         function switchTab(tab) {
             const createTab = document.getElementById('createTab');
             const enterTab = document.getElementById('enterTab');
             const btns = document.querySelectorAll('.tab-btn');
-            
             btns.forEach(btn => btn.classList.remove('active'));
-            
             if (tab === 'create') {
                 createTab.classList.add('active');
                 enterTab.classList.remove('active');
@@ -480,7 +707,7 @@
             }
         }
 
-        // ========== АВАТАРКА ==========
+        // Загрузка аватарки
         function triggerAvatarUpload() {
             document.getElementById('avatarFile').click();
         }
@@ -496,13 +723,11 @@
             }
         });
 
-        // ========== СОЗДАНИЕ АККАУНТА ==========
+        // Создание аккаунта
         async function createAccount() {
             const username = document.getElementById('newUsername').value.trim();
-            if (!username) {
-                alert('✨ Введи свой никнейм!');
-                return;
-            }
+            const fontColor = document.getElementById('fontColorSelect').value;
+            if (!username) { alert('Введи никнейм!'); return; }
             
             const snyId = 'SNY_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6).toUpperCase();
             const avatarUrl = document.getElementById('avatarImage').src;
@@ -511,53 +736,33 @@
                 id: snyId,
                 name: username,
                 avatar: avatarUrl,
+                fontColor: fontColor,
+                theme: 'default',
                 createdAt: new Date()
             };
             
-            try {
-                await db.collection('users').doc(snyId).set(currentUser);
-                localStorage.setItem('sny_user_id', snyId);
-                enterMessenger();
-            } catch (error) {
-                alert('❌ Ошибка создания аккаунта');
-            }
+            await db.collection('users').doc(snyId).set(currentUser);
+            localStorage.setItem('sny_user_id', snyId);
+            enterMessenger();
         }
 
-        // ========== ВХОД ==========
+        // Вход
         async function loginWithId() {
             const userId = document.getElementById('existingUserId').value.trim().toUpperCase();
-            if (!userId) {
-                alert('🔑 Введи свой SNY-ID!');
-                return;
-            }
+            if (!userId) { alert('Введи SNY-ID!'); return; }
             
-            try {
-                const userDoc = await db.collection('users').doc(userId).get();
-                if (userDoc.exists) {
-                    currentUser = userDoc.data();
-                    localStorage.setItem('sny_user_id', userId);
-                    enterMessenger();
-                } else {
-                    alert('❌ Пользователь не найден!');
-                }
-            } catch (error) {
-                alert('❌ Ошибка входа');
+            const userDoc = await db.collection('users').doc(userId).get();
+            if (userDoc.exists) {
+                currentUser = userDoc.data();
+                localStorage.setItem('sny_user_id', userId);
+                enterMessenger();
+            } else {
+                alert('Пользователь не найден!');
             }
         }
 
-        // ========== ВЫХОД ==========
-        function logout() {
-            if (confirm('Выйти из аккаунта?')) {
-                localStorage.removeItem('sny_user_id');
-                if (messagesUnsubscribe) messagesUnsubscribe();
-                currentUser = null;
-                document.getElementById('welcomeScreen').classList.add('active');
-                document.getElementById('messengerScreen').style.display = 'none';
-            }
-        }
-
-        // ========== ВХОД В ЧАТ ==========
-        function enterMessenger() {
+        // Вход в мессенджер
+        async function enterMessenger() {
             document.getElementById('welcomeScreen').classList.remove('active');
             document.getElementById('messengerScreen').style.display = 'block';
             
@@ -565,51 +770,163 @@
             document.getElementById('profileAvatar').src = currentUser.avatar;
             document.getElementById('profileId').innerText = currentUser.id;
             
-            loadMessages();
-            loadStickers();
+            if (currentUser.theme) changeTheme(currentUser.theme);
+            if (currentUser.fontColor) document.documentElement.style.setProperty('--font-color', currentUser.fontColor);
+            
+            await loadChats();
+            loadCustomStickers();
+            
+            // Открываем общий чат по умолчанию
+            openGeneralChat();
         }
 
-        // ========== ЗАГРУЗКА СООБЩЕНИЙ ==========
-        function loadMessages() {
+        // Загрузка списка чатов
+        async function loadChats() {
+            if (chatsUnsubscribe) chatsUnsubscribe();
+            
+            // Получаем всех пользователей
+            const usersSnapshot = await db.collection('users').get();
+            const users = [];
+            usersSnapshot.forEach(doc => {
+                if (doc.id !== currentUser.id) {
+                    users.push(doc.data());
+                }
+            });
+            
+            const chatsList = document.getElementById('chatsList');
+            chatsList.innerHTML = `
+                <div class="chat-item" onclick="openGeneralChat()">
+                    <div class="chat-avatar" style="background:#667eea; display:flex; align-items:center; justify-content:center; font-size:24px;">💬</div>
+                    <div class="chat-info">
+                        <div class="chat-name">Общий чат</div>
+                        <div class="chat-last-msg">Все пользователи</div>
+                    </div>
+                </div>
+            `;
+            
+            // Добавляем личные чаты
+            users.forEach(user => {
+                const chatId = getPrivateChatId(currentUser.id, user.id);
+                chatsList.innerHTML += `
+                    <div class="chat-item" onclick="openPrivateChat('${user.id}')">
+                        <img class="chat-avatar" src="${user.avatar}" alt="">
+                        <div class="chat-info">
+                            <div class="chat-name">${escapeHtml(user.name)}</div>
+                            <div class="chat-last-msg">ID: ${user.id}</div>
+                        </div>
+                        <button class="copy-id" onclick="copyToClipboard('${user.id}', event)">📋</button>
+                    </div>
+                `;
+            });
+        }
+
+        function getPrivateChatId(user1, user2) {
+            return [user1, user2].sort().join('_');
+        }
+
+        // Открыть общий чат
+        function openGeneralChat() {
+            currentChat = { type: 'general' };
+            document.getElementById('chatHeaderAvatar').src = 'https://via.placeholder.com/40?text=💬';
+            document.getElementById('chatHeaderName').innerText = 'Общий чат';
+            document.getElementById('chatHeaderId').innerText = 'Все пользователи';
+            loadMessages('general');
+        }
+
+        // Открыть личный чат
+        async function openPrivateChat(userId) {
+            const userDoc = await db.collection('users').doc(userId).get();
+            const user = userDoc.data();
+            currentChat = { type: 'private', userId: userId, userName: user.name, userAvatar: user.avatar };
+            document.getElementById('chatHeaderAvatar').src = user.avatar;
+            document.getElementById('chatHeaderName').innerText = user.name;
+            document.getElementById('chatHeaderId').innerText = userId;
+            loadMessages('private', userId);
+        }
+
+        // Загрузка сообщений
+        function loadMessages(chatType, otherUserId = null) {
             if (messagesUnsubscribe) messagesUnsubscribe();
             
-            messagesUnsubscribe = db.collection('messages')
-                .orderBy('timestamp', 'asc')
-                .limit(100)
-                .onSnapshot((snapshot) => {
-                    const container = document.getElementById('messagesList');
-                    container.innerHTML = '';
-                    
-                    snapshot.forEach(doc => {
-                        const msg = doc.data();
-                        displayMessage(msg);
-                    });
-                    
-                    container.scrollTop = container.scrollHeight;
+            let query;
+            if (chatType === 'general') {
+                query = db.collection('messages').where('chatType', '==', 'general').orderBy('timestamp', 'asc');
+            } else {
+                const chatId = getPrivateChatId(currentUser.id, otherUserId);
+                query = db.collection('messages').where('chatId', '==', chatId).orderBy('timestamp', 'asc');
+            }
+            
+            messagesUnsubscribe = query.onSnapshot((snapshot) => {
+                const container = document.getElementById('messagesList');
+                container.innerHTML = '';
+                
+                snapshot.forEach(doc => {
+                    const msg = doc.data();
+                    msg.id = doc.id;
+                    displayMessage(msg);
                 });
+                
+                container.scrollTop = container.scrollHeight;
+            });
         }
 
-        // ========== ПОКАЗ СООБЩЕНИЯ ==========
+        // Отображение сообщения
         function displayMessage(msg) {
             const container = document.getElementById('messagesList');
             const div = document.createElement('div');
-            div.className = 'message ' + (msg.userId === currentUser?.id ? 'message-own' : 'message-other');
+            const isOwn = msg.userId === currentUser.id;
+            div.className = 'message ' + (isOwn ? 'message-own' : 'message-other');
             
-            let time = '';
-            if (msg.timestamp) {
-                const date = msg.timestamp.toDate ? msg.timestamp.toDate() : new Date(msg.timestamp);
-                time = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-            }
+            const time = msg.timestamp?.toDate ? new Date(msg.timestamp.toDate()).toLocaleTimeString() : '';
+            
+            // Получаем цвет шрифта отправителя
+            const senderColor = msg.fontColor || '#000000';
             
             let content = '';
-            if (msg.type === 'text') content = `<div class="message-text">${escapeHtml(msg.text)}</div>`;
-            else if (msg.type === 'video') content = `<video src="${msg.videoUrl}" controls class="message-video"></video>`;
-            else if (msg.type === 'sticker') content = `<div class="message-sticker">${msg.sticker}</div>`;
+            if (msg.type === 'text') {
+                content = `<div class="message-text" style="color: ${senderColor}">${escapeHtml(msg.text)}</div>`;
+            } else if (msg.type === 'image') {
+                content = `<img src="${msg.imageUrl}" class="message-image" onclick="viewImage('${msg.imageUrl}')">`;
+            } else if (msg.type === 'video') {
+                content = `<video src="${msg.videoUrl}" controls class="message-video"></video>`;
+            } else if (msg.type === 'sticker') {
+                if (msg.stickerUrl) {
+                    content = `<img src="${msg.stickerUrl}" class="custom-sticker" style="width:80px">`;
+                } else {
+                    content = `<div class="message-sticker">${msg.sticker}</div>`;
+                }
+            }
+            
+            // Реакции
+            let reactionsHtml = '';
+            if (msg.reactions) {
+                const reactionList = Object.entries(msg.reactions);
+                if (reactionList.length > 0) {
+                    reactionsHtml = '<div class="reactions">';
+                    reactionList.forEach(([emoji, users]) => {
+                        reactionsHtml += `<span class="reaction" onclick="addReaction('${msg.id}', '${emoji}')">
+                            <span class="reaction-emoji">${emoji}</span> ${users.length}
+                        </span>`;
+                    });
+                    reactionsHtml += '</div>';
+                }
+            }
+            
+            // Просмотры
+            let viewsHtml = '';
+            if (!isOwn && msg.views && !msg.views.includes(currentUser.id)) {
+                setTimeout(() => markAsViewed(msg.id), 1000);
+            }
+            if (msg.views && msg.views.length > 0) {
+                viewsHtml = `<div class="views-info" onclick="showViews('${msg.id}')">👁️ ${msg.views.length} просмотров</div>`;
+            }
             
             div.innerHTML = `
                 <div class="message-bubble">
                     <div class="message-name">${escapeHtml(msg.userName)}</div>
                     ${content}
+                    ${reactionsHtml}
+                    ${viewsHtml}
                     <div class="message-time">${time}</div>
                 </div>
             `;
@@ -617,33 +934,132 @@
             container.appendChild(div);
         }
 
-        // ========== ОТПРАВКА СООБЩЕНИЯ ==========
+        // Отметка о просмотре
+        async function markAsViewed(messageId) {
+            const msgRef = db.collection('messages').doc(messageId);
+            const msgDoc = await msgRef.get();
+            const msg = msgDoc.data();
+            if (msg && msg.views) {
+                if (!msg.views.includes(currentUser.id)) {
+                    await msgRef.update({
+                        views: [...msg.views, currentUser.id]
+                    });
+                }
+            } else if (msg) {
+                await msgRef.update({
+                    views: [currentUser.id]
+                });
+            }
+        }
+
+        // Показать просмотры
+        async function showViews(messageId) {
+            const msgDoc = await db.collection('messages').doc(messageId).get();
+            const msg = msgDoc.data();
+            if (msg && msg.views) {
+                const viewsList = document.getElementById('viewsList');
+                viewsList.innerHTML = '';
+                for (const userId of msg.views) {
+                    const userDoc = await db.collection('users').doc(userId).get();
+                    if (userDoc.exists) {
+                        const user = userDoc.data();
+                        viewsList.innerHTML += `
+                            <div style="display:flex; align-items:center; gap:10px; padding:10px; border-bottom:1px solid #eee;">
+                                <img src="${user.avatar}" style="width:40px; height:40px; border-radius:50%;">
+                                <div>
+                                    <div><strong>${escapeHtml(user.name)}</strong></div>
+                                    <small>${user.id}</small>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+                document.getElementById('viewsModal').classList.add('active');
+            }
+        }
+
+        // Добавить реакцию
+        async function addReaction(messageId, emoji) {
+            const msgRef = db.collection('messages').doc(messageId);
+            const msgDoc = await msgRef.get();
+            const msg = msgDoc.data();
+            let reactions = msg.reactions || {};
+            if (!reactions[emoji]) reactions[emoji] = [];
+            if (!reactions[emoji].includes(currentUser.id)) {
+                reactions[emoji].push(currentUser.id);
+                await msgRef.update({ reactions });
+            }
+        }
+
+        // Отправка сообщения
         async function sendMessage() {
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
             if (!text) return;
             
-            try {
-                await db.collection('messages').add({
-                    type: 'text',
-                    text: text,
+            const messageData = {
+                type: 'text',
+                text: text,
+                userId: currentUser.id,
+                userName: currentUser.name,
+                avatar: currentUser.avatar,
+                fontColor: currentUser.fontColor,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                views: [],
+                reactions: {}
+            };
+            
+            if (currentChat.type === 'general') {
+                messageData.chatType = 'general';
+            } else {
+                messageData.chatType = 'private';
+                messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId);
+                messageData.recipientId = currentChat.userId;
+            }
+            
+            await db.collection('messages').add(messageData);
+            input.value = '';
+        }
+
+        // Отправка фото
+        function attachImage() {
+            document.getElementById('imageInput').click();
+        }
+
+        document.getElementById('imageInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                const messageData = {
+                    type: 'image',
+                    imageUrl: event.target.result,
                     userId: currentUser.id,
                     userName: currentUser.name,
                     avatar: currentUser.avatar,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                input.value = '';
-            } catch (error) {
-                alert('❌ Не удалось отправить');
-            }
-        }
+                    fontColor: currentUser.fontColor,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    views: [],
+                    reactions: {}
+                };
+                
+                if (currentChat.type === 'general') {
+                    messageData.chatType = 'general';
+                } else {
+                    messageData.chatType = 'private';
+                    messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId);
+                    messageData.recipientId = currentChat.userId;
+                }
+                
+                await db.collection('messages').add(messageData);
+            };
+            reader.readAsDataURL(file);
+            document.getElementById('imageInput').value = '';
+        });
 
-        function handleEnter(event) {
-            if (event.key === 'Enter') sendMessage();
-        }
-
-        // ========== ОТПРАВКА ВИДЕО ==========
-        function sendVideo() {
+        // Отправка видео
+        function attachVideo() {
             document.getElementById('videoFile').click();
         }
 
@@ -651,113 +1067,223 @@
             const file = e.target.files[0];
             if (!file) return;
             
-            if (file.size > 50 * 1024 * 1024) {
-                alert('Видео не больше 50 МБ!');
-                return;
-            }
-            
-            try {
-                const videoRef = storage.ref().child(`videos/${Date.now()}_${file.name}`);
-                await videoRef.put(file);
-                const videoUrl = await videoRef.getDownloadURL();
-                
-                await db.collection('messages').add({
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                const messageData = {
                     type: 'video',
-                    videoUrl: videoUrl,
+                    videoUrl: event.target.result,
                     userId: currentUser.id,
                     userName: currentUser.name,
                     avatar: currentUser.avatar,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            } catch (error) {
-                alert('❌ Ошибка загрузки видео');
-            }
-            
+                    fontColor: currentUser.fontColor,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    views: [],
+                    reactions: {}
+                };
+                
+                if (currentChat.type === 'general') {
+                    messageData.chatType = 'general';
+                } else {
+                    messageData.chatType = 'private';
+                    messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId);
+                    messageData.recipientId = currentChat.userId;
+                }
+                
+                await db.collection('messages').add(messageData);
+            };
+            reader.readAsDataURL(file);
             document.getElementById('videoFile').value = '';
         });
 
-        // ========== СТИКЕРЫ ==========
-        const defaultStickers = ['😊', '😂', '🥰', '😎', '🎉', '❤️', '🔥', '💯', '✅', '⭐'];
-        
-        function loadStickers() {
+        // Стикеры
+        async function loadCustomStickers() {
+            const stickersRef = await db.collection('stickers').where('userId', '==', currentUser.id).get();
+            customStickers = [];
+            stickersRef.forEach(doc => {
+                customStickers.push(doc.data());
+            });
+            renderStickers();
+        }
+
+        function renderStickers() {
             const grid = document.getElementById('stickersGrid');
             grid.innerHTML = '';
             
+            const defaultStickers = ['😊', '😂', '🥰', '😎', '🎉', '❤️', '🔥', '💯'];
             defaultStickers.forEach(sticker => {
                 const div = document.createElement('div');
                 div.className = 'sticker-item';
                 div.textContent = sticker;
+                div.style.fontSize = '40px';
+                div.style.cursor = 'pointer';
                 div.onclick = () => sendSticker(sticker);
+                grid.appendChild(div);
+            });
+            
+            customStickers.forEach(sticker => {
+                const div = document.createElement('div');
+                div.className = 'sticker-item';
+                if (sticker.stickerUrl) {
+                    div.innerHTML = `<img src="${sticker.stickerUrl}" style="width:50px; height:50px; object-fit:contain;">`;
+                } else {
+                    div.textContent = sticker.sticker;
+                }
+                div.style.cursor = 'pointer';
+                div.onclick = () => sendSticker(sticker.sticker || sticker.stickerUrl, sticker.stickerUrl);
                 grid.appendChild(div);
             });
         }
 
-        async function sendSticker(sticker) {
-            try {
-                await db.collection('messages').add({
-                    type: 'sticker',
-                    sticker: sticker,
+        async function sendSticker(sticker, stickerUrl = null) {
+            const messageData = {
+                type: 'sticker',
+                sticker: sticker,
+                stickerUrl: stickerUrl,
+                userId: currentUser.id,
+                userName: currentUser.name,
+                avatar: currentUser.avatar,
+                fontColor: currentUser.fontColor,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                views: [],
+                reactions: {}
+            };
+            
+            if (currentChat.type === 'general') {
+                messageData.chatType = 'general';
+            } else {
+                messageData.chatType = 'private';
+                messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId);
+                messageData.recipientId = currentChat.userId;
+            }
+            
+            await db.collection('messages').add(messageData);
+            closeModal('stickerModalWindow');
+        }
+
+        function openStickerModal() {
+            document.getElementById('stickerModalWindow').classList.add('active');
+        }
+
+        function openStickerImageUpload() {
+            document.getElementById('stickerImageInput').click();
+        }
+
+        document.getElementById('stickerImageInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                await db.collection('stickers').add({
                     userId: currentUser.id,
-                    userName: currentUser.name,
-                    avatar: currentUser.avatar,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    stickerUrl: event.target.result,
+                    createdAt: new Date()
                 });
-            } catch (error) {
-                alert('❌ Ошибка отправки стикера');
+                await loadCustomStickers();
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Профиль
+        async function showProfile(userId) {
+            const userDoc = await db.collection('users').doc(userId).get();
+            const user = userDoc.data();
+            const content = document.getElementById('profileContent');
+            content.innerHTML = `
+                <div class="profile-view">
+                    <img src="${user.avatar}" class="profile-view-avatar">
+                    <h3>${escapeHtml(user.name)}</h3>
+                    <p style="color:#666; margin:10px 0;">ID: ${user.id}</p>
+                    <button onclick="copyToClipboard('${user.id}')">📋 Копировать ID</button>
+                    ${userId !== currentUser.id ? `<button onclick="openPrivateChat('${userId}'); closeModal('profileModal');">💬 Написать</button>` : ''}
+                </div>
+            `;
+            document.getElementById('profileModal').classList.add('active');
+        }
+
+        // Копирование ID
+        function copyToClipboard(text, event) {
+            if (event) event.stopPropagation();
+            navigator.clipboard.writeText(text);
+            alert('✅ ID скопирован!');
+        }
+
+        // Темы
+        function showThemeModal() {
+            document.getElementById('themeModal').classList.add('active');
+        }
+
+        function changeTheme(theme) {
+            document.body.className = `theme-${theme}`;
+            if (currentUser) {
+                db.collection('users').doc(currentUser.id).update({ theme });
+                currentUser.theme = theme;
             }
         }
 
-        function openStickerCreator() {
-            document.getElementById('stickerModal').style.display = 'flex';
+        // Цвет шрифта
+        function showFontColorModal() {
+            document.getElementById('fontColorModal').classList.add('active');
         }
 
-        function closeStickerModal() {
-            document.getElementById('stickerModal').style.display = 'none';
-            document.getElementById('stickerEmoji').value = '';
+        async function saveFontColor() {
+            const color = document.getElementById('fontColorPicker').value;
+            await db.collection('users').doc(currentUser.id).update({ fontColor: color });
+            currentUser.fontColor = color;
+            document.documentElement.style.setProperty('--font-color', color);
+            closeModal('fontColorModal');
+            alert('✅ Цвет шрифта сохранен!');
         }
 
-        async function createSticker() {
-            const sticker = document.getElementById('stickerEmoji').value.trim();
-            if (!sticker) return;
-            await sendSticker(sticker);
-            closeStickerModal();
+        // Просмотр фото
+        function viewImage(imageUrl) {
+            window.open(imageUrl, '_blank');
         }
 
-        // ========== ТЕМЫ ==========
-        function setTheme(theme) {
-            const themes = {
-                pink: 'linear-gradient(135deg, #ff69b4, #ff1493)',
-                red: 'linear-gradient(135deg, #ef4444, #dc2626)',
-                blue: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-                green: 'linear-gradient(135deg, #10b981, #059669)'
-            };
-            document.body.style.background = themes[theme];
+        function handleEnter(event) {
+            if (event.key === 'Enter') sendMessage();
         }
 
-        // ========== ЗАЩИТА ОТ XSS ==========
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
 
-        // ========== ПРОВЕРКА СОХРАНЕННОГО ПОЛЬЗОВАТЕЛЯ ==========
+        // Закрытие модалок по клику вне
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        // Выход
+        function logout() {
+            if (confirm('Выйти?')) {
+                localStorage.removeItem('sny_user_id');
+                if (messagesUnsubscribe) messagesUnsubscribe();
+                if (chatsUnsubscribe) chatsUnsubscribe();
+                document.getElementById('welcomeScreen').classList.add('active');
+                document.getElementById('messengerScreen').style.display = 'none';
+            }
+        }
+
+        // Проверка сохраненного пользователя
         async function checkSavedUser() {
             const saved = localStorage.getItem('sny_user_id');
             if (saved) {
-                try {
-                    const userDoc = await db.collection('users').doc(saved).get();
-                    if (userDoc.exists) {
-                        currentUser = userDoc.data();
-                        enterMessenger();
-                    }
-                } catch (error) {
-                    console.log('Ожидание подключения...');
+                const userDoc = await db.collection('users').doc(saved).get();
+                if (userDoc.exists) {
+                    currentUser = userDoc.data();
+                    enterMessenger();
                 }
             }
         }
 
-        // ========== ЗАПУСК ==========
         checkSavedUser();
     </script>
 </body>
