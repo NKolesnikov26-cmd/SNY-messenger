@@ -18,6 +18,7 @@
             transition: background 0.3s;
         }
 
+        /* Темы */
         .theme-default { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); }
         .theme-pink { background: linear-gradient(135deg, #7c5a6e 0%, #c9a3b8 100%); }
         .theme-red { background: linear-gradient(135deg, #8b5a5a 0%, #c98a8a 100%); }
@@ -25,9 +26,6 @@
         .theme-green { background: linear-gradient(135deg, #4a6b5a 0%, #8aad9a 100%); }
         .theme-purple { background: linear-gradient(135deg, #6b4a8b 0%, #a98ac9 100%); }
         .theme-orange { background: linear-gradient(135deg, #8b6a4a 0%, #c9aa8a 100%); }
-        .theme-teal { background: linear-gradient(135deg, #4a6b6b 0%, #8aadad 100%); }
-        .theme-indigo { background: linear-gradient(135deg, #5a4a8b 0%, #9a8ac9 100%); }
-        .theme-cyan { background: linear-gradient(135deg, #4a6b8b 0%, #8aaac9 100%); }
 
         .screen {
             display: none;
@@ -324,21 +322,6 @@
             color: #666;
         }
 
-        .reactions {
-            display: flex;
-            gap: 5px;
-            margin-top: 5px;
-            flex-wrap: wrap;
-        }
-
-        .reaction {
-            background: rgba(0,0,0,0.1);
-            padding: 2px 6px;
-            border-radius: 12px;
-            font-size: 11px;
-            cursor: pointer;
-        }
-
         .input-area {
             padding: 20px;
             border-top: 1px solid #e5e7eb;
@@ -449,11 +432,6 @@
             opacity: 0.6;
         }
 
-        .game-info {
-            text-align: center;
-            margin: 10px 0;
-        }
-
         .notification {
             position: fixed;
             bottom: 20px;
@@ -475,14 +453,9 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
     </style>
 </head>
 <body>
-    <!-- ЭКРАН ВХОДА -->
     <div id="welcomeScreen" class="screen active">
         <div class="welcome-card">
             <h1>💬 SNY</h1>
@@ -513,7 +486,6 @@
         </div>
     </div>
 
-    <!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
     <div id="messengerScreen" class="screen" style="display:none">
         <div class="messenger-container">
             <div class="sidebar">
@@ -551,7 +523,7 @@
                         <input type="file" id="stickerImageInput" accept="image/*" style="display:none">
                     </div>
                     <div class="input-row">
-                        <input type="text" id="messageInput" placeholder="Сообщение..." onkeypress="handleEnter(event)">
+                        <input type="text" id="messageInput" placeholder="Напиши сообщение..." onkeypress="handleEnter(event)">
                         <button onclick="sendMessage()">📤</button>
                     </div>
                 </div>
@@ -559,7 +531,6 @@
         </div>
     </div>
 
-    <!-- МОДАЛЬНЫЕ ОКНА -->
     <div id="profileModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>👤 Профиль</h3><span class="close-modal" onclick="closeModal('profileModal')">&times;</span></div><div id="profileContent"></div></div></div>
     <div id="themeModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎨 Темы</h3><span class="close-modal" onclick="closeModal('themeModal')">&times;</span></div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px"><button onclick="changeTheme('default')">🌙 По умолчанию</button><button onclick="changeTheme('pink')">🌸 Розовая</button><button onclick="changeTheme('red')">❤️ Красная</button><button onclick="changeTheme('blue')">💙 Синяя</button><button onclick="changeTheme('green')">💚 Зеленая</button><button onclick="changeTheme('purple')">🟣 Фиолетовая</button><button onclick="changeTheme('orange')">🟠 Оранжевая</button></div></div></div>
     <div id="wallpaperModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🖼️ Обои</h3><span class="close-modal" onclick="closeModal('wallpaperModal')">&times;</span></div><button onclick="setWallpaper('default')">По умолчанию</button><button onclick="uploadWallpaper()">📤 Своё фото</button><input type="file" id="wallpaperFile" accept="image/*" style="display:none"></div></div>
@@ -650,11 +621,16 @@
                 createdAt: new Date()
             };
             
-            await db.collection('users').doc(snyId).set(currentUser);
-            localStorage.setItem('sny_user_id', snyId);
-            localStorage.setItem('sny_password', password);
-            showNotification('✅ Аккаунт создан!');
-            enterMessenger();
+            try {
+                await db.collection('users').doc(snyId).set(currentUser);
+                localStorage.setItem('sny_user_id', snyId);
+                localStorage.setItem('sny_password', password);
+                showNotification('✅ Аккаунт создан!');
+                enterMessenger();
+            } catch (error) {
+                console.error('Ошибка создания:', error);
+                showNotification('❌ Ошибка создания аккаунта');
+            }
         }
 
         // ========== ВХОД ==========
@@ -664,15 +640,20 @@
             if (!userId) { alert('Введи ID!'); return; }
             if (!password) { alert('Введи пароль!'); return; }
             
-            const userDoc = await db.collection('users').doc(userId).get();
-            if (userDoc.exists && userDoc.data().password === password) {
-                currentUser = userDoc.data();
-                localStorage.setItem('sny_user_id', userId);
-                localStorage.setItem('sny_password', password);
-                showNotification(`👋 Добро пожаловать, ${currentUser.name}!`);
-                enterMessenger();
-            } else {
-                alert('Неверный ID или пароль!');
+            try {
+                const userDoc = await db.collection('users').doc(userId).get();
+                if (userDoc.exists && userDoc.data().password === password) {
+                    currentUser = userDoc.data();
+                    localStorage.setItem('sny_user_id', userId);
+                    localStorage.setItem('sny_password', password);
+                    showNotification(`👋 Добро пожаловать, ${currentUser.name}!`);
+                    enterMessenger();
+                } else {
+                    alert('Неверный ID или пароль!');
+                }
+            } catch (error) {
+                console.error('Ошибка входа:', error);
+                showNotification('❌ Ошибка входа');
             }
         }
 
@@ -689,27 +670,33 @@
             await loadCustomStickers();
             await loadWallpaper();
             
-            // Открываем общий чат
             await openGeneralChat();
         }
 
         // ========== ЗАГРУЗКА ОБОЕВ ==========
         async function loadWallpaper() {
-            const groupDoc = await db.collection('groupSettings').doc('general').get();
-            if (groupDoc.exists && groupDoc.data().wallpaper && groupDoc.data().wallpaper !== 'default') {
-                document.getElementById('messagesList').style.backgroundImage = `url(${groupDoc.data().wallpaper})`;
-                document.getElementById('messagesList').style.backgroundSize = 'cover';
-            } else {
-                document.getElementById('messagesList').style.backgroundImage = 'none';
+            try {
+                const groupDoc = await db.collection('groupSettings').doc('general').get();
+                if (groupDoc.exists && groupDoc.data().wallpaper && groupDoc.data().wallpaper !== 'default') {
+                    document.getElementById('messagesList').style.backgroundImage = `url(${groupDoc.data().wallpaper})`;
+                    document.getElementById('messagesList').style.backgroundSize = 'cover';
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки обоев:', error);
             }
         }
 
         async function setWallpaper(url) {
-            const wallpaperValue = url === 'default' ? null : url;
-            await db.collection('groupSettings').doc('general').set({ wallpaper: wallpaperValue }, { merge: true });
-            await loadWallpaper();
-            closeModal('wallpaperModal');
-            showNotification('🖼️ Обои обновлены для всех!');
+            try {
+                const wallpaperValue = url === 'default' ? null : url;
+                await db.collection('groupSettings').doc('general').set({ wallpaper: wallpaperValue }, { merge: true });
+                await loadWallpaper();
+                closeModal('wallpaperModal');
+                showNotification('🖼️ Обои обновлены!');
+            } catch (error) {
+                console.error('Ошибка установки обоев:', error);
+                showNotification('❌ Ошибка установки обоев');
+            }
         }
 
         function uploadWallpaper() { document.getElementById('wallpaperFile').click(); }
@@ -724,31 +711,36 @@
 
         // ========== ЗАГРУЗКА СПИСКА ЧАТОВ ==========
         async function loadChats() {
-            const usersSnapshot = await db.collection('users').get();
-            const chatsList = document.getElementById('chatsList');
-            chatsList.innerHTML = `
-                <div class="chat-item" onclick="openGeneralChat()">
-                    <div class="chat-avatar" style="background:#667eea;display:flex;align-items:center;justify-content:center;font-size:24px;">💬</div>
-                    <div class="chat-info"><div class="chat-name">Общий чат</div></div>
-                </div>
-                <div class="chat-item pinned-chat" onclick="openGameChat()">
-                    <div class="chat-avatar" style="background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:24px;">🎮</div>
-                    <div class="chat-info"><div class="chat-name">Крестики-нолики</div></div>
-                </div>
-            `;
-            
-            usersSnapshot.forEach(doc => {
-                if (doc.id !== currentUser.id) {
-                    const user = doc.data();
-                    chatsList.innerHTML += `
-                        <div class="chat-item" onclick="openPrivateChat('${user.id}')">
-                            <img class="chat-avatar" src="${user.avatar}">
-                            <div class="chat-info"><div class="chat-name">${escapeHtml(user.name)}</div></div>
-                            <button class="copy-id" onclick="copyToClipboard('${user.id}', event)">📋</button>
-                        </div>
-                    `;
-                }
-            });
+            try {
+                const usersSnapshot = await db.collection('users').get();
+                const chatsList = document.getElementById('chatsList');
+                chatsList.innerHTML = `
+                    <div class="chat-item" onclick="openGeneralChat()">
+                        <div class="chat-avatar" style="background:#667eea;display:flex;align-items:center;justify-content:center;font-size:24px;">💬</div>
+                        <div class="chat-info"><div class="chat-name">Общий чат</div></div>
+                    </div>
+                    <div class="chat-item pinned-chat" onclick="openGameChat()">
+                        <div class="chat-avatar" style="background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:24px;">🎮</div>
+                        <div class="chat-info"><div class="chat-name">Крестики-нолики</div></div>
+                    </div>
+                `;
+                
+                usersSnapshot.forEach(doc => {
+                    if (doc.id !== currentUser.id) {
+                        const user = doc.data();
+                        chatsList.innerHTML += `
+                            <div class="chat-item" onclick="openPrivateChat('${user.id}')">
+                                <img class="chat-avatar" src="${user.avatar}">
+                                <div class="chat-info"><div class="chat-name">${escapeHtml(user.name)}</div></div>
+                                <button class="copy-id" onclick="copyToClipboard('${user.id}', event)">📋</button>
+                            </div>
+                        `;
+                    }
+                });
+            } catch (error) {
+                console.error('Ошибка загрузки чатов:', error);
+                showNotification('❌ Ошибка загрузки чатов');
+            }
         }
 
         function getPrivateChatId(user1, user2) { return [user1, user2].sort().join('_'); }
@@ -760,18 +752,21 @@
             document.getElementById('chatHeaderName').innerText = 'Общий чат';
             document.getElementById('chatHeaderId').innerText = 'Все пользователи';
             await loadMessages('general');
-            showNotification('💬 Общий чат');
         }
 
         async function openPrivateChat(userId) {
-            const userDoc = await db.collection('users').doc(userId).get();
-            const user = userDoc.data();
-            currentChat = { type: 'private', userId: userId };
-            document.getElementById('chatHeaderAvatar').src = user.avatar;
-            document.getElementById('chatHeaderName').innerText = user.name;
-            document.getElementById('chatHeaderId').innerText = user.bio || userId;
-            await loadMessages('private', userId);
-            showNotification(`💬 Чат с ${user.name}`);
+            try {
+                const userDoc = await db.collection('users').doc(userId).get();
+                const user = userDoc.data();
+                currentChat = { type: 'private', userId: userId };
+                document.getElementById('chatHeaderAvatar').src = user.avatar;
+                document.getElementById('chatHeaderName').innerText = user.name;
+                document.getElementById('chatHeaderId').innerText = user.bio || userId;
+                await loadMessages('private', userId);
+            } catch (error) {
+                console.error('Ошибка открытия чата:', error);
+                showNotification('❌ Ошибка открытия чата');
+            }
         }
 
         function openGameChat() {
@@ -782,36 +777,41 @@
             showGameModal();
         }
 
-        // ========== ЗАГРУЗКА СООБЩЕНИЙ (ГЛАВНОЕ ИСПРАВЛЕНИЕ!) ==========
+        // ========== ЗАГРУЗКА СООБЩЕНИЙ (ИСПРАВЛЕНО) ==========
         async function loadMessages(chatType, otherUserId = null) {
             if (messagesUnsubscribe) messagesUnsubscribe();
             
-            let query;
-            if (chatType === 'general') {
-                query = db.collection('messages').where('chatType', '==', 'general').orderBy('timestamp', 'asc');
-            } else if (chatType === 'private') {
-                const chatId = getPrivateChatId(currentUser.id, otherUserId);
-                query = db.collection('messages').where('chatId', '==', chatId).orderBy('timestamp', 'asc');
-            } else {
-                return;
-            }
-            
-            messagesUnsubscribe = query.onSnapshot((snapshot) => {
-                const container = document.getElementById('messagesList');
-                if (!container) return;
-                container.innerHTML = '';
+            try {
+                let query;
+                if (chatType === 'general') {
+                    query = db.collection('messages').where('chatType', '==', 'general').orderBy('timestamp', 'asc');
+                } else if (chatType === 'private') {
+                    const chatId = getPrivateChatId(currentUser.id, otherUserId);
+                    query = db.collection('messages').where('chatId', '==', chatId).orderBy('timestamp', 'asc');
+                } else {
+                    return;
+                }
                 
-                snapshot.forEach(doc => {
-                    const msg = doc.data();
-                    msg.id = doc.id;
-                    displayMessage(msg);
+                messagesUnsubscribe = query.onSnapshot((snapshot) => {
+                    const container = document.getElementById('messagesList');
+                    if (!container) return;
+                    container.innerHTML = '';
+                    
+                    snapshot.forEach(doc => {
+                        const msg = doc.data();
+                        msg.id = doc.id;
+                        displayMessage(msg);
+                    });
+                    
+                    container.scrollTop = container.scrollHeight;
+                }, (error) => {
+                    console.error('Ошибка загрузки сообщений:', error);
+                    showNotification('❌ Ошибка загрузки сообщений. Проверь интернет и правила Firebase!');
                 });
-                
-                container.scrollTop = container.scrollHeight;
-            }, (error) => {
-                console.error('Ошибка загрузки сообщений:', error);
-                showNotification('❌ Ошибка загрузки сообщений. Проверь правила Firebase!');
-            });
+            } catch (error) {
+                console.error('Ошибка в loadMessages:', error);
+                showNotification('❌ Ошибка загрузки сообщений');
+            }
         }
 
         // ========== ОТОБРАЖЕНИЕ СООБЩЕНИЯ ==========
@@ -858,14 +858,16 @@
             container.appendChild(div);
         }
 
-        // ========== ОТПРАВКА СООБЩЕНИЯ ==========
+        // ========== ОТПРАВКА СООБЩЕНИЯ (ИСПРАВЛЕНО) ==========
         async function sendMessage() {
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
+            
             if (!text) {
                 showNotification('📝 Введите сообщение');
                 return;
             }
+            
             if (!currentChat || currentChat.type === 'game') {
                 showNotification('❌ Нельзя отправить сообщение сюда');
                 return;
@@ -902,15 +904,23 @@
         async function editMessage(msgId, oldText) {
             const newText = prompt('Редактировать сообщение:', oldText);
             if (newText && newText !== oldText) {
-                await db.collection('messages').doc(msgId).update({ text: newText, edited: true });
-                showNotification('✏️ Сообщение изменено');
+                try {
+                    await db.collection('messages').doc(msgId).update({ text: newText, edited: true });
+                    showNotification('✏️ Сообщение изменено');
+                } catch (error) {
+                    showNotification('❌ Ошибка редактирования');
+                }
             }
         }
 
         async function deleteMessage(msgId) {
             if (confirm('Удалить сообщение?')) {
-                await db.collection('messages').doc(msgId).delete();
-                showNotification('🗑️ Сообщение удалено');
+                try {
+                    await db.collection('messages').doc(msgId).delete();
+                    showNotification('🗑️ Сообщение удалено');
+                } catch (error) {
+                    showNotification('❌ Ошибка удаления');
+                }
             }
         }
 
@@ -930,8 +940,9 @@
                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                     reactions: {}
                 };
-                if (currentChat.type === 'general') messageData.chatType = 'general';
-                else if (currentChat.type === 'private') {
+                if (currentChat.type === 'general') {
+                    messageData.chatType = 'general';
+                } else if (currentChat.type === 'private') {
                     messageData.chatType = 'private';
                     messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId);
                 }
@@ -944,10 +955,14 @@
 
         // ========== СТИКЕРЫ ==========
         async function loadCustomStickers() {
-            const stickersRef = await db.collection('stickers').where('userId', '==', currentUser.id).get();
-            customStickers = [];
-            stickersRef.forEach(doc => customStickers.push(doc.data()));
-            renderStickers();
+            try {
+                const stickersRef = await db.collection('stickers').where('userId', '==', currentUser.id).get();
+                customStickers = [];
+                stickersRef.forEach(doc => customStickers.push(doc.data()));
+                renderStickers();
+            } catch (error) {
+                console.error('Ошибка загрузки стикеров:', error);
+            }
         }
 
         function renderStickers() {
@@ -995,15 +1010,20 @@
                 reactions: {}
             };
             
-            if (currentChat.type === 'general') messageData.chatType = 'general';
-            else if (currentChat.type === 'private') {
+            if (currentChat.type === 'general') {
+                messageData.chatType = 'general';
+            } else if (currentChat.type === 'private') {
                 messageData.chatType = 'private';
                 messageData.chatId = getPrivateChatId(currentUser.id, currentChat.userId);
             }
             
-            await db.collection('messages').add(messageData);
-            closeModal('stickerModalWindow');
-            showNotification('😊 Стикер отправлен!');
+            try {
+                await db.collection('messages').add(messageData);
+                closeModal('stickerModalWindow');
+                showNotification('😊 Стикер отправлен!');
+            } catch (error) {
+                showNotification('❌ Ошибка отправки стикера');
+            }
         }
 
         function openStickerModal() {
@@ -1030,20 +1050,24 @@
 
         // ========== ПРОФИЛЬ ==========
         async function showProfile(userId) {
-            const userDoc = await db.collection('users').doc(userId).get();
-            const user = userDoc.data();
-            const content = document.getElementById('profileContent');
-            content.innerHTML = `
-                <div class="profile-view">
-                    <img src="${user.avatar}" class="profile-view-avatar">
-                    <h3>${escapeHtml(user.name)}</h3>
-                    <p>${user.bio || 'Нет описания'}</p>
-                    <p style="color:#666;margin:10px 0;">ID: ${user.id}</p>
-                    <button onclick="copyToClipboard('${user.id}')">📋 Копировать ID</button>
-                    ${userId !== currentUser.id ? `<button onclick="openPrivateChat('${userId}'); closeModal('profileModal');">💬 Написать</button>` : ''}
-                </div>
-            `;
-            document.getElementById('profileModal').classList.add('active');
+            try {
+                const userDoc = await db.collection('users').doc(userId).get();
+                const user = userDoc.data();
+                const content = document.getElementById('profileContent');
+                content.innerHTML = `
+                    <div class="profile-view">
+                        <img src="${user.avatar}" class="profile-view-avatar">
+                        <h3>${escapeHtml(user.name)}</h3>
+                        <p>${user.bio || 'Нет описания'}</p>
+                        <p style="color:#666;margin:10px 0;">ID: ${user.id}</p>
+                        <button onclick="copyToClipboard('${user.id}')">📋 Копировать ID</button>
+                        ${userId !== currentUser.id ? `<button onclick="openPrivateChat('${userId}'); closeModal('profileModal');">💬 Написать</button>` : ''}
+                    </div>
+                `;
+                document.getElementById('profileModal').classList.add('active');
+            } catch (error) {
+                showNotification('❌ Ошибка загрузки профиля');
+            }
         }
 
         function copyToClipboard(text, event) {
@@ -1058,65 +1082,54 @@
 
         function showWallpaperModal() { document.getElementById('wallpaperModal').classList.add('active'); }
 
-        // ========== ИГРА (синхронизированная) ==========
-        let gameUnsubscribe = null;
-        let gameBoardData = ['', '', '', '', '', '', '', '', ''];
+        // ========== ИГРА (упрощенная) ==========
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
         let gameCurrentPlayer = 'X';
-        let gameActive = true;
+        let gameActiveGame = true;
 
-        function startGameSync() {
-            if (gameUnsubscribe) gameUnsubscribe();
-            gameUnsubscribe = db.collection('game').doc('tic-tac-toe').onSnapshot((doc) => {
-                if (doc.exists) {
-                    const data = doc.data();
-                    gameBoardData = data.board || ['', '', '', '', '', '', '', '', ''];
-                    gameCurrentPlayer = data.currentPlayer || 'X';
-                    gameActive = data.active !== false;
-                    renderGameBoardUI();
-                } else {
-                    resetGameInFirebase();
-                }
-            });
-        }
-
-        async function resetGameInFirebase() {
-            await db.collection('game').doc('tic-tac-toe').set({
-                board: ['', '', '', '', '', '', '', '', ''],
-                currentPlayer: 'X',
-                active: true,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-        }
-
-        async function makeGameMove(index) {
-            if (!gameActive || gameBoardData[index] !== '') return;
+        function renderGameBoardUI() {
+            const container = document.getElementById('gameContent');
+            if (!container) return;
             
-            const newBoard = [...gameBoardData];
-            newBoard[index] = gameCurrentPlayer;
+            let statusText = gameActiveGame ? `Ход: ${gameCurrentPlayer === 'X' ? '❌' : '⭕'}` : 'Игра окончена';
             
-            const winner = checkWinner(newBoard);
-            if (winner) {
-                await db.collection('game').doc('tic-tac-toe').update({
-                    board: newBoard,
-                    active: false
-                });
-                showNotification(`🏆 Победил ${winner === 'X' ? 'Крестик' : 'Нолик'}!`);
-            } else if (newBoard.every(cell => cell !== '')) {
-                await db.collection('game').doc('tic-tac-toe').update({
-                    board: newBoard,
-                    active: false
-                });
-                showNotification('🤝 Ничья!');
-            } else {
-                const nextPlayer = gameCurrentPlayer === 'X' ? 'O' : 'X';
-                await db.collection('game').doc('tic-tac-toe').update({
-                    board: newBoard,
-                    currentPlayer: nextPlayer
-                });
+            container.innerHTML = `
+                <div style="text-align:center; margin-bottom:10px;">${statusText}</div>
+                <div class="game-board" id="gameBoard"></div>
+                <button onclick="resetGameBoard()">🔄 Новая игра</button>
+            `;
+            
+            const board = document.getElementById('gameBoard');
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'game-cell';
+                if (!gameActiveGame) cell.classList.add('disabled');
+                cell.textContent = gameBoard[i];
+                cell.onclick = () => makeGameMoveLocal(i);
+                board.appendChild(cell);
             }
         }
 
-        function checkWinner(board) {
+        function makeGameMoveLocal(index) {
+            if (!gameActiveGame || gameBoard[index] !== '') return;
+            
+            gameBoard[index] = gameCurrentPlayer;
+            
+            const winner = checkGameWinner(gameBoard);
+            if (winner) {
+                gameActiveGame = false;
+                showNotification(`🏆 Победил ${winner === 'X' ? 'Крестик' : 'Нолик'}!`);
+            } else if (gameBoard.every(cell => cell !== '')) {
+                gameActiveGame = false;
+                showNotification('🤝 Ничья!');
+            } else {
+                gameCurrentPlayer = gameCurrentPlayer === 'X' ? 'O' : 'X';
+            }
+            
+            renderGameBoardUI();
+        }
+
+        function checkGameWinner(board) {
             const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
             for (let w of wins) {
                 if (board[w[0]] && board[w[0]] === board[w[1]] && board[w[0]] === board[w[2]]) {
@@ -1126,36 +1139,16 @@
             return null;
         }
 
-        async function resetGame() {
-            await resetGameInFirebase();
+        function resetGameBoard() {
+            gameBoard = ['', '', '', '', '', '', '', '', ''];
+            gameCurrentPlayer = 'X';
+            gameActiveGame = true;
+            renderGameBoardUI();
             showNotification('🔄 Новая игра!');
         }
 
-        function renderGameBoardUI() {
-            const container = document.getElementById('gameContent');
-            if (!container) return;
-            
-            let statusText = gameActive ? `Ход: ${gameCurrentPlayer === 'X' ? '❌' : '⭕'}` : 'Игра окончена';
-            
-            container.innerHTML = `
-                <div class="game-info">${statusText}</div>
-                <div class="game-board" id="gameBoard"></div>
-                <button onclick="resetGame()">🔄 Новая игра</button>
-            `;
-            
-            const board = document.getElementById('gameBoard');
-            for (let i = 0; i < 9; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'game-cell';
-                if (!gameActive) cell.classList.add('disabled');
-                cell.textContent = gameBoardData[i];
-                cell.onclick = () => makeGameMove(i);
-                board.appendChild(cell);
-            }
-        }
-
         function showGameModal() {
-            startGameSync();
+            resetGameBoard();
             document.getElementById('gameModal').classList.add('active');
         }
 
@@ -1169,14 +1162,19 @@
             }
         }
 
+        // ========== ПРОВЕРКА СОХРАНЕННОГО ПОЛЬЗОВАТЕЛЯ ==========
         async function checkSavedUser() {
             const saved = localStorage.getItem('sny_user_id');
             const savedPass = localStorage.getItem('sny_password');
             if (saved && savedPass) {
-                const userDoc = await db.collection('users').doc(saved).get();
-                if (userDoc.exists && userDoc.data().password === savedPass) {
-                    currentUser = userDoc.data();
-                    enterMessenger();
+                try {
+                    const userDoc = await db.collection('users').doc(saved).get();
+                    if (userDoc.exists && userDoc.data().password === savedPass) {
+                        currentUser = userDoc.data();
+                        enterMessenger();
+                    }
+                } catch (error) {
+                    console.log('Ожидание подключения к Firebase...');
                 }
             }
         }
