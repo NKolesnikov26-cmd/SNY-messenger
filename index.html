@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNY - Мессенджер</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .screen {
+            display: none;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .screen.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .welcome-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            width: 400px;
+            text-align: center;
+        }
+
+        .welcome-card h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+        }
+
+        .avatar-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .avatar-section img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #667eea;
+            margin-bottom: 10px;
+        }
+
+        /* Мессенджер */
+        .messenger-container {
+            display: flex;
+            width: 1200px;
+            max-width: 100%;
+            height: 90vh;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #f7f7f7;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .user-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info h3 {
+            font-size: 16px;
+        }
+
+        .user-info small {
+            font-size: 10px;
+            color: #666;
+        }
+
+        .logout-btn {
+            background: #ff4444;
+            margin-top: 10px;
+        }
+
+        .themes {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+        }
+
+        .themes h4, .stickers h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .theme-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .theme-btn {
+            width: auto;
+            padding: 8px 12px;
+            margin: 0;
+            font-size: 12px;
+        }
+
+        .theme-pink { background: #ff69b4; }
+        .theme-red { background: #ef4444; }
+        .theme-blue { background: #3b82f6; }
+        .theme-green { background: #10b981; }
+
+        .stickers {
+            flex: 1;
+        }
+
+        .stickers-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .sticker-item {
+            font-size: 32px;
+            text-align: center;
+            cursor: pointer;
+            padding: 8px;
+            background: white;
+            border-radius: 10px;
+            transition: transform 0.2s;
+        }
+
+        .sticker-item:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+            background: white;
+        }
+
+        .messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #fafafa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            animation: fadeIn 0.3s;
+        }
+
+        .message-own {
+            text-align: right;
+        }
+
+        .message-other {
+            text-align: left;
+        }
+
+        .message-bubble {
+            display: inline-block;
+            max-width: 60%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            background: #f0f0f0;
+        }
+
+        .message-own .message-bubble {
+            background: #667eea;
+            color: white;
+        }
+
+        .message-name {
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            opacity: 0.8;
+        }
+
+        .message-time {
+            font-size: 9px;
+            margin-top: 5px;
+            opacity: 0.6;
+        }
+
+        .message-text {
+            word-wrap: break-word;
+        }
+
+        .message-video {
+            max-width: 200px;
+            border-radius: 10px;
+            margin-top: 5px;
+        }
+
+        .message-sticker {
+            font-size: 48px;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+            background: white;
+        }
+
+        .input-area input {
+            flex: 1;
+            margin: 0;
+        }
+
+        .input-area button {
+            width: 50px;
+            margin: 0;
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 350px;
+            text-align: center;
+        }
+
+        .modal-content button {
+            width: auto;
+            margin: 5px;
+            padding: 10px 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- ЭКРАН ВХОДА -->
+    <div id="welcomeScreen" class="screen active">
+        <div class="welcome-card">
+            <h1>💬 SNY</h1>
+            <p>Твой личный мессенджер</p>
+            
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchTab('create')">✨ Создать</button>
+                <button class="tab-btn" onclick="switchTab('enter')">🔑 Войти</button>
+            </div>
+
+            <!-- Вкладка создания -->
+            <div id="createTab" class="tab-content active">
+                <input type="text" id="newUsername" placeholder="Твой никнейм" maxlength="20">
+                <div class="avatar-section">
+                    <img id="avatarImage" src="https://i.pravatar.cc/150?img=7" alt="avatar">
+                    <button onclick="triggerAvatarUpload()">📸 Загрузить аватар</button>
+                    <input type="file" id="avatarFile" accept="image/*" style="display:none">
+                </div>
+                <button onclick="createAccount()">🚀 Создать SNY-ID</button>
+            </div>
+
+            <!-- Вкладка входа -->
+            <div id="enterTab" class="tab-content">
+                <input type="text" id="existingUserId" placeholder="Введи свой SNY-ID">
+                <button onclick="loginWithId()">🔓 Войти</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ОСНОВНОЙ ЧАТ -->
+    <div id="messengerScreen" class="screen" style="display:none">
+        <div class="messenger-container">
+            <!-- Боковая панель -->
+            <div class="sidebar">
+                <div class="user-info">
+                    <img id="profileAvatar" src="" alt="avatar">
+                    <div>
+                        <h3 id="profileName"></h3>
+                        <small id="profileId"></small>
+                    </div>
+                    <button onclick="logout()" class="logout-btn" style="width:auto; padding:8px 12px;">🚪</button>
+                </div>
+                
+                <div class="themes">
+                    <h4>🎨 Темы:</h4>
+                    <div class="theme-buttons">
+                        <button onclick="setTheme('pink')" class="theme-btn theme-pink">🌸 Розовая</button>
+                        <button onclick="setTheme('red')" class="theme-btn theme-red">❤️ Красная</button>
+                        <button onclick="setTheme('blue')" class="theme-btn theme-blue">💙 Синяя</button>
+                        <button onclick="setTheme('green')" class="theme-btn theme-green">💚 Зеленая</button>
+                    </div>
+                </div>
+                
+                <div class="stickers">
+                    <h4>😊 Стикеры:</h4>
+                    <div class="stickers-grid" id="stickersGrid"></div>
+                    <button onclick="openStickerCreator()" style="width:100%">➕ Создать стикер</button>
+                </div>
+            </div>
+            
+            <!-- Область чата -->
+            <div class="chat-area">
+                <div class="chat-header">
+                    <h3>💬 Общий чат</h3>
+                </div>
+                <div class="messages" id="messagesList"></div>
+                <div class="input-area">
+                    <input type="text" id="messageInput" placeholder="Напиши сообщение..." onkeypress="handleEnter(event)">
+                    <button onclick="sendVideo()">🎥</button>
+                    <button onclick="sendMessage()">📤</button>
+                    <input type="file" id="videoFile" accept="video/*" style="display:none">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно создания стикера -->
+    <div id="stickerModal" class="modal">
+        <div class="modal-content">
+            <h3>✨ Новый стикер</h3>
+            <input type="text" id="stickerEmoji" placeholder="Введи смайлик или текст" maxlength="4">
+            <button onclick="createSticker()">Создать</button>
+            <button onclick="closeStickerModal()">Отмена</button>
+        </div>
+    </div>
+
+    <!-- Подключаем Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+
+    <script>
+        // ========== ТВОИ КЛЮЧИ FIREBASE ==========
+        const firebaseConfig = {
+            apiKey: "AIzaSyBfXUgZnRD013c1jPQ04X3ZRRCHJSwE6NQ",
+            authDomain: "sny-messenger.firebaseapp.com",
+            projectId: "sny-messenger",
+            storageBucket: "sny-messenger.firebasestorage.app",
+            messagingSenderId: "495989032426",
+            appId: "1:495989032426:web:21094d0b3fb3f544579e93"
+        };
+
+        // Инициализация Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+
+        // ========== ПЕРЕМЕННЫЕ ==========
+        let currentUser = null;
+        let messagesUnsubscribe = null;
+
+        // ========== ПЕРЕКЛЮЧЕНИЕ ТАБОВ ==========
+        function switchTab(tab) {
+            const createTab = document.getElementById('createTab');
+            const enterTab = document.getElementById('enterTab');
+            const btns = document.querySelectorAll('.tab-btn');
+            
+            btns.forEach(btn => btn.classList.remove('active'));
+            
+            if (tab === 'create') {
+                createTab.classList.add('active');
+                enterTab.classList.remove('active');
+                btns[0].classList.add('active');
+            } else {
+                createTab.classList.remove('active');
+                enterTab.classList.add('active');
+                btns[1].classList.add('active');
+            }
+        }
+
+        // ========== АВАТАРКА ==========
+        function triggerAvatarUpload() {
+            document.getElementById('avatarFile').click();
+        }
+
+        document.getElementById('avatarFile').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    document.getElementById('avatarImage').src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // ========== СОЗДАНИЕ АККАУНТА ==========
+        async function createAccount() {
+            const username = document.getElementById('newUsername').value.trim();
+            if (!username) {
+                alert('✨ Введи свой никнейм!');
+                return;
+            }
+            
+            const snyId = 'SNY_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6).toUpperCase();
+            const avatarUrl = document.getElementById('avatarImage').src;
+            
+            currentUser = {
+                id: snyId,
+                name: username,
+                avatar: avatarUrl,
+                createdAt: new Date()
+            };
+            
+            try {
+                await db.collection('users').doc(snyId).set(currentUser);
+                localStorage.setItem('sny_user_id', snyId);
+                enterMessenger();
+            } catch (error) {
+                alert('❌ Ошибка создания аккаунта');
+            }
+        }
+
+        // ========== ВХОД ==========
+        async function loginWithId() {
+            const userId = document.getElementById('existingUserId').value.trim().toUpperCase();
+            if (!userId) {
+                alert('🔑 Введи свой SNY-ID!');
+                return;
+            }
+            
+            try {
+                const userDoc = await db.collection('users').doc(userId).get();
+                if (userDoc.exists) {
+                    currentUser = userDoc.data();
+                    localStorage.setItem('sny_user_id', userId);
+                    enterMessenger();
+                } else {
+                    alert('❌ Пользователь не найден!');
+                }
+            } catch (error) {
+                alert('❌ Ошибка входа');
+            }
+        }
+
+        // ========== ВЫХОД ==========
+        function logout() {
+            if (confirm('Выйти из аккаунта?')) {
+                localStorage.removeItem('sny_user_id');
+                if (messagesUnsubscribe) messagesUnsubscribe();
+                currentUser = null;
+                document.getElementById('welcomeScreen').classList.add('active');
+                document.getElementById('messengerScreen').style.display = 'none';
+            }
+        }
+
+        // ========== ВХОД В ЧАТ ==========
+        function enterMessenger() {
+            document.getElementById('welcomeScreen').classList.remove('active');
+            document.getElementById('messengerScreen').style.display = 'block';
+            
+            document.getElementById('profileName').innerText = currentUser.name;
+            document.getElementById('profileAvatar').src = currentUser.avatar;
+            document.getElementById('profileId').innerText = currentUser.id;
+            
+            loadMessages();
+            loadStickers();
+        }
+
+        // ========== ЗАГРУЗКА СООБЩЕНИЙ ==========
+        function loadMessages() {
+            if (messagesUnsubscribe) messagesUnsubscribe();
+            
+            messagesUnsubscribe = db.collection('messages')
+                .orderBy('timestamp', 'asc')
+                .limit(100)
+                .onSnapshot((snapshot) => {
+                    const container = document.getElementById('messagesList');
+                    container.innerHTML = '';
+                    
+                    snapshot.forEach(doc => {
+                        const msg = doc.data();
+                        displayMessage(msg);
+                    });
+                    
+                    container.scrollTop = container.scrollHeight;
+                });
+        }
+
+        // ========== ПОКАЗ СООБЩЕНИЯ ==========
+        function displayMessage(msg) {
+            const container = document.getElementById('messagesList');
+            const div = document.createElement('div');
+            div.className = 'message ' + (msg.userId === currentUser?.id ? 'message-own' : 'message-other');
+            
+            let time = '';
+            if (msg.timestamp) {
+                const date = msg.timestamp.toDate ? msg.timestamp.toDate() : new Date(msg.timestamp);
+                time = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+            }
+            
+            let content = '';
+            if (msg.type === 'text') content = `<div class="message-text">${escapeHtml(msg.text)}</div>`;
+            else if (msg.type === 'video') content = `<video src="${msg.videoUrl}" controls class="message-video"></video>`;
+            else if (msg.type === 'sticker') content = `<div class="message-sticker">${msg.sticker}</div>`;
+            
+            div.innerHTML = `
+                <div class="message-bubble">
+                    <div class="message-name">${escapeHtml(msg.userName)}</div>
+                    ${content}
+                    <div class="message-time">${time}</div>
+                </div>
+            `;
+            
+            container.appendChild(div);
+        }
+
+        // ========== ОТПРАВКА СООБЩЕНИЯ ==========
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            if (!text) return;
+            
+            try {
+                await db.collection('messages').add({
+                    type: 'text',
+                    text: text,
+                    userId: currentUser.id,
+                    userName: currentUser.name,
+                    avatar: currentUser.avatar,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                input.value = '';
+            } catch (error) {
+                alert('❌ Не удалось отправить');
+            }
+        }
+
+        function handleEnter(event) {
+            if (event.key === 'Enter') sendMessage();
+        }
+
+        // ========== ОТПРАВКА ВИДЕО ==========
+        function sendVideo() {
+            document.getElementById('videoFile').click();
+        }
+
+        document.getElementById('videoFile').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            if (file.size > 50 * 1024 * 1024) {
+                alert('Видео не больше 50 МБ!');
+                return;
+            }
+            
+            try {
+                const videoRef = storage.ref().child(`videos/${Date.now()}_${file.name}`);
+                await videoRef.put(file);
+                const videoUrl = await videoRef.getDownloadURL();
+                
+                await db.collection('messages').add({
+                    type: 'video',
+                    videoUrl: videoUrl,
+                    userId: currentUser.id,
+                    userName: currentUser.name,
+                    avatar: currentUser.avatar,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch (error) {
+                alert('❌ Ошибка загрузки видео');
+            }
+            
+            document.getElementById('videoFile').value = '';
+        });
+
+        // ========== СТИКЕРЫ ==========
+        const defaultStickers = ['😊', '😂', '🥰', '😎', '🎉', '❤️', '🔥', '💯', '✅', '⭐'];
+        
+        function loadStickers() {
+            const grid = document.getElementById('stickersGrid');
+            grid.innerHTML = '';
+            
+            defaultStickers.forEach(sticker => {
+                const div = document.createElement('div');
+                div.className = 'sticker-item';
+                div.textContent = sticker;
+                div.onclick = () => sendSticker(sticker);
+                grid.appendChild(div);
+            });
+        }
+
+        async function sendSticker(sticker) {
+            try {
+                await db.collection('messages').add({
+                    type: 'sticker',
+                    sticker: sticker,
+                    userId: currentUser.id,
+                    userName: currentUser.name,
+                    avatar: currentUser.avatar,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch (error) {
+                alert('❌ Ошибка отправки стикера');
+            }
+        }
+
+        function openStickerCreator() {
+            document.getElementById('stickerModal').style.display = 'flex';
+        }
+
+        function closeStickerModal() {
+            document.getElementById('stickerModal').style.display = 'none';
+            document.getElementById('stickerEmoji').value = '';
+        }
+
+        async function createSticker() {
+            const sticker = document.getElementById('stickerEmoji').value.trim();
+            if (!sticker) return;
+            await sendSticker(sticker);
+            closeStickerModal();
+        }
+
+        // ========== ТЕМЫ ==========
+        function setTheme(theme) {
+            const themes = {
+                pink: 'linear-gradient(135deg, #ff69b4, #ff1493)',
+                red: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                blue: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                green: 'linear-gradient(135deg, #10b981, #059669)'
+            };
+            document.body.style.background = themes[theme];
+        }
+
+        // ========== ЗАЩИТА ОТ XSS ==========
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ========== ПРОВЕРКА СОХРАНЕННОГО ПОЛЬЗОВАТЕЛЯ ==========
+        async function checkSavedUser() {
+            const saved = localStorage.getItem('sny_user_id');
+            if (saved) {
+                try {
+                    const userDoc = await db.collection('users').doc(saved).get();
+                    if (userDoc.exists) {
+                        currentUser = userDoc.data();
+                        enterMessenger();
+                    }
+                } catch (error) {
+                    console.log('Ожидание подключения...');
+                }
+            }
+        }
+
+        // ========== ЗАПУСК ==========
+        checkSavedUser();
+    </script>
+</body>
+</html>
