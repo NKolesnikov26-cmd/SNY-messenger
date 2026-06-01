@@ -32,6 +32,8 @@
             --text-primary: #1f2937;
             --text-secondary: #6b7280;
             --accent-color: #667eea;
+            --gift-bg: #fef3c7;
+            --gift-text: #92400e;
         }
         .theme-pink {
             --bg-color: #fff0f5;
@@ -43,6 +45,8 @@
             --text-primary: #8b3a62;
             --text-secondary: #c96a9e;
             --accent-color: #ff69b4;
+            --gift-bg: #fff0f5;
+            --gift-text: #8b3a62;
         }
         .theme-red {
             --bg-color: #fff5f5;
@@ -54,6 +58,8 @@
             --text-primary: #7f1d1d;
             --text-secondary: #b91c1c;
             --accent-color: #ef4444;
+            --gift-bg: #fff5f5;
+            --gift-text: #7f1d1d;
         }
         .theme-blue {
             --bg-color: #eff6ff;
@@ -65,6 +71,8 @@
             --text-primary: #1e3a8a;
             --text-secondary: #2563eb;
             --accent-color: #3b82f6;
+            --gift-bg: #eff6ff;
+            --gift-text: #1e3a8a;
         }
         .theme-green {
             --bg-color: #f0fdf4;
@@ -76,6 +84,8 @@
             --text-primary: #14532d;
             --text-secondary: #16a34a;
             --accent-color: #10b981;
+            --gift-bg: #f0fdf4;
+            --gift-text: #14532d;
         }
         .theme-purple {
             --bg-color: #faf5ff;
@@ -87,6 +97,8 @@
             --text-primary: #4c1d95;
             --text-secondary: #7e22ce;
             --accent-color: #a855f7;
+            --gift-bg: #faf5ff;
+            --gift-text: #4c1d95;
         }
         .theme-orange {
             --bg-color: #fff7ed;
@@ -98,6 +110,8 @@
             --text-primary: #7c2d12;
             --text-secondary: #c2410c;
             --accent-color: #f97316;
+            --gift-bg: #fff7ed;
+            --gift-text: #7c2d12;
         }
 
         .app-container {
@@ -193,6 +207,10 @@
             color: var(--text-primary);
             border-bottom-left-radius: 4px;
         }
+        .gift-message .message-bubble {
+            background: var(--gift-bg) !important;
+            color: var(--gift-text) !important;
+        }
         .message-name { font-size: 11px; font-weight: bold; margin-bottom: 4px; opacity: 0.8; }
         .message-time { font-size: 9px; margin-top: 4px; opacity: 0.6; display: inline-block; }
         .message-text { word-wrap: break-word; line-height: 1.4; font-size: 15px; }
@@ -202,10 +220,6 @@
         .message-video { max-width: 200px; border-radius: 12px; }
         .message-big-sticker { font-size: 50px; }
         .message-big-sticker-img { width: 70px; height: 70px; object-fit: contain; }
-        .gift-message {
-            background: linear-gradient(135deg, #ffd89b, #19547b);
-            color: white !important;
-        }
 
         .message-actions {
             display: flex; gap: 8px; margin-top: 6px; justify-content: flex-end;
@@ -443,6 +457,28 @@
             border-radius: 30px;
             color: var(--text-primary);
         }
+        .gift-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background: var(--message-other-bg);
+            border-radius: 16px;
+            margin-bottom: 10px;
+        }
+        .gift-from-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .gift-info {
+            flex: 1;
+            text-align: left;
+        }
+        .gift-emoji-big {
+            font-size: 30px;
+        }
 
         .notification {
             position: fixed;
@@ -610,6 +646,7 @@
     <div id="fontColorModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎨 Цвет шрифта</h3><span class="close-modal" onclick="closeModal('fontColorModal')">&times;</span></div><div id="colorPickerGrid" class="color-picker-grid"></div><button onclick="saveFontColor()">Сохранить</button></div></div>
     <div id="giftSelectModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎁 Выберите подарок</h3><span class="close-modal" onclick="closeModal('giftSelectModal')">&times;</span></div><div id="giftsGrid" class="gifts-grid"></div></div></div>
     <div id="userSelectModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>👥 Выберите получателя</h3><span class="close-modal" onclick="closeModal('userSelectModal')">&times;</span></div><div id="usersList" class="user-select-grid"></div></div></div>
+    <div id="giftsReceivedModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎁 Подарки</h3><span class="close-modal" onclick="closeModal('giftsReceivedModal')">&times;</span></div><div id="giftsReceivedList"></div></div></div>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -656,7 +693,7 @@
         function changeTheme(themeName) {
             document.body.className = `theme-${themeName}`;
             if (currentUser) {
-                db.collection('users').doc(currentUser.id).update({ theme: themeName });
+                db.collection('users').doc(currentUser.id).update({ theme: themeName }).catch(() => {});
                 currentUser.theme = themeName;
             }
         }
@@ -695,15 +732,6 @@
             }
         }
 
-        async function addCoins(amount) {
-            if (currentUser) {
-                const newCoins = (currentUser.coins || 60) + amount;
-                await db.collection('users').doc(currentUser.id).update({ coins: newCoins });
-                currentUser.coins = newCoins;
-                updateCoinsDisplay();
-            }
-        }
-
         async function checkAndAddMessageCoins() {
             if (!currentUser) return;
             const messageCount = (currentUser.messageCount || 0) + 1;
@@ -725,7 +753,7 @@
         }
 
         async function sendGiftToUser(userId, userName, userAvatar, gift) {
-            if (!currentUser) return;
+            if (!currentUser) return false;
             const userCoins = currentUser.coins || 60;
             if (userCoins < gift.price) {
                 showNotification(`❌ Недостаточно монет! Нужно ${gift.price}, у вас ${userCoins}`);
@@ -746,9 +774,12 @@
                 timestamp: new Date()
             };
             
-            await db.collection('users').doc(userId).update({
-                receivedGifts: firebase.firestore.FieldValue.arrayUnion(giftRecord)
-            });
+            const userRef = db.collection('users').doc(userId);
+            const userDoc = await userRef.get();
+            const userData = userDoc.data();
+            const existingGifts = userData.receivedGifts || [];
+            existingGifts.push(giftRecord);
+            await userRef.update({ receivedGifts: existingGifts });
             
             const msgData = {
                 type: 'text',
@@ -824,6 +855,30 @@
                 }
             });
             document.getElementById('userSelectModal').classList.add('active');
+        }
+
+        function showGiftsReceived(gifts) {
+            const container = document.getElementById('giftsReceivedList');
+            container.innerHTML = '';
+            if (!gifts || gifts.length === 0) {
+                container.innerHTML = '<div style="text-align:center; padding:20px;">🎁 Пока нет подарков</div>';
+                return;
+            }
+            gifts.forEach(gift => {
+                const div = document.createElement('div');
+                div.className = 'gift-item';
+                div.innerHTML = `
+                    <div class="gift-emoji-big">${gift.giftEmoji}</div>
+                    <div class="gift-info">
+                        <div><strong>${gift.giftName}</strong></div>
+                        <div style="font-size:12px;">от ${escapeHtml(gift.fromUserName)}</div>
+                        <div style="font-size:10px; color:var(--text-secondary);">${new Date(gift.timestamp).toLocaleDateString()}</div>
+                    </div>
+                    <img src="${gift.fromUserAvatar}" class="gift-from-avatar" onclick="showProfile('${gift.fromUserId}')" style="cursor:pointer;">
+                `;
+                container.appendChild(div);
+            });
+            document.getElementById('giftsReceivedModal').classList.add('active');
         }
 
         let touchStartX = 0;
@@ -1260,6 +1315,7 @@
             const div = document.createElement('div');
             const isOwn = msg.userId === currentUser.id;
             div.className = 'message ' + (isOwn ? 'message-own' : 'message-other');
+            if (msg.isGift) div.classList.add('gift-message');
             const time = msg.timestamp?.toDate ? new Date(msg.timestamp.toDate()).toLocaleTimeString() : '';
             const fontColor = msg.fontColor || '#000000';
             
@@ -1273,7 +1329,6 @@
                     else if (p.type === 'sticker-img') html += `<img src="${p.content}" class="inline-sticker-img">`;
                 }
                 content = `<div class="message-text" style="color: ${fontColor}">${html}</div>`;
-                if (msg.isGift) div.classList.add('gift-message');
             } else if (msg.type === 'image') {
                 content = `<img src="${msg.imageUrl}" class="message-image" onclick="window.open('${msg.imageUrl}','_blank')">`;
             } else if (msg.type === 'video') {
@@ -1433,13 +1488,10 @@
             if (!userId) return;
             const userDoc = await db.collection('users').doc(userId).get();
             const user = userDoc.data();
+            const gifts = user.receivedGifts || [];
             let giftsHtml = '';
-            if (user.receivedGifts && user.receivedGifts.length > 0) {
-                giftsHtml = '<div class="gifts-received"><strong>🎁 Полученные подарки:</strong><br>';
-                user.receivedGifts.forEach(gift => {
-                    giftsHtml += `<div class="gift-received-item" title="От ${gift.fromUserName}">${gift.giftEmoji}</div>`;
-                });
-                giftsHtml += '</div>';
+            if (gifts.length > 0) {
+                giftsHtml = `<div style="margin-top:15px;"><button onclick="showGiftsReceived(${JSON.stringify(gifts).replace(/"/g, '&quot;')})">🎁 Посмотреть подарки (${gifts.length})</button></div>`;
             }
             const content = document.getElementById('profileContent');
             content.innerHTML = `<div class="profile-view">
@@ -1455,7 +1507,34 @@
                 ${userId !== currentUser.id ? `<button onclick="openPrivateChat('${userId}'); closeModal('profileModal');">💬 Написать</button>` : ''}
             </div>`;
             document.getElementById('profileModal').classList.add('active');
+            window.currentGiftsData = gifts;
         }
+
+        window.showProfile = showProfile;
+        window.showGiftsReceived = function(gifts) {
+            const container = document.getElementById('giftsReceivedList');
+            container.innerHTML = '';
+            if (!gifts || gifts.length === 0) {
+                container.innerHTML = '<div style="text-align:center; padding:20px;">🎁 Пока нет подарков</div>';
+                document.getElementById('giftsReceivedModal').classList.add('active');
+                return;
+            }
+            gifts.forEach(gift => {
+                const div = document.createElement('div');
+                div.className = 'gift-item';
+                div.innerHTML = `
+                    <div class="gift-emoji-big">${gift.giftEmoji}</div>
+                    <div class="gift-info">
+                        <div><strong>${gift.giftName}</strong></div>
+                        <div style="font-size:12px;">от ${escapeHtml(gift.fromUserName)}</div>
+                        <div style="font-size:10px; color:var(--text-secondary);">${new Date(gift.timestamp).toLocaleDateString()}</div>
+                    </div>
+                    <img src="${gift.fromUserAvatar}" class="gift-from-avatar" onclick="showProfile('${gift.fromUserId}')" style="cursor:pointer;">
+                `;
+                container.appendChild(div);
+            });
+            document.getElementById('giftsReceivedModal').classList.add('active');
+        };
 
         function copyToClipboard(text, e) { if (e) e.stopPropagation(); navigator.clipboard.writeText(text); showNotification('✅ ID скопирован'); }
         function showThemeModal() { document.getElementById('themeModal').classList.add('active'); }
