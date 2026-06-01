@@ -1,3 +1,6 @@
+# 🔧 ИСПРАВЛЕННАЯ ВЕРСИЯ - Работает просмотр профилей, сохранение входа и темы
+
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -21,7 +24,7 @@
             overflow: hidden;
         }
 
-        /* Темы оформления интерфейса */
+        /* Темы оформления интерфейса - полоска теперь меняет цвет */
         .theme-default {
             --bg-color: #ffffff;
             --sidebar-bg: #f9fafb;
@@ -34,6 +37,7 @@
             --accent-color: #667eea;
             --gift-bg: #fef3c7;
             --gift-text: #92400e;
+            --toast-bg: #333333;
         }
         .theme-pink {
             --bg-color: #fff0f5;
@@ -47,6 +51,7 @@
             --accent-color: #ff69b4;
             --gift-bg: #fff0f5;
             --gift-text: #8b3a62;
+            --toast-bg: #8b3a62;
         }
         .theme-red {
             --bg-color: #fff5f5;
@@ -60,6 +65,7 @@
             --accent-color: #ef4444;
             --gift-bg: #fff5f5;
             --gift-text: #7f1d1d;
+            --toast-bg: #7f1d1d;
         }
         .theme-blue {
             --bg-color: #eff6ff;
@@ -73,6 +79,7 @@
             --accent-color: #3b82f6;
             --gift-bg: #eff6ff;
             --gift-text: #1e3a8a;
+            --toast-bg: #1e3a8a;
         }
         .theme-green {
             --bg-color: #f0fdf4;
@@ -86,6 +93,7 @@
             --accent-color: #10b981;
             --gift-bg: #f0fdf4;
             --gift-text: #14532d;
+            --toast-bg: #14532d;
         }
         .theme-purple {
             --bg-color: #faf5ff;
@@ -99,6 +107,7 @@
             --accent-color: #a855f7;
             --gift-bg: #faf5ff;
             --gift-text: #4c1d95;
+            --toast-bg: #4c1d95;
         }
         .theme-orange {
             --bg-color: #fff7ed;
@@ -112,6 +121,7 @@
             --accent-color: #f97316;
             --gift-bg: #fff7ed;
             --gift-text: #7c2d12;
+            --toast-bg: #7c2d12;
         }
 
         .app-container {
@@ -381,6 +391,7 @@
         .profile-view { text-align: center; color: var(--text-primary); }
         .profile-view-avatar {
             width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; object-fit: cover;
+            cursor: pointer;
         }
         .gifts-grid {
             display: grid;
@@ -471,6 +482,7 @@
             height: 40px;
             border-radius: 50%;
             object-fit: cover;
+            cursor: pointer;
         }
         .gift-info {
             flex: 1;
@@ -485,7 +497,7 @@
             bottom: 80px;
             left: 50%;
             transform: translateX(-50%);
-            background: #333;
+            background: var(--toast-bg);
             color: white;
             padding: 10px 20px;
             border-radius: 30px;
@@ -600,6 +612,7 @@
             </div>
             
             <button class="clear-chat-btn" onclick="clearChat()">🗑️ Очистить чат</button>
+            <button class="clear-chat-btn" onclick="logout()" style="background:#6c757d; margin-top:0;">🚪 Выйти</button>
         </div>
 
         <div class="chat-screen" id="chatScreen">
@@ -695,6 +708,7 @@
             if (currentUser) {
                 db.collection('users').doc(currentUser.id).update({ theme: themeName }).catch(() => {});
                 currentUser.theme = themeName;
+                localStorage.setItem('sny_theme', themeName);
             }
         }
 
@@ -855,30 +869,6 @@
                 }
             });
             document.getElementById('userSelectModal').classList.add('active');
-        }
-
-        function showGiftsReceived(gifts) {
-            const container = document.getElementById('giftsReceivedList');
-            container.innerHTML = '';
-            if (!gifts || gifts.length === 0) {
-                container.innerHTML = '<div style="text-align:center; padding:20px;">🎁 Пока нет подарков</div>';
-                return;
-            }
-            gifts.forEach(gift => {
-                const div = document.createElement('div');
-                div.className = 'gift-item';
-                div.innerHTML = `
-                    <div class="gift-emoji-big">${gift.giftEmoji}</div>
-                    <div class="gift-info">
-                        <div><strong>${gift.giftName}</strong></div>
-                        <div style="font-size:12px;">от ${escapeHtml(gift.fromUserName)}</div>
-                        <div style="font-size:10px; color:var(--text-secondary);">${new Date(gift.timestamp).toLocaleDateString()}</div>
-                    </div>
-                    <img src="${gift.fromUserAvatar}" class="gift-from-avatar" onclick="showProfile('${gift.fromUserId}')" style="cursor:pointer;">
-                `;
-                container.appendChild(div);
-            });
-            document.getElementById('giftsReceivedModal').classList.add('active');
         }
 
         let touchStartX = 0;
@@ -1132,6 +1122,19 @@
             if (currentUser) await db.collection('users').doc(currentUser.id).update({ lastSeen: new Date() });
         }
 
+        function logout() {
+            if (confirm('Выйти из аккаунта?')) {
+                localStorage.removeItem('sny_user_id');
+                localStorage.removeItem('sny_password');
+                currentUser = null;
+                document.getElementById('welcomeScreen').classList.add('active');
+                document.getElementById('appContainer').style.display = 'none';
+                if (messagesUnsubscribe) messagesUnsubscribe();
+                if (gameUnsubscribe) gameUnsubscribe();
+                showNotification('👋 Вы вышли из аккаунта');
+            }
+        }
+
         async function enterMessenger() {
             document.getElementById('welcomeScreen').classList.remove('active');
             document.getElementById('appContainer').style.display = 'block';
@@ -1228,8 +1231,10 @@
 
         function getPrivateChatId(u1, u2) { return [u1, u2].sort().join('_'); }
 
+        let messagesUnsubscribe = null;
         async function loadAllMessages() {
-            db.collection('messages').onSnapshot((snap) => {
+            if (messagesUnsubscribe) messagesUnsubscribe();
+            messagesUnsubscribe = db.collection('messages').onSnapshot((snap) => {
                 allMessages = [];
                 snap.forEach(doc => { const msg = doc.data(); msg.id = doc.id; allMessages.push(msg); });
                 refreshCurrentChat();
@@ -1489,52 +1494,49 @@
             const userDoc = await db.collection('users').doc(userId).get();
             const user = userDoc.data();
             const gifts = user.receivedGifts || [];
-            let giftsHtml = '';
-            if (gifts.length > 0) {
-                giftsHtml = `<div style="margin-top:15px;"><button onclick="showGiftsReceived(${JSON.stringify(gifts).replace(/"/g, '&quot;')})">🎁 Посмотреть подарки (${gifts.length})</button></div>`;
-            }
+            
             const content = document.getElementById('profileContent');
             content.innerHTML = `<div class="profile-view">
-                <img src="${user.avatar}" class="profile-view-avatar">
+                <img src="${user.avatar}" class="profile-view-avatar" onclick="showProfile('${userId}')">
                 <h3>${escapeHtml(user.name)}</h3>
                 <p>${user.bio || 'Нет описания'}</p>
                 <p>🪙 ${user.coins || 60} монет</p>
                 <p>📨 ${user.messageCount || 0} сообщений</p>
                 <p>ID: ${user.id}</p>
                 <p>Был: ${formatTime(user.lastSeen)}</p>
-                ${giftsHtml}
+                ${gifts.length > 0 ? `<div style="margin:15px 0;"><button onclick="showGiftsReceivedWindow('${userId}')">🎁 Подарки (${gifts.length})</button></div>` : '<div style="margin:15px 0;"><p>🎁 Нет подарков</p></div>'}
                 <button onclick="copyToClipboard('${user.id}')">📋 Копировать ID</button>
                 ${userId !== currentUser.id ? `<button onclick="openPrivateChat('${userId}'); closeModal('profileModal');">💬 Написать</button>` : ''}
             </div>`;
             document.getElementById('profileModal').classList.add('active');
-            window.currentGiftsData = gifts;
         }
 
-        window.showProfile = showProfile;
-        window.showGiftsReceived = function(gifts) {
+        async function showGiftsReceivedWindow(userId) {
+            const userDoc = await db.collection('users').doc(userId).get();
+            const user = userDoc.data();
+            const gifts = user.receivedGifts || [];
             const container = document.getElementById('giftsReceivedList');
             container.innerHTML = '';
-            if (!gifts || gifts.length === 0) {
+            if (gifts.length === 0) {
                 container.innerHTML = '<div style="text-align:center; padding:20px;">🎁 Пока нет подарков</div>';
-                document.getElementById('giftsReceivedModal').classList.add('active');
-                return;
+            } else {
+                gifts.forEach(gift => {
+                    const div = document.createElement('div');
+                    div.className = 'gift-item';
+                    div.innerHTML = `
+                        <div class="gift-emoji-big">${gift.giftEmoji}</div>
+                        <div class="gift-info">
+                            <div><strong>${gift.giftName}</strong></div>
+                            <div style="font-size:12px;">от ${escapeHtml(gift.fromUserName)}</div>
+                            <div style="font-size:10px; color:var(--text-secondary);">${new Date(gift.timestamp).toLocaleDateString()}</div>
+                        </div>
+                        <img src="${gift.fromUserAvatar}" class="gift-from-avatar" onclick="showProfile('${gift.fromUserId}'); closeModal('giftsReceivedModal');" style="cursor:pointer;">
+                    `;
+                    container.appendChild(div);
+                });
             }
-            gifts.forEach(gift => {
-                const div = document.createElement('div');
-                div.className = 'gift-item';
-                div.innerHTML = `
-                    <div class="gift-emoji-big">${gift.giftEmoji}</div>
-                    <div class="gift-info">
-                        <div><strong>${gift.giftName}</strong></div>
-                        <div style="font-size:12px;">от ${escapeHtml(gift.fromUserName)}</div>
-                        <div style="font-size:10px; color:var(--text-secondary);">${new Date(gift.timestamp).toLocaleDateString()}</div>
-                    </div>
-                    <img src="${gift.fromUserAvatar}" class="gift-from-avatar" onclick="showProfile('${gift.fromUserId}')" style="cursor:pointer;">
-                `;
-                container.appendChild(div);
-            });
             document.getElementById('giftsReceivedModal').classList.add('active');
-        };
+        }
 
         function copyToClipboard(text, e) { if (e) e.stopPropagation(); navigator.clipboard.writeText(text); showNotification('✅ ID скопирован'); }
         function showThemeModal() { document.getElementById('themeModal').classList.add('active'); }
@@ -1640,10 +1642,15 @@
             const savedPass = localStorage.getItem('sny_password');
             if (saved && savedPass) {
                 const user = await db.collection('users').doc(saved).get();
-                if (user.exists && user.data().password === savedPass) { currentUser = user.data(); enterMessenger(); }
+                if (user.exists && user.data().password === savedPass) { 
+                    currentUser = user.data();
+                    if (currentUser.theme) changeTheme(currentUser.theme);
+                    enterMessenger(); 
+                }
             }
         }
         checkSavedUser();
     </script>
 </body>
 </html>
+```
