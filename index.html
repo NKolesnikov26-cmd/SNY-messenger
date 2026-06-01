@@ -21,6 +21,7 @@
             overflow: hidden;
         }
 
+        /* Темы оформления */
         .theme-default {
             --bg-color: #ffffff;
             --sidebar-bg: #f9fafb;
@@ -165,7 +166,7 @@
             display: flex; align-items: center; gap: 10px;
             flex: 1; cursor: pointer;
         }
-        .chat-header-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
+        .chat-header-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; cursor: pointer; }
         .chat-header-name { font-weight: 600; font-size: 16px; color: var(--text-primary); }
         .chat-header-id { font-size: 11px; color: var(--text-secondary); }
         .chat-header-actions { display: flex; gap: 6px; align-items: center; }
@@ -217,8 +218,8 @@
             background: var(--gift-bg) !important;
             color: var(--gift-text) !important;
         }
-        .message-name { font-size: 11px; font-weight: bold; margin-bottom: 4px; opacity: 0.8; }
-        .message-time { font-size: 9px; margin-top: 4px; opacity: 0.6; display: inline-block; }
+        .message-name { font-size: 11px; font-weight: bold; margin-bottom: 4px; opacity: 0.8; cursor: pointer; display: inline-block; }
+        .message-time { font-size: 9px; margin-top: 4px; opacity: 0.6; display: inline-block; margin-left: 8px; }
         .message-text { word-wrap: break-word; line-height: 1.4; font-size: 15px; }
         .message-text .inline-sticker { font-size: 1.2em; display: inline-block; }
         .message-text .inline-sticker-img { width: 1.2em; height: 1.2em; vertical-align: middle; }
@@ -379,18 +380,6 @@
             width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; object-fit: cover;
             cursor: pointer;
         }
-        .admin-panel {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid var(--border-color);
-        }
-        .admin-panel input {
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 20px;
-            border: 1px solid var(--border-color);
-            width: 100%;
-        }
         .gift-item {
             display: flex;
             align-items: center;
@@ -401,14 +390,41 @@
             margin-bottom: 10px;
         }
         .gift-from-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            width: 40px; height: 40px; border-radius: 50%;
             object-fit: cover;
             cursor: pointer;
         }
         .gift-info { flex: 1; text-align: left; }
         .gift-emoji-big { font-size: 30px; }
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 20px 0;
+        }
+        .game-cell {
+            aspect-ratio: 1;
+            background: var(--message-other-bg);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+        .game-cell.disabled { opacity: 0.6; pointer-events: none; }
+        .game-info {
+            text-align: center;
+            margin: 15px 0;
+            font-weight: bold;
+            font-size: 16px;
+            padding: 10px;
+            background: var(--message-other-bg);
+            border-radius: 30px;
+            color: var(--text-primary);
+        }
 
         .notification {
             position: fixed;
@@ -509,9 +525,10 @@
                 <div class="menu-item" onclick="showFontColorModal()"><span>🎨</span> <span>Цвет шрифта</span></div>
                 <div class="menu-item" onclick="showWallpaperModal()"><span>🖼️</span> <span>Обои</span></div>
                 <div class="menu-item" onclick="showAdminPanel()"><span>👑</span> <span>Админ-панель</span></div>
+                <div class="menu-item" onclick="showGroupSettings()"><span>⚙️</span> <span>Настройки чата</span></div>
             </div>
             <div class="menu-section"><div class="menu-section-title">Чаты</div><div class="chats-list" id="chatsList"></div></div>
-            <button class="clear-chat-btn" onclick="leaveGeneralChat()" id="leaveChatBtn">🚪 Выйти из общего чата</button>
+            <button class="clear-chat-btn" onclick="leaveGeneralChat()" id="leaveChatBtn" style="display:none;">🚪 Выйти из общего чата</button>
             <button class="clear-chat-btn" onclick="logout()" style="background:#6c757d; margin-top:0;">🚪 Выйти из аккаунта</button>
         </div>
 
@@ -519,7 +536,7 @@
             <div class="chat-header">
                 <button class="menu-toggle" onclick="toggleMenu()">☰</button>
                 <div class="chat-header-info" id="chatHeaderInfo">
-                    <img id="chatHeaderAvatar" class="chat-header-avatar" src="">
+                    <img id="chatHeaderAvatar" class="chat-header-avatar" src="" onclick="showGroupSettings()">
                     <div><div class="chat-header-name" id="chatHeaderName"></div><div class="chat-header-id" id="chatHeaderId"></div></div>
                 </div>
                 <div class="chat-header-actions">
@@ -534,7 +551,7 @@
                     <button class="tool-btn" onclick="attachVideo()">🎥 Видео</button>
                     <button class="tool-btn" id="voiceRecordBtn" onclick="toggleVoiceRecord()">🎙️ ГС</button>
                     <button class="tool-btn" onclick="openStickerModal()">😊 Стикер</button>
-                    <button class="tool-btn" onclick="showJoinRequestModal()" id="joinRequestBtn" style="display:none;">📝 Подать заявку</button>
+                    <button class="tool-btn" id="joinRequestBtn" onclick="showJoinRequestModal()" style="display:none;">📝 Подать заявку</button>
                     <span id="voiceTimer" class="voice-timer"></span>
                     <input type="file" id="imageInput" accept="image/*" style="display:none">
                     <input type="file" id="videoFile" accept="video/*" style="display:none">
@@ -557,10 +574,9 @@
     <div id="fontColorModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎨 Цвет шрифта</h3><span class="close-modal" onclick="closeModal('fontColorModal')">&times;</span></div><div id="colorPickerGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin:20px 0;"></div><button onclick="saveFontColor()">Сохранить</button></div></div>
     <div id="giftSelectModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎁 Выберите подарок</h3><span class="close-modal" onclick="closeModal('giftSelectModal')">&times;</span></div><div id="giftsGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin:20px 0;"></div></div></div>
     <div id="userSelectModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>👥 Выберите получателя</h3><span class="close-modal" onclick="closeModal('userSelectModal')">&times;</span></div><div id="usersList" style="display:flex;flex-direction:column;gap:10px;max-height:300px;overflow-y:auto;"></div></div></div>
-    <div id="giftsReceivedModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🎁 Подарки</h3><span class="close-modal" onclick="closeModal('giftsReceivedModal')">&times;</span></div><div id="giftsReceivedList"></div></div></div>
-    <div id="adminModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>👑 Админ-панель</h3><span class="close-modal" onclick="closeModal('adminModal')">&times;</span></div><div><input type="password" id="adminPassword" placeholder="Пароль админа"><button onclick="checkAdminPassword()">Войти</button></div><div id="adminContent" style="display:none; margin-top:15px;"><div class="menu-section-title">Управление пользователями</div><div id="adminUsersList"></div></div></div></div>
+    <div id="adminModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>👑 Админ-панель</h3><span class="close-modal" onclick="closeModal('adminModal')">&times;</span></div><div><input type="password" id="adminPassword" placeholder="Пароль админа"><button onclick="checkAdminPassword()">Войти</button></div><div id="adminContent" style="display:none; margin-top:15px;"><div class="menu-section-title">Управление пользователями</div><div id="adminUsersList"></div><div class="menu-section-title" style="margin-top:15px;">Заявки на вступление</div><div id="adminRequestsList"></div></div></div></div>
     <div id="joinRequestModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>📝 Заявка на вступление</h3><span class="close-modal" onclick="closeModal('joinRequestModal')">&times;</span></div><textarea id="requestMessage" rows="3" placeholder="Напишите причину вступления..."></textarea><button onclick="sendJoinRequest()">Отправить заявку</button></div></div>
-    <div id="requestsListModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>📋 Заявки</h3><span class="close-modal" onclick="closeModal('requestsListModal')">&times;</span></div><div id="requestsList"></div></div></div>
+    <div id="groupSettingsModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>⚙️ Настройки чата</h3><span class="close-modal" onclick="closeModal('groupSettingsModal')">&times;</span></div><div><label>Аватар группы</label><img id="groupAvatarPreview" style="width:100px;border-radius:50%;margin:10px auto;display:block"><button onclick="uploadGroupAvatar()">📸 Изменить аватар</button><input type="file" id="groupAvatarFile" accept="image/*" style="display:none"></div><div><label>Описание группы</label><textarea id="groupDescription" rows="3" placeholder="Описание группы"></textarea><button onclick="saveGroupSettings()">Сохранить</button></div></div></div>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -727,7 +743,7 @@
                     const user = doc.data();
                     const div = document.createElement('div');
                     div.className = 'user-select-item';
-                    div.innerHTML = `<img src="${user.avatar}" style="width:40px;height:40px;border-radius:50%;"><div><strong>${escapeHtml(user.name)}</strong><br><small>${user.id}</small></div>`;
+                    div.innerHTML = `<img src="${user.avatar}" style="width:40px;height:40px;border-radius:50%;cursor:pointer;" onclick="showProfile('${user.id}')"><div><strong>${escapeHtml(user.name)}</strong><br><small>${user.id}</small></div>`;
                     div.onclick = async () => {
                         await sendGiftToUser(user.id, user.name, user.avatar, selectedGift);
                         closeModal('userSelectModal');
@@ -749,6 +765,7 @@
                 const msgData = { type: 'image', imageUrl: ev.target.result, userId: currentUser.id, userName: currentUser.name, avatar: currentUser.avatar, fontColor: currentUser.fontColor || '#000000', timestamp: firebase.firestore.FieldValue.serverTimestamp(), reactions: {} };
                 if (currentChat.type === 'general') msgData.chatType = 'general';
                 else if (currentChat.type === 'private') { msgData.chatType = 'private'; msgData.chatId = getPrivateChatId(currentUser.id, currentChat.userId); }
+                else return;
                 await db.collection('messages').add(msgData);
                 showNotification('🖼️ Фото отправлено');
                 await checkAndAddMessageCoins();
@@ -765,6 +782,7 @@
                 const msgData = { type: 'video', videoUrl: ev.target.result, userId: currentUser.id, userName: currentUser.name, avatar: currentUser.avatar, fontColor: currentUser.fontColor || '#000000', timestamp: firebase.firestore.FieldValue.serverTimestamp(), reactions: {} };
                 if (currentChat.type === 'general') msgData.chatType = 'general';
                 else if (currentChat.type === 'private') { msgData.chatType = 'private'; msgData.chatId = getPrivateChatId(currentUser.id, currentChat.userId); }
+                else return;
                 await db.collection('messages').add(msgData);
                 showNotification('🎥 Видео отправлено');
                 await checkAndAddMessageCoins();
@@ -802,34 +820,34 @@
                 currentUser.inGeneralChat = false;
                 showNotification('🚪 Вы вышли из общего чата');
                 if (currentChat.type === 'general') await openGeneralChat();
+                await updateUIForGeneralAccess();
             }
         }
 
-        async function loadJoinRequests() {
+        async function loadAdminRequests() {
             const requestsSnapshot = await db.collection('joinRequests').where('status', '==', 'pending').get();
-            const requestsList = document.getElementById('requestsList');
-            requestsList.innerHTML = '';
+            const container = document.getElementById('adminRequestsList');
+            container.innerHTML = '';
             requestsSnapshot.forEach(doc => {
                 const req = doc.data();
                 const div = document.createElement('div');
                 div.className = 'user-select-item';
-                div.innerHTML = `<img src="${req.userAvatar}" style="width:40px;height:40px;border-radius:50%;"><div><strong>${escapeHtml(req.userName)}</strong><br><small>${req.message || 'Без сообщения'}</small></div><div><button onclick="approveRequest('${req.userId}')">✅</button><button onclick="rejectRequest('${req.userId}')">❌</button></div>`;
-                requestsList.appendChild(div);
+                div.innerHTML = `<img src="${req.userAvatar}" style="width:40px;height:40px;border-radius:50%;cursor:pointer;" onclick="showProfile('${req.userId}')"><div><strong>${escapeHtml(req.userName)}</strong><br><small>${req.message || 'Без сообщения'}</small></div><div><button onclick="approveRequest('${req.userId}')">✅</button><button onclick="rejectRequest('${req.userId}')">❌</button></div>`;
+                container.appendChild(div);
             });
-            document.getElementById('requestsListModal').classList.add('active');
         }
 
         async function approveRequest(userId) {
             await db.collection('users').doc(userId).update({ inGeneralChat: true });
             await db.collection('joinRequests').doc(userId).delete();
             showNotification('✅ Заявка одобрена');
-            closeModal('requestsListModal');
+            loadAdminRequests();
         }
 
         async function rejectRequest(userId) {
             await db.collection('joinRequests').doc(userId).delete();
             showNotification('❌ Заявка отклонена');
-            closeModal('requestsListModal');
+            loadAdminRequests();
         }
 
         // Админ-панель
@@ -839,6 +857,7 @@
                 isAdmin = true;
                 document.getElementById('adminContent').style.display = 'block';
                 loadAdminUsers();
+                loadAdminRequests();
                 showNotification('👑 Добро пожаловать в админ-панель');
             } else {
                 showNotification('❌ Неверный пароль');
@@ -853,7 +872,7 @@
                 const user = doc.data();
                 const div = document.createElement('div');
                 div.className = 'user-select-item';
-                div.innerHTML = `<img src="${user.avatar}" style="width:40px;height:40px;border-radius:50%;"><div><strong>${escapeHtml(user.name)}</strong><br><small>${user.id}</small><br><input type="text" id="editName_${user.id}" value="${escapeHtml(user.name)}" placeholder="Новое имя"></div><div><button onclick="editUserName('${user.id}')">✏️</button><button onclick="deleteUser('${user.id}')" style="background:#dc3545;">🗑️</button></div>`;
+                div.innerHTML = `<img src="${user.avatar}" style="width:40px;height:40px;border-radius:50%;cursor:pointer;" onclick="showProfile('${user.id}')"><div><strong>${escapeHtml(user.name)}</strong><br><small>${user.id}</small><br><input type="text" id="editName_${user.id}" value="${escapeHtml(user.name)}" placeholder="Новое имя"></div><div><button onclick="editUserName('${user.id}')">✏️</button><button onclick="deleteUser('${user.id}')" style="background:#dc3545;">🗑️</button></div>`;
                 container.appendChild(div);
             });
         }
@@ -897,80 +916,194 @@
             if (hasAccess) {
                 if (joinBtn) joinBtn.style.display = 'none';
                 if (leaveBtn) leaveBtn.style.display = 'block';
-                if (messageInput) messageInput.disabled = false;
+                if (messageInput && currentChat.type === 'general') messageInput.disabled = false;
             } else {
                 if (joinBtn && currentChat.type === 'general') joinBtn.style.display = 'block';
-                if (leaveBtn) leaveBtn.style.display = 'none';
+                if (leaveBtn && currentChat.type === 'general') leaveBtn.style.display = 'none';
                 if (messageInput && currentChat.type === 'general') messageInput.disabled = true;
             }
         }
 
-        // Игра Крестики-нолики
+        // Настройки группы
+        async function loadGroupSettings() {
+            const groupDoc = await db.collection('groupSettings').doc('general').get();
+            if (groupDoc.exists) {
+                if (groupDoc.data().avatar) document.getElementById('chatHeaderAvatar').src = groupDoc.data().avatar;
+                if (groupDoc.data().description) document.getElementById('chatHeaderId').innerText = groupDoc.data().description;
+                if (groupDoc.data().wallpaper && groupDoc.data().wallpaper !== 'default') {
+                    document.getElementById('messagesList').style.backgroundImage = `url(${groupDoc.data().wallpaper})`;
+                    document.getElementById('messagesList').style.backgroundSize = 'cover';
+                }
+            }
+        }
+
+        function showGroupSettings() {
+            document.getElementById('groupSettingsModal').classList.add('active');
+            db.collection('groupSettings').doc('general').get().then(doc => {
+                if (doc.exists) {
+                    document.getElementById('groupDescription').value = doc.data().description || '';
+                    if (doc.data().avatar) document.getElementById('groupAvatarPreview').src = doc.data().avatar;
+                }
+            });
+        }
+
+        async function saveGroupSettings() {
+            const description = document.getElementById('groupDescription').value;
+            await db.collection('groupSettings').doc('general').set({ description, updatedAt: new Date() }, { merge: true });
+            document.getElementById('chatHeaderId').innerText = description;
+            showNotification('✅ Описание группы обновлено');
+            closeModal('groupSettingsModal');
+        }
+
+        function uploadGroupAvatar() { document.getElementById('groupAvatarFile').click(); }
+        document.getElementById('groupAvatarFile').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = async (ev) => {
+                    await db.collection('groupSettings').doc('general').set({ avatar: ev.target.result, updatedAt: new Date() }, { merge: true });
+                    document.getElementById('chatHeaderAvatar').src = ev.target.result;
+                    showNotification('✅ Аватар группы обновлен');
+                    closeModal('groupSettingsModal');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        async function setWallpaper(url) {
+            await db.collection('groupSettings').doc('general').set({ wallpaper: url === 'default' ? null : url }, { merge: true });
+            if (url === 'default') document.getElementById('messagesList').style.backgroundImage = 'none';
+            else {
+                document.getElementById('messagesList').style.backgroundImage = `url(${url})`;
+                document.getElementById('messagesList').style.backgroundSize = 'cover';
+            }
+            closeModal('wallpaperModal');
+            showNotification('🖼️ Обои обновлены');
+        }
+
+        function uploadWallpaper() { document.getElementById('wallpaperFile').click(); }
+        document.getElementById('wallpaperFile').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) { const reader = new FileReader(); reader.onload = (ev) => setWallpaper(ev.target.result); reader.readAsDataURL(file); }
+        });
+
+        // Игра Крестики-нолики (полностью синхронизированная)
         let gameBoard = ['', '', '', '', '', '', '', '', ''];
-        let gameCurrent = 'X';
+        let gameCurrentPlayer = 'X';
         let gameActiveGame = true;
         let gameWinner = null;
+        let gameLastMoveBy = null;
 
         function startGameSync() {
             if (gameUnsubscribe) gameUnsubscribe();
             gameUnsubscribe = db.collection('game').doc('tic-tac-toe').onSnapshot((doc) => {
                 if (doc.exists) {
-                    const d = doc.data();
-                    gameBoard = d.board || ['', '', '', '', '', '', '', '', ''];
-                    gameCurrent = d.currentPlayer || 'X';
-                    gameActiveGame = d.active !== false;
-                    gameWinner = d.winner;
-                    renderGame();
-                } else resetGameFirebase();
+                    const data = doc.data();
+                    gameBoard = data.board || ['', '', '', '', '', '', '', '', ''];
+                    gameCurrentPlayer = data.currentPlayer || 'X';
+                    gameActiveGame = data.active !== false;
+                    gameWinner = data.winner;
+                    gameLastMoveBy = data.lastMoveBy;
+                    renderGameUI();
+                } else {
+                    resetGameInFirebase();
+                }
             });
         }
 
-        async function resetGameFirebase() {
-            await db.collection('game').doc('tic-tac-toe').set({ board: ['', '', '', '', '', '', '', '', ''], currentPlayer: 'X', active: true, winner: null });
+        async function resetGameInFirebase() {
+            await db.collection('game').doc('tic-tac-toe').set({
+                board: ['', '', '', '', '', '', '', '', ''],
+                currentPlayer: 'X',
+                active: true,
+                winner: null,
+                lastMoveBy: null,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
         }
 
-        async function makeMove(i) {
-            if (!gameActiveGame || gameWinner || gameBoard[i] !== '') return;
+        async function makeGameMove(index) {
+            if (!gameActiveGame || gameWinner || gameBoard[index] !== '') {
+                showNotification('❌ Невозможный ход!');
+                return;
+            }
             const newBoard = [...gameBoard];
-            newBoard[i] = gameCurrent;
-            const winner = checkWin(newBoard);
+            newBoard[index] = gameCurrentPlayer;
+            
+            const winner = checkWinOnBoard(newBoard);
             if (winner) {
-                await db.collection('game').doc('tic-tac-toe').update({ board: newBoard, active: false, winner: winner });
+                await db.collection('game').doc('tic-tac-toe').update({
+                    board: newBoard,
+                    active: false,
+                    winner: winner,
+                    lastMoveBy: currentUser.id
+                });
                 showNotification(`🏆 Победил ${winner === 'X' ? 'Крестик' : 'Нолик'}!`);
-            } else if (newBoard.every(c => c !== '')) {
-                await db.collection('game').doc('tic-tac-toe').update({ board: newBoard, active: false, winner: 'Ничья!' });
+            } else if (newBoard.every(cell => cell !== '')) {
+                await db.collection('game').doc('tic-tac-toe').update({
+                    board: newBoard,
+                    active: false,
+                    winner: 'Ничья!',
+                    lastMoveBy: currentUser.id
+                });
                 showNotification('🤝 Ничья!');
             } else {
-                await db.collection('game').doc('tic-tac-toe').update({ board: newBoard, currentPlayer: gameCurrent === 'X' ? 'O' : 'X' });
+                const nextPlayer = gameCurrentPlayer === 'X' ? 'O' : 'X';
+                await db.collection('game').doc('tic-tac-toe').update({
+                    board: newBoard,
+                    currentPlayer: nextPlayer,
+                    lastMoveBy: currentUser.id
+                });
+                showNotification(`${nextPlayer === 'X' ? '❌' : '⭕'} Теперь ход ${nextPlayer === 'X' ? 'Крестиков' : 'Ноликов'}`);
             }
         }
 
-        function checkWin(board) {
+        function checkWinOnBoard(board) {
             const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-            for (let w of wins) if (board[w[0]] && board[w[0]] === board[w[1]] && board[w[0]] === board[w[2]]) return board[w[0]];
+            for (let w of wins) {
+                if (board[w[0]] && board[w[0]] === board[w[1]] && board[w[0]] === board[w[2]]) {
+                    return board[w[0]];
+                }
+            }
             return null;
         }
 
-        async function resetGame() { await resetGameFirebase(); }
+        async function resetGame() {
+            await resetGameInFirebase();
+            showNotification('🔄 Игра перезапущена!');
+        }
 
-        function renderGame() {
-            const cont = document.getElementById('gameContent');
-            if (!cont) return;
-            let status = gameWinner === 'Ничья!' ? '🤝 Ничья!' : (gameWinner ? `🏆 Победили ${gameWinner === 'X' ? 'Крестики' : 'Нолики'}!` : `🎮 Ход: ${gameCurrent === 'X' ? '❌ Крестики' : '⭕ Нолики'}`);
-            const canMove = gameActiveGame && !gameWinner;
-            cont.innerHTML = `<div class="game-info">${status}</div><div class="game-board" id="gameBoard"></div><button onclick="resetGame()">🔄 Новая игра</button>`;
+        function renderGameUI() {
+            const container = document.getElementById('gameContent');
+            if (!container) return;
+            let statusText = '';
+            if (gameWinner === 'Ничья!') statusText = '🤝 Ничья!';
+            else if (gameWinner) statusText = `🏆 Победили ${gameWinner === 'X' ? 'Крестики (X)' : 'Нолики (O)'}!`;
+            else statusText = `🎮 Ход: ${gameCurrentPlayer === 'X' ? '❌ Крестики (X)' : '⭕ Нолики (O)'}`;
+            
+            const isPlayerTurn = gameActiveGame && !gameWinner;
+            
+            container.innerHTML = `
+                <div class="game-info">${statusText}</div>
+                <div class="game-board" id="gameBoard"></div>
+                <button onclick="resetGame()">🔄 Новая игра</button>
+            `;
+            
             const board = document.getElementById('gameBoard');
             for (let i = 0; i < 9; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'game-cell';
-                if (!canMove || gameBoard[i] !== '') cell.classList.add('disabled');
+                if (!isPlayerTurn || gameBoard[i] !== '') cell.classList.add('disabled');
                 cell.textContent = gameBoard[i];
-                cell.onclick = () => { if (canMove && !gameBoard[i]) makeMove(i); };
+                cell.onclick = () => { if (isPlayerTurn && !gameBoard[i]) makeGameMove(i); };
                 board.appendChild(cell);
             }
         }
 
-        function showGameModal() { startGameSync(); document.getElementById('gameModal').classList.add('active'); }
+        function showGameModal() {
+            startGameSync();
+            document.getElementById('gameModal').classList.add('active');
+        }
 
         // Основные функции
         let touchStartX = 0;
@@ -1043,10 +1176,14 @@
         }
 
         async function sendVoiceMessage(audioDataUrl, duration) {
-            if (!currentChat || currentChat.type === 'game') return;
+            if (!currentChat || currentChat.type === 'game') {
+                showNotification('❌ Нельзя отправить голосовое в игру');
+                return;
+            }
             const msgData = { type: 'voice', audioUrl: audioDataUrl, userId: currentUser.id, userName: currentUser.name, avatar: currentUser.avatar, fontColor: currentUser.fontColor || '#000000', timestamp: firebase.firestore.FieldValue.serverTimestamp(), reactions: {}, duration: Math.min(duration, 60) };
             if (currentChat.type === 'general') msgData.chatType = 'general';
             else if (currentChat.type === 'private') { msgData.chatType = 'private'; msgData.chatId = getPrivateChatId(currentUser.id, currentChat.userId); }
+            else return;
             await db.collection('messages').add(msgData);
             showNotification('🎤 Голосовое отправлено');
         }
@@ -1123,6 +1260,7 @@
 
         async function clearChat() {
             if (!confirm('Очистить чат?')) return;
+            if (currentChat.type === 'game') { showNotification('❌ Нельзя очистить игру'); return; }
             try {
                 let query = currentChat.type === 'general' ? db.collection('messages').where('chatType', '==', 'general') : db.collection('messages').where('chatId', '==', getPrivateChatId(currentUser.id, currentChat.userId));
                 const snapshot = await query.get();
@@ -1203,7 +1341,6 @@
             document.getElementById('menuId').innerText = currentUser.id;
             await loadChats();
             await loadCustomStickers();
-            await loadWallpaper();
             await loadGroupSettings();
             await loadAllMessages();
             await openGeneralChat();
@@ -1213,58 +1350,6 @@
             initSwipe();
             await updateUIForGeneralAccess();
         }
-
-        async function loadGroupSettings() {
-            const groupDoc = await db.collection('groupSettings').doc('general').get();
-            if (groupDoc.exists) {
-                if (groupDoc.data().avatar) document.getElementById('chatHeaderAvatar').src = groupDoc.data().avatar;
-                if (groupDoc.data().description) document.getElementById('chatHeaderId').innerText = groupDoc.data().description;
-            }
-        }
-
-        async function saveGroupSettings() {
-            const description = document.getElementById('groupDescription').value;
-            await db.collection('groupSettings').doc('general').set({ description, updatedAt: new Date() }, { merge: true });
-            document.getElementById('chatHeaderId').innerText = description;
-            showNotification('✅ Описание обновлено');
-            closeModal('groupSettingsModal');
-        }
-
-        function uploadGroupAvatar() { document.getElementById('groupAvatarFile').click(); }
-        document.getElementById('groupAvatarFile').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = async (ev) => {
-                    await db.collection('groupSettings').doc('general').set({ avatar: ev.target.result, updatedAt: new Date() }, { merge: true });
-                    document.getElementById('chatHeaderAvatar').src = ev.target.result;
-                    showNotification('✅ Аватар обновлен');
-                    closeModal('groupSettingsModal');
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        async function loadWallpaper() {
-            const groupDoc = await db.collection('groupSettings').doc('general').get();
-            if (groupDoc.exists && groupDoc.data().wallpaper && groupDoc.data().wallpaper !== 'default') {
-                document.getElementById('messagesList').style.backgroundImage = `url(${groupDoc.data().wallpaper})`;
-                document.getElementById('messagesList').style.backgroundSize = 'cover';
-            }
-        }
-
-        async function setWallpaper(url) {
-            await db.collection('groupSettings').doc('general').set({ wallpaper: url === 'default' ? null : url }, { merge: true });
-            await loadWallpaper();
-            closeModal('wallpaperModal');
-            showNotification('🖼️ Обои обновлены');
-        }
-
-        function uploadWallpaper() { document.getElementById('wallpaperFile').click(); }
-        document.getElementById('wallpaperFile').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) { const reader = new FileReader(); reader.onload = (ev) => setWallpaper(ev.target.result); reader.readAsDataURL(file); }
-        });
 
         async function loadChats() {
             try {
@@ -1277,7 +1362,6 @@
                         chatsList.innerHTML += `<div class="menu-item" onclick="openPrivateChat('${user.id}'); closeMenu();">👤 ${escapeHtml(user.name)}</div>`;
                     }
                 });
-                if (isAdmin) chatsList.innerHTML += `<div class="menu-item" onclick="loadJoinRequests()">📋 Заявки (админ)</div>`;
             } catch(e) { console.error(e); }
         }
 
@@ -1295,7 +1379,14 @@
         function refreshCurrentChat() {
             const container = document.getElementById('messagesList');
             if (!container) return;
-            let filtered = currentChat.type === 'general' ? allMessages.filter(m => m.chatType === 'general') : allMessages.filter(m => m.chatId === getPrivateChatId(currentUser.id, currentChat.userId));
+            let filtered = [];
+            if (currentChat.type === 'general') {
+                filtered = allMessages.filter(m => m.chatType === 'general');
+            } else if (currentChat.type === 'private') {
+                filtered = allMessages.filter(m => m.chatId === getPrivateChatId(currentUser.id, currentChat.userId));
+            } else {
+                return;
+            }
             filtered.sort((a,b) => (a.timestamp?.toDate ? a.timestamp.toDate().getTime() : 0) - (b.timestamp?.toDate ? b.timestamp.toDate().getTime() : 0));
             container.innerHTML = '';
             filtered.forEach(msg => displayMessage(msg));
@@ -1304,10 +1395,10 @@
 
         async function openGeneralChat() {
             currentChat = { type: 'general' };
-            document.getElementById('chatHeaderAvatar').src = 'https://via.placeholder.com/40?text=💬';
-            document.getElementById('chatHeaderName').innerText = 'Общий чат';
             const groupDoc = await db.collection('groupSettings').doc('general').get();
             if (groupDoc.exists && groupDoc.data().avatar) document.getElementById('chatHeaderAvatar').src = groupDoc.data().avatar;
+            else document.getElementById('chatHeaderAvatar').src = 'https://via.placeholder.com/40?text=💬';
+            document.getElementById('chatHeaderName').innerText = 'Общий чат';
             if (groupDoc.exists && groupDoc.data().description) document.getElementById('chatHeaderId').innerText = groupDoc.data().description;
             else document.getElementById('chatHeaderId').innerText = 'Все пользователи';
             refreshCurrentChat();
@@ -1333,6 +1424,8 @@
             document.getElementById('chatHeaderAvatar').src = 'https://via.placeholder.com/40?text=🎮';
             document.getElementById('chatHeaderName').innerText = 'Крестики-нолики';
             document.getElementById('chatHeaderId').innerText = 'Играйте с друзьями!';
+            const input = document.getElementById('messageInput');
+            if (input) input.disabled = true;
             showGameModal();
             closeMenu();
         }
@@ -1413,7 +1506,7 @@
             if (isOwn && msg.type === 'text') {
                 actionsHtml = `<div class="message-actions"><button class="message-action-btn" onclick="editMessage('${msg.id}', '${escapeHtml(msg.text)}')">✏️</button><button class="message-action-btn" onclick="showReactionPicker('${msg.id}')">😊</button><button class="message-action-btn" onclick="deleteMessage('${msg.id}', true)">🗑️</button></div>`;
             }
-            div.innerHTML = `<div class="message-bubble"><div class="message-name">${escapeHtml(msg.userName)}</div>${content}${reactionsHtml}${actionsHtml}<div class="message-time">${time}</div></div>`;
+            div.innerHTML = `<div class="message-bubble"><div class="message-name" onclick="showProfile('${msg.userId}')">${escapeHtml(msg.userName)}</div>${content}${reactionsHtml}${actionsHtml}<div class="message-time">${time}</div></div>`;
             container.appendChild(div);
         }
 
@@ -1422,7 +1515,7 @@
             const text = input.value.trim();
             if (!text) return;
             if (!currentChat) { showNotification('❌ Чат не выбран'); return; }
-            if (currentChat.type === 'game') { showNotification('❌ Нельзя отправить сюда'); return; }
+            if (currentChat.type === 'game') { showNotification('❌ Это игра, нельзя писать сообщения!'); return; }
             if (currentChat.type === 'general') {
                 const hasAccess = await checkGeneralChatAccess();
                 if (!hasAccess) { showNotification('❌ Вы не в общем чате! Подайте заявку'); return; }
@@ -1475,7 +1568,12 @@
             });
         }
 
-        function openStickerModal() { renderStickers(); document.getElementById('stickerModalWindow').classList.add('active'); }
+        function openStickerModal() { 
+            if (currentChat.type === 'game') { showNotification('❌ Нельзя отправить стикер в игру'); return; }
+            renderStickers(); 
+            document.getElementById('stickerModalWindow').classList.add('active'); 
+        }
+        
         function openStickerImageUpload() { document.getElementById('stickerImageInput').click(); }
         document.getElementById('stickerImageInput').addEventListener('change', async (e) => {
             const file = e.target.files[0];
@@ -1506,15 +1604,16 @@
                 });
             }
             giftsHtml += '</div>';
+            const lastSeen = user.lastSeen ? formatTime(user.lastSeen) : 'неизвестно';
             const content = document.getElementById('profileContent');
             content.innerHTML = `<div class="profile-view">
-                <img src="${user.avatar}" class="profile-view-avatar">
-                <h3>${escapeHtml(user.name)}${user.isAdmin ? '<span class="admin-badge">ADMIN</span>' : ''}</h3>
+                <img src="${user.avatar}" class="profile-view-avatar" onclick="showProfile('${user.id}')">
+                <h3>${escapeHtml(user.name)}</h3>
                 <p>${user.bio || 'Нет описания'}</p>
                 <p>🪙 ${user.coins || 60} монет</p>
                 <p>📨 ${user.messageCount || 0} сообщений</p>
+                <p>🕐 Последний раз: ${lastSeen}</p>
                 <p>ID: ${user.id}</p>
-                <p>Был: ${formatTime(user.lastSeen)}</p>
                 ${giftsHtml}
                 <button onclick="copyToClipboard('${user.id}')">📋 Копировать ID</button>
                 ${userId !== currentUser.id ? `<button onclick="openPrivateChat('${userId}'); closeModal('profileModal');">💬 Написать</button>` : ''}
@@ -1566,7 +1665,11 @@
             const savedPass = localStorage.getItem('sny_password');
             if (saved && savedPass) {
                 const user = await db.collection('users').doc(saved).get();
-                if (user.exists && user.data().password === savedPass) { currentUser = user.data(); if (currentUser.theme) changeTheme(currentUser.theme); enterMessenger(); }
+                if (user.exists && user.data().password === savedPass) { 
+                    currentUser = user.data(); 
+                    if (currentUser.theme) changeTheme(currentUser.theme); 
+                    enterMessenger(); 
+                }
             }
         }
         checkSavedUser();
